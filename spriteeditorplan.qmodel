@@ -252,7 +252,7 @@
                          <object>{01e4038c-bbf7-4188-8eab-dedba3646dfc}</object>
                          <name>QJsonDocument</name>
                          <pos>x:30;y:-435</pos>
-                         <rect>x:-50;y:-30;w:100;h:60</rect>
+                         <rect>x:-55;y:-30;w:110;h:60</rect>
                          <visual-role>0</visual-role>
                         </DObject>
                        </base-DObject>
