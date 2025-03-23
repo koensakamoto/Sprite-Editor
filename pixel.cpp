@@ -2,6 +2,8 @@
 
 Pixel::Pixel(): red(0), green(0), blue(0), alpha(0), colored(false) {}
 
+Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b,  unsigned char a):red(r), green(g), blue(b), alpha(a), colored(true) {}
+
 void Pixel::erasePixel(){
     red = 0;
     green = 0;
