@@ -10,8 +10,8 @@ private:
 
     // red, green and blue values ranging from 0 to 255.
     unsigned char red;
-    unsigned char blue;
     unsigned char green;
+    unsigned char blue;
 
     // transparency
     unsigned char alpha;
@@ -21,17 +21,28 @@ private:
 
 public:
 
-    // Default constructor sets numerical values to 0, and isColored to false.
+    /**
+     * @brief Pixel Default constructor.
+     */
     Pixel();
+
+    /**
+     * @brief Pixel creates a Pixel object with the specified RGBA values.
+     * @param r Value from 0-255 representing the red value of a pixel.
+     * @param g Value from 0-255 representing the green value of a pixel.
+     * @param b Value from 0-255 representing the blue value of a pixel.
+     * @param a Value from 0-255 representing the alpha value of a pixel.
+     */
+    Pixel(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 
     /**
      * @brief setPixel Sets the RGBA values of a pixel, and isColored to true.
      * @param r Value from 0-255 representing the red value of a pixel.
-     * @param b Value from 0-255 representing the blue value of a pixel.
      * @param g Value from 0-255 representing the green value of a pixel.
+     * @param b Value from 0-255 representing the blue value of a pixel.
      * @param a Value from 0-255 representing the alpha value of a pixel.
      */
-    void setPixel(unsigned char r, unsigned char b, unsigned char g, unsigned char a);
+    void setPixel(unsigned char r, unsigned char g, unsigned char b,  unsigned char a);
 
     /**
      * @brief erasePixel Sets isColored to false. Deletes previous color information by
