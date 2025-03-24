@@ -3,9 +3,7 @@
 
 // Frame::Frame(): width(0), height(0){}
 
-Frame::Frame(int width, int height): width(width), height(height){
-    this->grid = Pixel[width][height];
-}
+Frame::Frame(int width, int height): width(width), height(height){}
 
 
 bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
@@ -27,13 +25,14 @@ bool Frame::deletePixel(int x, int y){
     }
     else {
         grid[x][y].erasePixel();
+        return true;
     }
 
 }
 
 Frame Frame::duplicate(){
 
-    Pixel newGrid[width][height];
+    std::vector<std::vector<Pixel>> newGrid;;
 
     for (int i  = 0; i < width; i++){
          for (int j = 0; j < height; j++){
@@ -52,7 +51,7 @@ void Frame::resize(double scaleFactor){
     int newX = scaleFactor*width;
     int newY = scaleFactor*height;
 
-    Pixel newGrid[newX][newY];
+    std::vector<std::vector<Pixel>> newGrid;
 
     for (int i = 0; i < newX; i++){
         for (int j = 0; j < newY; j++){

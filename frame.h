@@ -1,6 +1,7 @@
 #ifndef FRAME_H
 #define FRAME_H
 
+#include <vector>
 #include <QObject>
 #include <pixel.h>
 
@@ -8,9 +9,9 @@ class Frame
 {
 private:
 
-    int width;
-    int height;
-    Pixel grid[][];
+    int width = 5;
+    int height = 5;
+    std::vector<std::vector<Pixel>> grid;
 
 public:
 
