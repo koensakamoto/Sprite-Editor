@@ -1,3 +1,5 @@
+#endif // JSONHANDLER_H
+
 #include "JSONHandler.h"
 #include "pixel.h"
 #include <QFile>
@@ -5,7 +7,7 @@
 #include <QJsonObject>
 #include <QJsonParseError>
 
-void JSONHandler::loadProject(const QString& filePath){
+void JSONHandler::loadProject(const QString& filePath, QVector<Frame> frames){
     QFile file(filePath);
 
     //Check right here if file loaded correctly
@@ -17,24 +19,33 @@ void JSONHandler::loadProject(const QString& filePath){
     QJsonDocument jsonDoc = QJsonDocument::fromJson(projectJson, &parseError);
     if(jsonDoc.isObject()){
         QJsonObject jsonObject = jsonDoc.object();
-        QJsonArray frames = jsonObject["frames"].toArray();
+        QJsonArray framesJson = jsonObject["frames"].toArray();
+
+        //Need to get actual height and width from reading json
+        int height = 10;
+        int width = 10;
 
         for(int i = 0; i < frames.size(); i++){
-            QJsonObject frameObj = frames.at(i).toObject();
+            QJsonObject frameObj = framesJson.at(i).toObject();
             QJsonArray frameRows = jsonObject["grid"].toArray();
-
+            Frame currFrame(width, height);
+            QVector<QVector<Pixel>> grid;
             for(int r = 0; r < frameRows.size(); r++){
-                QJsonObject rowPixelsObj = frames.at(i).toObject();
-                QJsonArray pixelsInRow = jsonObject[""].toArray();
+                QJsonObject rowPixelsObj = framesJson.at(i).toObject();
+                QJsonArray pixelsInRow = jsonObject["pixel"].toArray();
+                QVector<Pixel> currRow;
                 for(int c = 0; c < pixelsInRow.size(); c++){
-                    Pixel p = pixelsInRow.at(c).toObject();
+                    QJsonObject pixelObj = pixelsInRow.at(c).toObject();
+                    //currRow.append(currPixel);
                 }
+                grid.append(currRow);
             }
-
-
+            frames.append(currFrame);
         }
     }
     else{
         return;
     }
+}
+
 
