@@ -13,6 +13,12 @@ private:
     int height = 5;
     std::vector<std::vector<Pixel>> grid;
 
+    // Helper method for BFS of grid.
+    bool isValid(int row, int col);
+
+    //BFS used to getAllContiguousPixels()
+    void BFS(bool visited[][], int row, int col);
+
 public:
 
 

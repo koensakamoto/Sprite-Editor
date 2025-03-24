@@ -1,9 +1,10 @@
 #include "frame.h"
 #include "pixel.h"
+#include <queue>
 
 // Frame::Frame(): width(0), height(0){}
 
-Frame::Frame(int width, int height): width(width), height(height){}
+Frame::Frame(int width, int height): width(width), height(height), grid{}{}
 
 
 bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
@@ -66,4 +67,80 @@ void Frame::resize(double scaleFactor){
 
 void Frame::clear(){
     this->grid = {};
+}
+
+std::vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
+
+    bool visited[width][height];
+    BFS(visited,x,y);
+
+
+
+}
+
+
+bool Frame::isValid(bool vis[][], int row, int col)
+{
+
+    // If cell lies out of bounds
+    // should it be row>width?
+    if (row < 0 || col < 0 ||
+        row >= width || col >= height)
+        return false;
+
+    // If cell is already visited or not colored
+
+    if (vis[row][col]){
+        return false;
+    }
+    else if (!grid[row][col].isColored()){
+        return false;
+    }
+
+
+    // Otherwise
+    return true;
+}
+
+
+ void BFS(bool visited[][], int row, int col)
+{
+
+    // Stores indices of the matrix cells
+
+    // add point2d class
+    std::queue<Point2D> q = new std::queue();
+
+    //Queue<pair > q = new LinkedList<>();
+
+    // Mark the starting cell as visited
+    // and push it into the queue
+    q.add(new pair(row, col));
+    vis[row][col] = true;
+
+    // Iterate while the queue
+    // is not empty
+    while (!q.isEmpty())
+    {
+        pair cell = q.peek();
+        int x = cell.first;
+        int y = cell.second;
+
+        System.out.print(grid[x][y] + " ");
+
+        q.remove();
+
+        // Go to the adjacent cells
+        for(int i = 0; i < 4; i++)
+        {
+            int adjx = x + dRow[i];
+            int adjy = y + dCol[i];
+
+            if (isValid(vis, adjx, adjy))
+            {
+                q.add(new pair(adjx, adjy));
+                vis[adjx][adjy] = true;
+            }
+        }
+    }
 }

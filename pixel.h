@@ -17,7 +17,7 @@ private:
     unsigned char alpha;
 
     // If true, the pixel should be displayed, if false, the pixel is not displayed.
-    bool colored;
+    bool displayed;
 
 public:
 
@@ -51,9 +51,9 @@ public:
     void erasePixel();
 
     /**
-     * @return The value is the isColored flag. True if the pixel is colored, false otherwise.
+     * @return The value is the isDisplayed flag. True if the pixel is displayed.
      */
-    bool isColored();
+    bool isDisplayed();
 
 };
 
