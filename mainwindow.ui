@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>805</width>
     <height>600</height>
    </rect>
   </property>
@@ -14,17 +14,103 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget"/>
-  <widget class="QMenuBar" name="menubar">
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
-     <height>24</height>
+     <width>805</width>
+     <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="saveButton"/>
+    <addaction name="loadButton"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionSize"/>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="menuView"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>LeftToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <action name="saveButton">
+   <property name="text">
+    <string>Save File...</string>
+   </property>
+  </action>
+  <action name="loadButton">
+   <property name="text">
+    <string>Load File...</string>
+   </property>
+  </action>
+  <action name="actionPaintBucket">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>PaintBucket</string>
+   </property>
+   <property name="toolTip">
+    <string>Fills area where clicked with selected color.</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSelectTool">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>SelectTool</string>
+   </property>
+   <property name="toolTip">
+    <string>Allows you to draw an area to be selected and moved.</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionEraser">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Eraser</string>
+   </property>
+   <property name="toolTip">
+    <string>Used to erase anything that is drawn.</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionSize">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Size...</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

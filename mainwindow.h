@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <vector>
+#include "frame.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -14,10 +16,16 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    MainWindow(std::vector<Frame> frames, QWidget *parent = nullptr);
     ~MainWindow();
+
+public slots:
+    void onPaintBucketClicked();
+    void onEraserClicked();
+    void onSelectToolClicked();
 
 private:
     Ui::MainWindow *ui;
+    std::vector<Frame> frames;
 };
 #endif // MAINWINDOW_H
