@@ -15,13 +15,9 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     QToolBar *toolBar = ui->toolBar;
 
-    QAction *paintBucketAction = new QAction("Paint Bucket", this);
-    QAction *selectToolAction = new QAction("Select Tool", this);
-    QAction *eraserAction = new QAction("Eraser", this);
-
-    paintBucketAction->setCheckable(true);
-    selectToolAction->setCheckable(true);
-    eraserAction->setCheckable(true);
+    QAction *paintBucketAction = ui->actionPaintBucket;
+    QAction *selectToolAction = ui->actionSelectTool;
+    QAction *eraserAction = ui->actionEraser;
 
 
     QActionGroup *toolActionGroup = new QActionGroup(this);

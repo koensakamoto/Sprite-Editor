@@ -29,3 +29,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     spriteeditorplan.qmodel
+
+RESOURCES += \
+    resources.qrc

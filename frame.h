@@ -17,7 +17,7 @@ private:
     bool isValid(int row, int col);
 
     //BFS used to getAllContiguousPixels()
-    void BFS(bool visited[][], int row, int col);
+    void BFS(std::vector<std::vector<bool>> visited, int row, int col);
 
 public:
 

@@ -1,6 +1,6 @@
 #include "pixel.h"
 
-Pixel::Pixel(): red(0), green(0), blue(0), alpha(0), colored(false) {}
+Pixel::Pixel(): red(0), green(0), blue(0), alpha(0), displayed(false) {}
 
 Pixel::Pixel(unsigned char r, unsigned char g, unsigned char b,  unsigned char a):red(r), green(g), blue(b), alpha(a), displayed(true) {}
 

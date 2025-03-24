@@ -61,20 +61,6 @@
     <string>Load File...</string>
    </property>
   </action>
-  <action name="actionPaintBucket">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>PaintBucket</string>
-   </property>
-   <property name="toolTip">
-    <string>Fills area where clicked with selected color.</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
-   </property>
-  </action>
   <action name="actionSelectTool">
    <property name="checkable">
     <bool>true</bool>
@@ -92,6 +78,10 @@
   <action name="actionEraser">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/ICON_eraser.png</normaloff>:/icons/ICON_eraser.png</iconset>
    </property>
    <property name="text">
     <string>Eraser</string>
@@ -111,7 +101,27 @@
     <string>Size...</string>
    </property>
   </action>
+  <action name="actionPaintBucket">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/ICON_paintbucker.png</normaloff>:/icons/ICON_paintbucker.png</iconset>
+   </property>
+   <property name="text">
+    <string>PaintBucket</string>
+   </property>
+   <property name="toolTip">
+    <string>Fills in area where clicked with previously selected color.</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

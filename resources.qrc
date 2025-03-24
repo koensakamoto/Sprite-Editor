@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>ICON_eraser.png</file>
+        <file>ICON_paintbucker.png</file>
+    </qresource>
+</RCC>
