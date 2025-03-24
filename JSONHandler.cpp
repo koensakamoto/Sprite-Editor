@@ -1,5 +1,3 @@
-#endif // JSONHANDLER_H
-
 #include "JSONHandler.h"
 #include "pixel.h"
 #include <QFile>
@@ -47,5 +45,4 @@ void JSONHandler::loadProject(const QString& filePath, QVector<Frame> frames){
         return;
     }
 }
-
 
