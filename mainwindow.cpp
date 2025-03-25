@@ -3,6 +3,10 @@
 #include "frame.h"
 #include <vector>
 #include <QActionGroup>
+#include <QFile>
+#include <QJsonArray>
+#include <QJsonObject>
+#include <QJsonParseError>
 
 
 MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
@@ -51,4 +55,56 @@ void MainWindow::onEraserClicked() {
 
 void MainWindow::onSelectToolClicked() {
 
+}
+
+void MainWindow::loadProject(const QString& filePath, QVector<Frame> frames){
+
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::ReadOnly)) {
+        qDebug() << "failure to open file:" << filePath;
+        return;
+    }
+
+    QByteArray projectJson = file.readAll();
+    file.close();
+
+    QJsonParseError parseError;
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(projectJson, &parseError);
+
+    if (!jsonDoc.isObject()) {
+        qDebug() << "The structure of the JSON is incorrect!";
+        return;
+    }
+    frames.clear();
+
+    QJsonObject jsonObject = jsonDoc.object();
+
+    int height = jsonObject["height"].toInt();
+    int width = jsonObject["width"].toInt();
+
+    QJsonArray framesJson = jsonObject["frames"].toArray();
+
+    for (const QJsonValue& frameValue : framesJson){
+        QJsonObject frameObj = frameValue.toObject();
+
+        Frame currFrame(width, height);
+
+        QJsonArray gridJson = frameObj["grid"].toArray();
+
+        for(int row = 0; row < height; row++){
+            QJsonArray rowJson = gridJson[row].toArray();
+            for(int col = 0; col < width; col++){
+                QJsonObject pixelObj = rowJson[col].toObject();
+
+                unsigned char r = pixelObj["r"].toInt();
+                unsigned char g = pixelObj["g"].toInt();
+                unsigned char b = pixelObj["b"].toInt();
+                unsigned char a = pixelObj["a"].toInt();
+
+                currFrame.setPixel(col, row, r, g, b, a);
+            }
+        }
+        frames.append(currFrame);
+    }
 }

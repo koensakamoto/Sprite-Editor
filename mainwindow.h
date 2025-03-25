@@ -27,5 +27,6 @@ public slots:
 private:
     Ui::MainWindow *ui;
     std::vector<Frame> frames;
+    void loadProject(const QString& filePath, QVector<Frame> frames);
 };
 #endif // MAINWINDOW_H
