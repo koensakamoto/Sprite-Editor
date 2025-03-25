@@ -1,6 +1,6 @@
 #include "frame.h"
 #include "pixel.h"
-#include <Queue>
+#include <queue>
 
 // Frame::Frame(): width(0), height(0){}
 
@@ -144,3 +144,23 @@ void Frame::clear(){
     //     }
     // }
 }
+
+
+QJsonObject Frame::frameToQJson(){
+        QJsonObject frameJson;
+        int rowLength = (int)grid.size();
+        int colLength = (int)grid.at(0).size();
+        for(int row = 0 ; row < rowLength; row++ ){
+
+            for(int col = 0; col < colLength; col++ ){
+                const QString key = QString("(%1, %2)").arg(row).arg(col);
+                Pixel currentPixel = this->grid.at(row).at(col);
+                frameJson[key] = currentPixel.pixelToQJson();
+            }
+
+        }
+
+        return frameJson;
+    }
+
+
