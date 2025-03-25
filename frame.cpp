@@ -1,10 +1,12 @@
 #include "frame.h"
 #include "pixel.h"
+#include "point2d.h"
 #include <queue>
 
 // Frame::Frame(): width(0), height(0){}
 
-Frame::Frame(int width, int height): width(width), height(height), grid{}{}
+Frame::Frame(int width, int height): width(width), height(height), grid{},
+                                    dRow{ -1, 0, 1, 0 }, dCol{ 0, 1, 0, -1 }{}
 
 
 bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
@@ -33,7 +35,7 @@ bool Frame::deletePixel(int x, int y){
 
 Frame Frame::duplicate(){
 
-    std::vector<std::vector<Pixel>> newGrid;;
+    std::vector<std::vector<Pixel>> newGrid;
 
     for (int i  = 0; i < width; i++){
          for (int j = 0; j < height; j++){
@@ -69,80 +71,80 @@ void Frame::clear(){
     this->grid = {};
 }
 
-// std::vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
+std::vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
 
-//     std::vector<std::vector<bool>> visited;
-//     BFS(visited,x,y);
+    bool visited[width][height];
 
+    std::vector<Pixel> contiguousPixels;
 
+    BFS(visited, x, y, contiguousPixels);
 
-// }
+    return contiguousPixels;
 
+}
 
-// bool Frame::isValid(std::vector<std::vector<bool>> vis, int row, int col)
-// {
+bool Frame::isValid(bool visited[][], int row, int col){
 
-//     // If cell lies out of bounds
-//     // should it be row>width?
-//     if (row < 0 || col < 0 ||
-//         row >= width || col >= height)
-//         return false;
+    // If cell lies out of bounds
+    // should it be row>width?
+    if (row < 0 || col < 0 ||
+        row >= width || col >= height)
+        return false;
 
-//     // If cell is already visited or not colored
+    // If cell is already visited or not colored
 
-//     if (vis[row][col]){
-//         return false;
-//     }
-//     else if (!grid[row][col].isDisplayed()){
-//         return false;
-//     }
+    if (visited[row][col]){
+        return false;
+    }
+    else if (!grid[row][col].isDisplayed()){
+        return false;
+    }
 
+    // Otherwise
+    return true;
+}
 
-//     // Otherwise
-//     return true;
-// }
-
-
- void BFS(std::vector<std::vector<bool>> vis, int row, int col)
+ void Frame::BFS(bool visited[][], int row, int col)
 {
 
     // Stores indices of the matrix cells
 
-    // add point2d class
-    // std::queue<Point2D> q = new std::queue();
-
-    // Queue<pair> q = new LinkedList<>();
-
     // Mark the starting cell as visited
     // and push it into the queue
-    // q.add(new pair(row, col));
-    vis[row][col] = true;
+
+    std::queue<Point2D> q;
+
+    Point2D p = Point2D(row,col);
+    q.push(p);
+    visited[row][col] = true;
 
     // Iterate while the queue
     // is not empty
-    // while (!q.isEmpty())
-    // {
-    //     // pair cell = q.peek();
-    //     int x = cell.first;
-    //     int y = cell.second;
 
-    //     System.out.print(grid[x][y] + " ");
+    while (!q.empty())
+    {
+        Point2D cell = q.front();
+        int x = cell.getX();
+        int y = cell.getY();
 
-    //     q.remove();
+        //System.out.print(grid[x][y] + " ");
 
-    //     // Go to the adjacent cells
-    //     for(int i = 0; i < 4; i++)
-    //     {
-    //         int adjx = x + dRow[i];
-    //         int adjy = y + dCol[i];
+        q.pop();
 
-    //         if (isValid(vis, adjx, adjy))
-    //         {
-    //             q.add(new pair(adjx, adjy));
-    //             vis[adjx][adjy] = true;
-    //         }
-    //     }
-    // }
+        // Go to the adjacent cells
+        for(int i = 0; i < 4; i++)
+        {
+            int adjx = x + dRow[i];
+            int adjy = y + dCol[i];
+
+            if (isValid(visited, adjx, adjy))
+            {
+                Point2D p = Point2D(adjx,adjy);
+                q.push(p);
+                visited[adjx][adjy] = true;
+            }
+        }
+    }
 }
 
 

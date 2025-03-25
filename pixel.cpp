@@ -33,6 +33,5 @@ QJsonObject Pixel::pixelToQJson() {
     pixelJson["green"] = this->green;
     pixelJson["alpha"] = this->alpha;
     pixelJson["displayed"] = this->displayed;
-
     return pixelJson;
 }

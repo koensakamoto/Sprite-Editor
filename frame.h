@@ -10,15 +10,19 @@ class Frame
 {
 private:
 
-    int width = 5;
-    int height = 5;
+    int width;
+    int height;
     std::vector<std::vector<Pixel>> grid;
 
+    // Used for BFS
+    int dRow[4];
+    int dCol[4];
+
     // Helper method for BFS of grid.
-    bool isValid(int row, int col);
+    bool isValid(bool visited[0][0], int row, int col);
 
     //BFS used to getAllContiguousPixels()
-    void BFS(std::vector<std::vector<bool>> visited, int row, int col);
+    void BFS(bool visited[0][0], int row, int col, std::vector<Pixel> contiguousPixels) ;
 
 public:
 
