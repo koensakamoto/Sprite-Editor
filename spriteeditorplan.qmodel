@@ -431,7 +431,7 @@
                     </item>
                    </qlist>
                   </elements>
-                  <last-modified>1742592722385</last-modified>
+                  <last-modified>1742938750121</last-modified>
                   <toolbarid>General</toolbarid>
                  </MDiagram>
                 </base-MDiagram>
@@ -497,30 +497,44 @@
                  <qlist>
                   <item>
                    <MClassMember>
-                    <uid>{8fe50b53-54ed-4e29-8548-c313fd9b248c}</uid>
+                    <uid>{21882fd5-0b98-4136-b2fc-11ae98411f3e}</uid>
                     <type>1</type>
-                    <declaration>-Pixels imageGrid[][]</declaration>
+                    <declaration>-QImage</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{c35d2b06-015f-4311-88e4-742a09596e5f}</uid>
+                    <uid>{1aac1bcc-43b5-4d1d-89cd-ef36b8d2e3a5}</uid>
                     <type>2</type>
                     <declaration>+void setPixel(int x, int y, Pixels pixel)</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{608c6626-9641-45fd-8610-3efecffca312}</uid>
+                    <uid>{c0ab8bfa-4447-4433-806e-a36bdb2ebeb6}</uid>
                     <type>2</type>
                     <declaration>+void deletePixel(int x,int y)</declaration>
                    </MClassMember>
                   </item>
                   <item>
                    <MClassMember>
-                    <uid>{6410f9a1-eea7-4ceb-b9ab-2c1f59787a1e}</uid>
+                    <uid>{674d2642-eccb-44b8-83dd-739551fb70f6}</uid>
                     <type>2</type>
                     <declaration>+vector&lt;Pixels&gt; getConnected(int x, int y)</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{7c8cc3a7-44ad-4f51-b647-58ef86e8ba0c}</uid>
+                    <type>2</type>
+                    <declaration>+ sendImage()</declaration>
+                   </MClassMember>
+                  </item>
+                  <item>
+                   <MClassMember>
+                    <uid>{89ef7c7c-bc43-44e3-9fd7-a03918ec1222}</uid>
+                    <type>2</type>
+                    <declaration>+recieveImage()</declaration>
                    </MClassMember>
                   </item>
                  </qlist>
