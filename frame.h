@@ -5,11 +5,15 @@
 #include <QObject>
 #include <pixel.h>
 #include <QJsonObject>
+#include <QImage>
+
+using std::vector;
 
 class Frame
 {
 private:
 
+    QImage image;
     int width;
     int height;
     std::vector<std::vector<Pixel>> grid;
@@ -19,10 +23,10 @@ private:
     int dCol[4];
 
     // Helper method for BFS of grid.
-    bool isValid(bool visited[0][0], int row, int col);
+    bool isValid(vector<vector<bool>> visited, int row, int col);
 
     //BFS used to getAllContiguousPixels()
-    void BFS(bool visited[0][0], int row, int col, std::vector<Pixel> contiguousPixels) ;
+    void BFS(vector<vector<bool>> visited, int row, int col) ;
 
 public:
 
@@ -34,32 +38,35 @@ public:
      */
     Frame(int x, int y);
 
-    /**
-     * @brief setPixel
-     * @param x
-     * @param y
-     * @param r
-     * @param b
-     * @param g
-     * @param a
-     * @return True if pixel was sucessfully changed, false otherwise.
-     */
-    bool setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a);
 
-    /**
-     * @brief deletePixel Pixel is "deleted" from the grid array. Pixel will not be shown.
-     * @param x
-     * @param y
-     * @return
-     */
-    bool deletePixel(int x, int y);
+
+
+    // /**
+    //  * @brief setPixel
+    //  * @param x
+    //  * @param y
+    //  * @param r
+    //  * @param b
+    //  * @param g
+    //  * @param a
+    //  * @return True if pixel was sucessfully changed, false otherwise.
+    //  */
+    // bool setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a);
+
+    // /**
+    //  * @brief deletePixel Pixel is "deleted" from the grid array. Pixel will not be shown.
+    //  * @param x
+    //  * @param y
+    //  * @return
+    //  */
+    // bool deletePixel(int x, int y);
 
     /**
      * @brief resize
      * @param x width of the new frame
      * @param y height of the new frame;
      */
-    void resize(double scaleFactor);
+    void resize(int x, int y);
 
     /**
      * @brief duplicate
@@ -85,6 +92,16 @@ public:
     * @return A QJsonObject with the frame's data.
     */
     QJsonObject frameToQJson(int frameId);
+public slots:
+    /**
+     * @brief getImage
+     * @return A QImage representing the grid of pixels of an image.
+     */
+    void recieveImage(QImage);
+
+
+signals:
+    void sendImage(QImage image);
 };
 
 #endif // FRAME_H

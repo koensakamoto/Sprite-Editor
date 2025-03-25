@@ -66,10 +66,10 @@ void MainWindow::onColorSelectorClicked(){
 }
 
 void MainWindow::onColorSelected(){
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
-    int alpha = color.alpha();
+    int red = QColor.red();
+    int green = QColor.green();
+    int blue = QColor.blue();
+    int alpha = QColor.alpha();
 }
 
 void MainWindow::onPaintBucketClicked() {

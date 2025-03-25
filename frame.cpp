@@ -4,39 +4,42 @@
 #include <queue>
 #include <QJsonArray>
 
+using std::vector;
+
 // Frame::Frame(): width(0), height(0){}
 
 Frame::Frame(int width, int height): width(width), height(height), grid{},
                                     dRow{ -1, 0, 1, 0 }, dCol{ 0, 1, 0, -1 }{}
 
 
-bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
+// bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
 
-    if (x > width || y > height){
-        return false;
-    }
-    else {
-        grid[x][y].setPixel(r, g, b, a);
-        return true;
-    }
+//     if (x > width || y > height){
+//         return false;
+//     }
+//     else {
+       // QPoint pt = QPoint(x,y);
+//         QColor color = QColor()
+//         image.setPixelColor(pt,);
+//     }
 
-}
+// }
 
-bool Frame::deletePixel(int x, int y){
+// bool Frame::deletePixel(int x, int y){
 
-    if (x > width || y > height){
-        return false;
-    }
-    else {
-        grid[x][y].erasePixel();
-        return true;
-    }
+//     if (x > width || y > height){
+//         return false;
+//     }
+//     else {
+//         grid[x][y].erasePixel();
+//         return true;
+//     }
 
-}
+// }
 
 Frame Frame::duplicate(){
 
-    std::vector<std::vector<Pixel>> newGrid;
+    vector<vector<Pixel>> newGrid;
 
     for (int i  = 0; i < width; i++){
          for (int j = 0; j < height; j++){
@@ -50,33 +53,37 @@ Frame Frame::duplicate(){
     return newFrame;
 }
 
-void Frame::resize(double scaleFactor){
+void Frame::resize(int width, int height){
 
-    int newX = scaleFactor*width;
-    int newY = scaleFactor*height;
+    // int newX = scaleFactor*width;
+    // int newY = scaleFactor*height;
 
-    std::vector<std::vector<Pixel>> newGrid;
+    // std::vector<std::vector<Pixel>> newGrid;
 
-    for (int i = 0; i < newX; i++){
-        for (int j = 0; j < newY; j++){
+    // for (int i = 0; i < newX; i++){
+    //     for (int j = 0; j < newY; j++){
 
-            newGrid[i][j] = grid[(int)i*scaleFactor][(int)j*scaleFactor];
+    //         newGrid[i][j] = grid[(int)i*scaleFactor][(int)j*scaleFactor];
 
-        }
-    }
+    //     }
+    // }
 
-    this->grid = newGrid;
+    // this->grid = newGrid;
+
+    //image.scaled(int width, int height);
+    image.scaled(width,height);
 }
 
 void Frame::clear(){
-    this->grid = {};
+    //this->grid = {};
+    this->image = QImage(width, height, QImage::Format_RGB32);
 }
 
-std::vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
+vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
 
-    bool visited[width][height];
 
-    std::vector<Pixel> contiguousPixels;
+
+    vector<Pixel> contiguousPixels;
 
     BFS(visited, x, y, contiguousPixels);
 
@@ -84,7 +91,7 @@ std::vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
 
 }
 
-bool Frame::isValid(bool visited[][], int row, int col){
+bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
 
     // If cell lies out of bounds
     // should it be row>width?
@@ -105,7 +112,7 @@ bool Frame::isValid(bool visited[][], int row, int col){
     return true;
 }
 
- void Frame::BFS(bool visited[][], int row, int col)
+ void Frame::BFS(vector<vector<bool>> visited, int row, int col)
 {
 
     // Stores indices of the matrix cells
