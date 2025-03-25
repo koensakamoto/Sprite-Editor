@@ -4,6 +4,7 @@
 #include <vector>
 #include <QObject>
 #include <pixel.h>
+#include <QJsonObject>
 
 class Frame
 {
@@ -74,6 +75,12 @@ public:
      * @return
      */
     std::vector<Pixel> getAllContiguousPixels(int x, int y);
+
+    /**
+    * @brief Converts frame data to a QJsonObject.
+    * @return A QJsonObject with the frame's data.
+    */
+    QJsonObject frameToQJson();
 };
 
 #endif // FRAME_H

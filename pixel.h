@@ -2,6 +2,7 @@
 #define PIXEL_H
 
 #include <QObject>
+#include <QJsonObject>
 
 class Pixel
 {
@@ -54,6 +55,12 @@ public:
      * @return The value is the isDisplayed flag. True if the pixel is displayed.
      */
     bool isDisplayed();
+
+    /**
+     * @brief pixelToQJson
+     * @return QJson Object contianing the red, blue, green, alpha and displayed information.
+     */
+    QJsonObject pixelToQJson();
 
 };
 
