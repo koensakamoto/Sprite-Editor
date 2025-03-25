@@ -84,7 +84,7 @@ public:
     * @brief Converts frame data to a QJsonObject.
     * @return A QJsonObject with the frame's data.
     */
-    QJsonObject frameToQJson();
+    QJsonObject frameToQJson(int frameId);
 };
 
 #endif // FRAME_H

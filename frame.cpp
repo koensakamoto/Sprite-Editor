@@ -2,6 +2,7 @@
 #include "pixel.h"
 #include "point2d.h"
 #include <queue>
+#include <QJsonArray>
 
 // Frame::Frame(): width(0), height(0){}
 
@@ -148,21 +149,27 @@ bool Frame::isValid(bool visited[][], int row, int col){
 }
 
 
-QJsonObject Frame::frameToQJson(){
-        QJsonObject frameJson;
-        int rowLength = (int)grid.size();
-        int colLength = (int)grid.at(0).size();
-        for(int row = 0 ; row < rowLength; row++ ){
 
-            for(int col = 0; col < colLength; col++ ){
-                const QString key = QString("(%1, %2)").arg(row).arg(col);
-                Pixel currentPixel = this->grid.at(row).at(col);
-                frameJson[key] = currentPixel.pixelToQJson();
-            }
+QJsonObject Frame::frameToQJson(int frameId) {
+    QJsonObject frameJson;
+    QJsonArray rowsArray;
 
+    int rowLength = grid.size();
+    int colLength = grid.at(0).size();
+
+    for (int row = 0; row < rowLength; row++) {
+        QJsonArray colsArray;
+        for (int col = 0; col < colLength; col++) {
+            Pixel currentPixel = grid.at(row).at(col);
+            colsArray.append(currentPixel.pixelToQJson());
         }
-
-        return frameJson;
+        rowsArray.append(colsArray);
     }
+
+    const QString frameName = QString("Frame %1").arg(frameId);
+    frameJson[frameName] = rowsArray;
+    return frameJson;
+}
+
 
 
