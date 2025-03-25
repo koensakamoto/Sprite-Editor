@@ -12,12 +12,14 @@ SOURCES += \
     frame.cpp \
     main.cpp \
     mainwindow.cpp \
-    pixel.cpp
+    pixel.cpp \
+    point2d.cpp
 
 HEADERS += \
     frame.h \
     mainwindow.h \
-    pixel.h
+    pixel.h \
+    point2d.h
 
 FORMS += \
     mainwindow.ui
