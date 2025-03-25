@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QColorDialog>
 #include <vector>
 #include "frame.h"
 
@@ -28,5 +29,9 @@ private:
     Ui::MainWindow *ui;
     std::vector<Frame> frames;
     void loadProject(const QString& filePath, QVector<Frame> frames);
+
+    void onColorSelected(const QColor &color);
+    void onColorSelectorClicked();
+    QColorDialog *dialog;
 };
 #endif // MAINWINDOW_H

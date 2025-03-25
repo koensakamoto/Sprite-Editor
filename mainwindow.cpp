@@ -7,6 +7,8 @@
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QJsonParseError>
+#include <QColor>
+#include <QColorDialog>
 
 
 MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
@@ -19,7 +21,11 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     QToolBar *toolBar = ui->toolBar;
 
+
+
     QAction *paintBucketAction = ui->actionPaintBucket;
+
+
     QAction *selectToolAction = ui->actionSelectTool;
     QAction *eraserAction = ui->actionEraser;
 
@@ -37,11 +43,33 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
     connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
 
+
+    this->dialog = new QColorDialog(this);
+
+    QAction *colorPickerAction = ui->actionColorPicker;
+
+    toolBar->addAction(colorPickerAction);
+
+    dialog->setOption(QColorDialog::ShowAlphaChannel);
+
+    connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
+
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::onColorSelectorClicked(){
+    this->dialog->show();
+}
+
+void MainWindow::onColorSelected(){
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+    int alpha = color.alpha();
 }
 
 void MainWindow::onPaintBucketClicked() {
