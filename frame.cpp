@@ -10,6 +10,7 @@ Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_R
                                     dRow{ -1, 0, 1, 0 },
                                     dCol{ 0, 1, 0, -1 }
                                     {}
+
 Frame::Frame(QImage image): image(image), width(image.width()), height(image.height()),
                             dRow{ -1, 0, 1, 0 },
                             dCol{ 0, 1, 0, -1 }
@@ -67,11 +68,13 @@ void Frame::resize(int width, int height){
     this->image = image.scaled(width,height);
     this->width = width;
     this->height = height;
+
+    sendImage(this->image);
 }
 
 void Frame::clear(){
-    //this->grid = {};
     this->image = QImage(width, height, QImage::Format_RGB32);
+    sendImage(this->image);
 }
 
 vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
@@ -92,6 +95,9 @@ vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
 
     BFS(visited, x, y, contiguousPixels, startColor);
 
+    sendContiguousPixels(contiguousPixels);
+
+    // may become return type void
     return contiguousPixels;
 
 }
