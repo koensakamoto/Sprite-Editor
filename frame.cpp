@@ -5,7 +5,7 @@
 
 using std::vector;
 
-Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_RGB32)),
+Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_ARGB32)),
                                     width(width), height(height),
                                     dRow{ -1, 0, 1, 0 },
                                     dCol{ 0, 1, 0, -1 }
@@ -73,7 +73,7 @@ void Frame::resize(int width, int height){
 }
 
 void Frame::clear(){
-    this->image = QImage(width, height, QImage::Format_RGB32);
+    this->image = QImage(width, height, QImage::Format_ARGB32);
     sendImage(this->image);
 }
 
