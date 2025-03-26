@@ -41,26 +41,6 @@ public:
      */
     Frame(QImage image);
 
-    // /**
-    //  * @brief setPixel
-    //  * @param x
-    //  * @param y
-    //  * @param r
-    //  * @param b
-    //  * @param g
-    //  * @param a
-    //  * @return True if pixel was sucessfully changed, false otherwise.
-    //  */
-    // bool setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a);
-
-    // /**
-    //  * @brief deletePixel Pixel is "deleted" from the grid array. Pixel will not be shown.
-    //  * @param x
-    //  * @param y
-    //  * @return
-    //  */
-    // bool deletePixel(int x, int y);
-
     /**
      * @brief resize
      * @param x width of the new frame

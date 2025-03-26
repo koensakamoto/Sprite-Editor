@@ -17,31 +17,6 @@ Frame::Frame(QImage image): image(image), width(image.width()), height(image.hei
                             {}
 
 
-// bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
-
-//     if (x > width || y > height){
-//         return false;
-//     }
-//     else {
-       // QPoint pt = QPoint(x,y);
-//         QColor color = QColor()
-//         image.setPixelColor(pt,);
-//     }
-
-// }
-
-// bool Frame::deletePixel(int x, int y){
-
-//     if (x > width || y > height){
-//         return false;
-//     }
-//     else {
-//         grid[x][y].erasePixel();
-//         return true;
-//     }
-
-// }
-
 Frame Frame::duplicate(){
 
     QImage copied = this->image.copy(0,0,width,height);
@@ -49,21 +24,6 @@ Frame Frame::duplicate(){
 }
 
 void Frame::resize(int width, int height){
-
-    // int newX = scaleFactor*width;
-    // int newY = scaleFactor*height;
-
-    // std::vector<std::vector<Pixel>> newGrid;
-
-    // for (int i = 0; i < newX; i++){
-    //     for (int j = 0; j < newY; j++){
-
-    //         newGrid[i][j] = grid[(int)i*scaleFactor][(int)j*scaleFactor];
-
-    //     }
-    // }
-
-    // this->grid = newGrid;
 
     this->image = image.scaled(width,height);
     this->width = width;
