@@ -6,6 +6,7 @@
 #include <pixel.h>
 #include <QJsonObject>
 #include <QImage>
+#include <point2d.h>
 
 using std::vector;
 
@@ -23,13 +24,12 @@ private:
     int dCol[4];
 
     // Helper method for BFS of grid.
-    bool isValid(vector<vector<bool>> visited, int row, int col);
+    bool isValid(vector<vector<bool>> visited, int row, int col, QColor startColor);
 
     //BFS used to getAllContiguousPixels()
-    void BFS(vector<vector<bool>> visited, int row, int col) ;
+    void BFS(vector<vector<bool>> visited, int row, int col, vector<Point2D> contiguousPixels, QColor startColor);
 
 public:
-
 
     /**
      * @brief Frame Creates a Frame of the specified dimensions. Units are in Pixels.
@@ -37,7 +37,6 @@ public:
      * @param y Length of frame in Pixels.
      */
     Frame(int x, int y);
-
 
 
 
@@ -80,12 +79,13 @@ public:
     void clear();
 
     /**
-     * @brief getAllContiguousPixels
+     * @brief getAllContiguousPixels returns a list of Point2D objects. Each point is an x and y
+     * coordinate for a pixel that is continous with the original pixel from x and y.
      * @param x x-coordinate of the pixel selected.
      * @param y y-coordinate of the pixel selected.
      * @return
      */
-    std::vector<Pixel> getAllContiguousPixels(int x, int y);
+    vector<Point2D> getAllContiguousPixels(int x, int y);
 
     /**
     * @brief Converts frame data to a QJsonObject.
@@ -94,14 +94,15 @@ public:
     QJsonObject frameToQJson(int frameId);
 public slots:
     /**
-     * @brief getImage
+     * @brief getImage from model
      * @return A QImage representing the grid of pixels of an image.
      */
-    void recieveImage(QImage);
+    void recieveAndUpdateImage(QImage);
 
 
 signals:
     void sendImage(QImage image);
+    void sendContiguousPixels(vector<Point2D>);
 };
 
 #endif // FRAME_H

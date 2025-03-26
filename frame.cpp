@@ -6,10 +6,12 @@
 
 using std::vector;
 
-// Frame::Frame(): width(0), height(0){}
-
-Frame::Frame(int width, int height): width(width), height(height), grid{},
-                                    dRow{ -1, 0, 1, 0 }, dCol{ 0, 1, 0, -1 }{}
+Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_RGB32)),
+                                    width(width), height(height),
+                                    grid{},
+                                    dRow{ -1, 0, 1, 0 },
+                                    dCol{ 0, 1, 0, -1 }
+                                    {}
 
 
 // bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
@@ -70,8 +72,9 @@ void Frame::resize(int width, int height){
 
     // this->grid = newGrid;
 
-    //image.scaled(int width, int height);
-    image.scaled(width,height);
+    this->image = image.scaled(width,height);
+    this->width = width;
+    this->height = height;
 }
 
 void Frame::clear(){
@@ -79,19 +82,29 @@ void Frame::clear(){
     this->image = QImage(width, height, QImage::Format_RGB32);
 }
 
-vector<Pixel> Frame::getAllContiguousPixels(int x, int y){
+vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
+
+    vector<Point2D> contiguousPixels;
+    vector<vector<bool>> visited;
 
 
+    QColor startColor = image.pixelColor(x,y);
+    QColor backgroundColor = QColor(255,255,255,255);
 
-    vector<Pixel> contiguousPixels;
 
-    BFS(visited, x, y, contiguousPixels);
+    //Rejecting clicks to the background
+    if (startColor == backgroundColor){
+        return contiguousPixels;
+    }
+
+
+    BFS(visited, x, y, contiguousPixels, startColor);
 
     return contiguousPixels;
 
 }
 
-bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
+bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor startColor){
 
     // If cell lies out of bounds
     // should it be row>width?
@@ -99,20 +112,19 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
         row >= width || col >= height)
         return false;
 
-    // If cell is already visited or not colored
-
+    // Invalid cells are already visited or a different color from the original.
     if (visited[row][col]){
         return false;
     }
-    else if (!grid[row][col].isDisplayed()){
+
+    else if (image.pixelColor(row,col).operator != (startColor)){
         return false;
     }
 
-    // Otherwise
     return true;
 }
 
- void Frame::BFS(vector<vector<bool>> visited, int row, int col)
+ void Frame::BFS(vector<vector<bool>> visited, int row, int col, vector<Point2D> contiguousPixels, QColor startColor)
 {
 
     // Stores indices of the matrix cells
@@ -124,6 +136,7 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
 
     Point2D p = Point2D(row,col);
     q.push(p);
+    contiguousPixels.push_back(p);
     visited[row][col] = true;
 
     // Iterate while the queue
@@ -135,8 +148,6 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
         int x = cell.getX();
         int y = cell.getY();
 
-        //System.out.print(grid[x][y] + " ");
-
         q.pop();
 
         // Go to the adjacent cells
@@ -145,10 +156,11 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col){
             int adjx = x + dRow[i];
             int adjy = y + dCol[i];
 
-            if (isValid(visited, adjx, adjy))
+            if (isValid(visited, adjx, adjy, startColor))
             {
                 Point2D p = Point2D(adjx,adjy);
                 q.push(p);
+                contiguousPixels.push_back(p);
                 visited[adjx][adjy] = true;
             }
         }
