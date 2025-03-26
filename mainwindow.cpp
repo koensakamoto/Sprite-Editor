@@ -65,11 +65,11 @@ void MainWindow::onColorSelectorClicked(){
     this->dialog->show();
 }
 
-void MainWindow::onColorSelected(){
-    int red = QColor.red();
-    int green = QColor.green();
-    int blue = QColor.blue();
-    int alpha = QColor.alpha();
+void MainWindow::onColorSelected(const QColor &color){
+    int red = color.red();
+    int green = color.green();
+    int blue = color.blue();
+    int alpha = color.alpha();
 }
 
 void MainWindow::onPaintBucketClicked() {
@@ -85,54 +85,54 @@ void MainWindow::onSelectToolClicked() {
 
 }
 
-void MainWindow::loadProject(const QString& filePath, QVector<Frame> frames){
+// void MainWindow::loadProject(const QString& filePath, QVector<Frame> frames){
 
-    QFile file(filePath);
+//     QFile file(filePath);
 
-    if (!file.open(QIODevice::ReadOnly)) {
-        qDebug() << "failure to open file:" << filePath;
-        return;
-    }
+//     if (!file.open(QIODevice::ReadOnly)) {
+//         qDebug() << "failure to open file:" << filePath;
+//         return;
+//     }
 
-    QByteArray projectJson = file.readAll();
-    file.close();
+//     QByteArray projectJson = file.readAll();
+//     file.close();
 
-    QJsonParseError parseError;
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(projectJson, &parseError);
+//     QJsonParseError parseError;
+//     QJsonDocument jsonDoc = QJsonDocument::fromJson(projectJson, &parseError);
 
-    if (!jsonDoc.isObject()) {
-        qDebug() << "The structure of the JSON is incorrect!";
-        return;
-    }
-    frames.clear();
+//     if (!jsonDoc.isObject()) {
+//         qDebug() << "The structure of the JSON is incorrect!";
+//         return;
+//     }
+//     frames.clear();
 
-    QJsonObject jsonObject = jsonDoc.object();
+//     QJsonObject jsonObject = jsonDoc.object();
 
-    int height = jsonObject["height"].toInt();
-    int width = jsonObject["width"].toInt();
+//     int height = jsonObject["height"].toInt();
+//     int width = jsonObject["width"].toInt();
 
-    QJsonArray framesJson = jsonObject["frames"].toArray();
+//     QJsonArray framesJson = jsonObject["frames"].toArray();
 
-    for (const QJsonValue& frameValue : framesJson){
-        QJsonObject frameObj = frameValue.toObject();
+//     for (const QJsonValue& frameValue : framesJson){
+//         QJsonObject frameObj = frameValue.toObject();
 
-        Frame currFrame(width, height);
+//         Frame currFrame(width, height);
 
-        QJsonArray gridJson = frameObj["grid"].toArray();
+//         QJsonArray gridJson = frameObj["grid"].toArray();
 
-        for(int row = 0; row < height; row++){
-            QJsonArray rowJson = gridJson[row].toArray();
-            for(int col = 0; col < width; col++){
-                QJsonObject pixelObj = rowJson[col].toObject();
+//         for(int row = 0; row < height; row++){
+//             QJsonArray rowJson = gridJson[row].toArray();
+//             for(int col = 0; col < width; col++){
+//                 QJsonObject pixelObj = rowJson[col].toObject();
 
-                unsigned char r = pixelObj["r"].toInt();
-                unsigned char g = pixelObj["g"].toInt();
-                unsigned char b = pixelObj["b"].toInt();
-                unsigned char a = pixelObj["a"].toInt();
+//                 unsigned char r = pixelObj["r"].toInt();
+//                 unsigned char g = pixelObj["g"].toInt();
+//                 unsigned char b = pixelObj["b"].toInt();
+//                 unsigned char a = pixelObj["a"].toInt();
 
-                currFrame.setPixel(col, row, r, g, b, a);
-            }
-        }
-        frames.append(currFrame);
-    }
-}
+//                 currFrame.setPixel(col, row, r, g, b, a);
+//             }
+//         }
+//         frames.append(currFrame);
+//     }
+// }

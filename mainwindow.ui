@@ -119,6 +119,14 @@
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
+  <action name="actionColorPicker">
+   <property name="text">
+    <string>ColorPicker</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
  </widget>
  <resources>
   <include location="resources.qrc"/>
