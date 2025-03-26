@@ -23,6 +23,14 @@ Frame Frame::duplicate(){
     return Frame(copied);
 }
 
+int Frame::getHeight() {
+    return height;
+}
+
+int Frame::getWidth() {
+    return width;
+}
+
 void Frame::resize(int width, int height){
 
     this->image = image.scaled(width,height);

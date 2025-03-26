@@ -49,6 +49,18 @@ public:
     void resize(int x, int y);
 
     /**
+     * @brief Gets the height of the frame.
+     * @return Height of frame.
+     */
+    int getHeight();
+
+    /**
+     * @brief Gets the width of the frame.
+     * @return Width of frame.
+     */
+    int getWidth();
+
+    /**
      * @brief duplicate
      * @return A Frame object that is a copy of the original.
      */

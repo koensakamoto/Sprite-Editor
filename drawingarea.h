@@ -12,7 +12,11 @@ class DrawingArea : public QWidget {
     Q_OBJECT
 
 public:
-    DrawingArea(Frame* frame, QWidget* parent = nullptr);
+    DrawingArea(Frame* frame, QWidget* parent);
+
+    void setBrushColor(const QColor& color);
+
+    void updateCanvas();
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -21,8 +25,12 @@ protected:
 
     void mouseMoveEvent(QMouseEvent* event) override;
 
+    void mouseReleaseEvent(QMouseEvent* event) override;
+
 private:
     Frame* frame;
+    bool drawing;
+    QColor brushColor = QColorConstants::Black;
 
     void drawPixel(const QPoint& pos);
 };
