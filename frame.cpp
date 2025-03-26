@@ -31,6 +31,10 @@ int Frame::getWidth() {
     return width;
 }
 
+QImage Frame::getImage() {
+    return image;
+}
+
 void Frame::resize(int width, int height){
 
     this->image = image.scaled(width,height);

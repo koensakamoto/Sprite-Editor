@@ -42,6 +42,12 @@ public:
     Frame(QImage image);
 
     /**
+     * @brief Gets the QImage object and returns it for editing.
+     * @return QImage member variable.
+     */
+    QImage getImage();
+
+    /**
      * @brief resize
      * @param x width of the new frame
      * @param y height of the new frame;
