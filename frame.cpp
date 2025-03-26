@@ -1,5 +1,4 @@
 #include "frame.h"
-#include "pixel.h"
 #include "point2d.h"
 #include <queue>
 #include <QJsonArray>
@@ -8,10 +7,13 @@ using std::vector;
 
 Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_RGB32)),
                                     width(width), height(height),
-                                    grid{},
                                     dRow{ -1, 0, 1, 0 },
                                     dCol{ 0, 1, 0, -1 }
                                     {}
+Frame::Frame(QImage image): image(image), width(image.width()), height(image.height()),
+                            dRow{ -1, 0, 1, 0 },
+                            dCol{ 0, 1, 0, -1 }
+                            {}
 
 
 // bool Frame::setPixel(int x, int y, unsigned char r, unsigned char b, unsigned char g, unsigned char a){
@@ -41,18 +43,8 @@ Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_R
 
 Frame Frame::duplicate(){
 
-    vector<vector<Pixel>> newGrid;
-
-    for (int i  = 0; i < width; i++){
-         for (int j = 0; j < height; j++){
-            newGrid[i][j] = grid[i][j];
-         }
-    }
-
-    Frame newFrame(width,height);
-    newFrame.grid = newGrid;
-
-    return newFrame;
+    QImage copied = this->image.copy(0,0,width,height);
+    return Frame(copied);
 }
 
 void Frame::resize(int width, int height){

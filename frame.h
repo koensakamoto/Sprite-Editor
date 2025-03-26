@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <QObject>
-#include <pixel.h>
 #include <QJsonObject>
 #include <QImage>
 #include <point2d.h>
@@ -17,7 +16,6 @@ private:
     QImage image;
     int width;
     int height;
-    std::vector<std::vector<Pixel>> grid;
 
     // Used for BFS
     int dRow[4];
@@ -38,7 +36,10 @@ public:
      */
     Frame(int x, int y);
 
-
+    /**
+     * @brief Frame Constructs a Frame from a QImage instance.
+     */
+    Frame(QImage image);
 
     // /**
     //  * @brief setPixel
