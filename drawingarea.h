@@ -18,8 +18,17 @@ public:
 
     void setUpCanvas();
 
+    void setFrame(Frame otherFrame);
+
+    int getFps();
+
 signals:
     void imageUpdated(const QPixmap &pixmap);
+
+public slots:
+     void updateNextFrame();
+
+    void onUpdatedFps(int newFps);
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -36,6 +45,8 @@ private:
     QColor brushColor = QColorConstants::Black;
 
     void drawPixel(const QPoint& pos);
+
+    int fps = 10;
 };
 
 #endif // DRAWINGAREA_H

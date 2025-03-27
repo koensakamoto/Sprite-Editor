@@ -30,7 +30,6 @@ public slots:
     void onEraserClicked();
     void onSelectToolClicked();
 
-
 private:
     Ui::MainWindow *ui;
     std::vector<Frame> frames;
@@ -41,5 +40,7 @@ private:
     void onColorSelected(const QColor &color);
     void onColorSelectorClicked();
     QColorDialog *dialog;
+
+    void animationPreview(DrawingArea previewArea);
 };
 #endif // MAINWINDOW_H

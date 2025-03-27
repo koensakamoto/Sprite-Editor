@@ -55,3 +55,21 @@ void DrawingArea::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     // painter.drawImage(120, 20, frame.getImage());
 }
+
+void DrawingArea::setFrame(Frame otherFrame){
+    this->frame = otherFrame;
+}
+
+void DrawingArea::updateNextFrame(){
+    emit imageUpdated(QPixmap::fromImage(frame.getImage()));
+    update();
+}
+
+void DrawingArea::onUpdatedFps(int newFps){
+    this->fps = newFps;
+}
+
+int DrawingArea::getFps(){
+    return fps;
+}
+
