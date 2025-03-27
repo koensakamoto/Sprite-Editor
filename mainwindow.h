@@ -42,6 +42,6 @@ private:
     void onColorSelectorClicked();
     QColorDialog *dialog;
 
-    void animationPreview(DrawingArea previewArea);
+    void animationPreview();
 };
 #endif // MAINWINDOW_H

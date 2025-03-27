@@ -19,6 +19,8 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 {
     ui->setupUi(this);
     ui->DrawingAreaLabel->setGeometry(120,50,400,400);
+    ui->PreviewLabel->setGeometry(600,50,100,100);
+
     frames.push_back(Frame(400, 400));
 
     currentFrame = 0;
@@ -72,6 +74,8 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
    // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
     // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
 
+    animationPreview();
+
 
 }
 
@@ -107,16 +111,22 @@ void MainWindow::onPenClicked() {
 
 }
 
-void MainWindow::animationPreview(DrawingArea previewArea){
+void MainWindow::animationPreview(){
     for(size_t i = 0; i < frames.size(); i++){
+
+        // Ensure delete/add frame buttons are disabled during animation.
         if(i == frames.size()){
             i = 0;
         }
         //edge case 0  fps
-        int delay = 1000/ previewArea.getFps();
-        const Frame currFrame = frames.at(i);
-        previewArea.setFrame(currFrame);
-        QTimer::singleShot(delay, &previewArea, &DrawingArea::updateNextFrame);
+        //int delay = 1000/ previewArea.getFps();
+        int delay = 200;
+        Frame currFrame = frames.at(i);
+
+        QImage previewImage = currFrame.getImage();
+        QPixmap previewPixmap = QPixmap::fromImage(previewImage);
+
+        QTimer::singleShot(delay, &ui->PreviewLabel, QLabel::setPixmap(previewPixmap));
     }
 }
 
