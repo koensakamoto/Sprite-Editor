@@ -16,10 +16,10 @@ public:
 
     void setBrushColor(const QColor& color);
 
-    void updateCanvas();
+    void setUpCanvas();
 
 signals:
-    void imageUpdated(QPixmap &pixmap);
+    void imageUpdated(const QPixmap &pixmap);
 
 protected:
     void paintEvent(QPaintEvent*) override;

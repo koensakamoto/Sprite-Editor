@@ -17,7 +17,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    frames.push_back(Frame(250, 250));
+    frames.push_back(Frame(441, 351));
 
     currentFrame = 0;
 
@@ -52,9 +52,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     dialog->setOption(QColorDialog::ShowAlphaChannel);
 
-    QPixmap pixmap2 = QPixmap(200,200);
-    pixmap2.fill(Qt::black);
-
 
 
     connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
@@ -64,9 +61,11 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
         ui->DrawingAreaLabel->setPixmap(pixmap);
-        ui->DrawingAreaLabel->setScaledContents(true);
+        // ui->DrawingAreaLabel->setScaledContents(true);
     });
-    drawingArea->updateCanvas();
+    drawingArea->setUpCanvas();
+    drawingArea->setParent(ui->DrawingAreaLabel);
+    // drawingArea->show();
     drawingArea->setBrushColor(QColor(Qt::black));
 }
 

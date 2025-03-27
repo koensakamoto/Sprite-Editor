@@ -7,16 +7,14 @@
 DrawingArea::DrawingArea(Frame frame, QWidget* parent)
     : QWidget(parent), frame(frame) {
     setFixedSize(frame.getWidth(), frame.getHeight());
-    QPixmap pixmap = QPixmap::fromImage(frame.getImage());
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
     brushColor = color;
 }
 
-void DrawingArea::updateCanvas() {
-    QPixmap pixmap = QPixmap::fromImage(frame.getImage());
-    emit imageUpdated(pixmap);
+void DrawingArea::setUpCanvas() {
+    emit imageUpdated(QPixmap::fromImage(frame.getImage()));
     update();
 }
 
@@ -24,8 +22,7 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {
         drawing = true;
         drawPixel(event->pos());
-        QPixmap pixmap = QPixmap::fromImage(frame.getImage());
-        emit imageUpdated(pixmap);
+        emit imageUpdated(QPixmap::fromImage(frame.getImage()));
         update();
     }
 }
@@ -33,7 +30,7 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
 void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
     if (drawing) {
         drawPixel(event->pos());
-        emit imageUpdated(pixmap);
+        emit imageUpdated(QPixmap::fromImage(frame.getImage()));
         update();
     }
 }
@@ -48,13 +45,12 @@ void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
 void DrawingArea::drawPixel(const QPoint& pos) {
     if (pos.x() >= 0 && pos.x() < frame.getImage().width() &&
         pos.y() >= 0 && pos.y() < frame.getImage().height()) {
-        frame.getImage().setPixelColor(pos, brushColor);
-        update();
+
     }
+    frame.getImage().setPixelColor(pos, brushColor);
 }
 
 void DrawingArea::paintEvent(QPaintEvent*) {
     QPainter painter(this);
-    painter.drawImage(120, 20, frame.getImage());
-    emit imageUpdated(pixmap);
+    // painter.drawImage(120, 20, frame.getImage());
 }

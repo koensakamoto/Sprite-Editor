@@ -9,12 +9,16 @@ Frame::Frame(int width, int height):image(QImage(width, height, QImage::Format_A
                                     width(width), height(height),
                                     dRow{ -1, 0, 1, 0 },
                                     dCol{ 0, 1, 0, -1 }
-                                    {}
+    {
+    image.fill(Qt::white);
+    }
 
 Frame::Frame(QImage image): image(image), width(image.width()), height(image.height()),
                             dRow{ -1, 0, 1, 0 },
                             dCol{ 0, 1, 0, -1 }
-                            {}
+    {
+    image.fill(Qt::white);
+    }
 
 
 Frame Frame::duplicate(){
