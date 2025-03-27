@@ -2,7 +2,7 @@
     <qresource prefix="/icons">
         <file>ICON_eraser.png</file>
         <file>ICON_paintbucker.png</file>
-        <file>ICON_colorpallate.png</file>
         <file>ICON_selector.png</file>
+        <file>ICON_collorpallete.png</file>
     </qresource>
 </RCC>

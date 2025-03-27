@@ -32,7 +32,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     QAction *selectToolAction = ui->actionSelectTool;
     QAction *eraserAction = ui->actionEraser;
-
+    QAction *colorPickerAction = ui->actionColorPicker;
 
     QActionGroup *toolActionGroup = new QActionGroup(this);
     toolActionGroup->addAction(paintBucketAction);
@@ -42,12 +42,13 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     toolBar->addAction(paintBucketAction);
     toolBar->addAction(selectToolAction);
     toolBar->addAction(eraserAction);
+    toolBar->addAction(colorPickerAction);
 
     this->dialog = new QColorDialog(this);
 
-    QAction *colorPickerAction = ui->actionColorPicker;
 
-    toolBar->addAction(colorPickerAction);
+
+
 
     dialog->setOption(QColorDialog::ShowAlphaChannel);
 
