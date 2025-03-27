@@ -35,12 +35,15 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     QAction *selectToolAction = ui->actionSelectTool;
     QAction *eraserAction = ui->actionEraser;
     QAction *colorPickerAction = ui->actionColorPicker;
+    QAction *penAction = ui->actionPen;
 
     QActionGroup *toolActionGroup = new QActionGroup(this);
+    toolActionGroup->addAction(penAction);
     toolActionGroup->addAction(paintBucketAction);
     toolActionGroup->addAction(selectToolAction);
     toolActionGroup->addAction(eraserAction);
 
+    toolBar->addAction(penAction);
     toolBar->addAction(paintBucketAction);
     toolBar->addAction(selectToolAction);
     toolBar->addAction(eraserAction);
@@ -55,6 +58,8 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
     connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
     connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
+    connect(penAction, &QAction::triggered, this, &MainWindow::onPenClicked);
+
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
@@ -95,6 +100,10 @@ void MainWindow::onEraserClicked() {
 }
 
 void MainWindow::onSelectToolClicked() {
+
+}
+
+void MainWindow::onPenClicked() {
 
 }
 

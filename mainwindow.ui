@@ -30,6 +30,32 @@
      <string/>
     </property>
    </widget>
+   <widget class="QLabel" name="previewDisplay">
+    <property name="geometry">
+     <rect>
+      <x>610</x>
+      <y>20</y>
+      <width>180</width>
+      <height>180</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QSlider" name="fpsSlider">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>240</y>
+      <width>160</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Orientation::Horizontal</enum>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -38,7 +64,7 @@
      <x>0</x>
      <y>0</y>
      <width>895</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -147,6 +173,21 @@
    </property>
    <property name="text">
     <string>ColorPicker</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionPen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/icons/ICON_PenTool.png</normaloff>:/icons/ICON_PenTool.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pen</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>

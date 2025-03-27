@@ -4,5 +4,6 @@
         <file>ICON_paintbucker.png</file>
         <file>ICON_selector.png</file>
         <file>ICON_collorpallete.png</file>
+        <file>ICON_PenTool.png</file>
     </qresource>
 </RCC>

@@ -29,6 +29,7 @@ public slots:
     void onPaintBucketClicked();
     void onEraserClicked();
     void onSelectToolClicked();
+    void onPenClicked();
 
 private:
     Ui::MainWindow *ui;
