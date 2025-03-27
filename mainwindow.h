@@ -26,6 +26,7 @@ public slots:
     void onEraserClicked();
     void onSelectToolClicked();
 
+
 private:
     Ui::MainWindow *ui;
     std::vector<Frame> frames;

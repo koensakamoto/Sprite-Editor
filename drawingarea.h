@@ -22,6 +22,8 @@ signals:
     void imageUpdated(QPixmap &pixmap);
 
 protected:
+    void paintEvent(QPaintEvent*) override;
+
     void mousePressEvent(QMouseEvent* event) override;
 
     void mouseMoveEvent(QMouseEvent* event) override;

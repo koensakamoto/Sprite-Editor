@@ -66,6 +66,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
         ui->DrawingAreaLabel->setScaledContents(true);
     });
     drawingArea->updateCanvas();
+    drawingArea->setBrushColor(QColor(Qt::black));
 }
 
 MainWindow::~MainWindow()
