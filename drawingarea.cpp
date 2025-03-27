@@ -1,3 +1,4 @@
+// This is our model.
 #include "drawingarea.h"
 
 #include <QWidget>

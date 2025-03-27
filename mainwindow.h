@@ -7,6 +7,10 @@
 #include "frame.h"
 #include "drawingarea.h"
 
+/**
+ * This is the main window class that represents the main window of our program.
+ */
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
