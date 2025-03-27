@@ -61,7 +61,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
-    // drawingArea->show();
     drawingArea->setBrushColor(QColor(Qt::black));
 }
 
