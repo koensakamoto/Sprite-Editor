@@ -31,7 +31,7 @@ int Frame::getWidth() {
     return width;
 }
 
-QImage Frame::getImage() {
+QImage& Frame::getImage() {
     return image;
 }
 

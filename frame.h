@@ -45,7 +45,7 @@ public:
      * @brief Gets the QImage object and returns it for editing.
      * @return QImage member variable.
      */
-    QImage getImage();
+    QImage& getImage();
 
     /**
      * @brief resize

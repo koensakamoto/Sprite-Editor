@@ -61,9 +61,11 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
-    connect(drawingArea, &DrawingArea::imageUpdated, this, [=](QPixmap pixmap){ui->DrawingAreaLabel->setPixmap(pixmap);});
-    ui->DrawingAreaLabel->setGeometry(200, 50, 400, 300);
-    ui->DrawingAreaLabel->show();
+    connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
+        ui->DrawingAreaLabel->setPixmap(pixmap);
+        ui->DrawingAreaLabel->setScaledContents(true);
+    });
+    drawingArea->updateCanvas();
 }
 
 MainWindow::~MainWindow()
@@ -76,7 +78,9 @@ void MainWindow::onColorSelectorClicked(){
 }
 
 void MainWindow::onColorSelected(const QColor &color){
-    drawingArea->setBrushColor(color);
+    if (color.isValid()) {
+        drawingArea->setBrushColor(color);
+    }
 }
 
 void MainWindow::onPaintBucketClicked() {
