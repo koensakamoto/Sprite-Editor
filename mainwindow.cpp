@@ -10,6 +10,7 @@
 #include <QColor>
 #include <QColorDialog>
 #include "drawingarea.h"
+#include <QTimer>
 
 
 MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
@@ -67,6 +68,11 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     drawingArea->setParent(ui->DrawingAreaLabel);
     // drawingArea->show();
     drawingArea->setBrushColor(QColor(Qt::black));
+
+   // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
+    // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -96,3 +102,17 @@ void MainWindow::onEraserClicked() {
 void MainWindow::onSelectToolClicked() {
 
 }
+
+void MainWindow::animationPreview(DrawingArea previewArea){
+    for(size_t i = 0; i < frames.size(); i++){
+        if(i == frames.size()){
+            i = 0;
+        }
+        //edge case 0  fps
+        int delay = 1000/ previewArea.getFps();
+        const Frame currFrame = frames.at(i);
+        previewArea.setFrame(currFrame);
+        QTimer::singleShot(delay, &previewArea, &DrawingArea::updateNextFrame);
+    }
+}
+
