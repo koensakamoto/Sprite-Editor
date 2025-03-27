@@ -17,7 +17,8 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    frames.push_back(Frame(441, 351));
+    ui->DrawingAreaLabel->setGeometry(120,50,400,400);
+    frames.push_back(Frame(400, 400));
 
     currentFrame = 0;
 
@@ -46,10 +47,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     this->dialog = new QColorDialog(this);
 
-
-
-
-
     dialog->setOption(QColorDialog::ShowAlphaChannel);
 
 
@@ -60,9 +57,8 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
-        ui->DrawingAreaLabel->setPixmap(pixmap);
-        // ui->DrawingAreaLabel->setScaledContents(true);
-    });
+        ui->DrawingAreaLabel->setPixmap(pixmap);});
+
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
     // drawingArea->show();
