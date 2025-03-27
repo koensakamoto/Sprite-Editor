@@ -12,7 +12,7 @@ class DrawingArea : public QWidget {
     Q_OBJECT
 
 public:
-    DrawingArea(Frame* frame, QWidget* parent);
+    DrawingArea(Frame frame, QWidget* parent);
 
     void setBrushColor(const QColor& color);
 
@@ -28,7 +28,7 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
-    Frame* frame;
+    Frame frame;
     bool drawing;
     QColor brushColor = QColorConstants::Black;
 

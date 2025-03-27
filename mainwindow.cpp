@@ -9,6 +9,7 @@
 #include <QJsonParseError>
 #include <QColor>
 #include <QColorDialog>
+#include "drawingarea.h"
 
 
 MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
@@ -17,11 +18,13 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 {
     ui->setupUi(this);
 
+    currentFrame = 0;
+
     this->frames = frames;
 
     QToolBar *toolBar = ui->toolBar;
 
-
+    drawingArea = new DrawingArea(frames[currentFrame], parent);
 
     QAction *paintBucketAction = ui->actionPaintBucket;
 
@@ -39,11 +42,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     toolBar->addAction(selectToolAction);
     toolBar->addAction(eraserAction);
 
-    connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
-    connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
-    connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
-
-
     this->dialog = new QColorDialog(this);
 
     QAction *colorPickerAction = ui->actionColorPicker;
@@ -52,6 +50,14 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     dialog->setOption(QColorDialog::ShowAlphaChannel);
 
+
+    ui->DrawingAreaLabel->setGeometry(200, 50, 400, 300);
+
+
+
+    connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
+    connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
+    connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
 }
@@ -66,10 +72,7 @@ void MainWindow::onColorSelectorClicked(){
 }
 
 void MainWindow::onColorSelected(const QColor &color){
-    int red = color.red();
-    int green = color.green();
-    int blue = color.blue();
-    int alpha = color.alpha();
+    drawingArea->setBrushColor(color);
 }
 
 void MainWindow::onPaintBucketClicked() {

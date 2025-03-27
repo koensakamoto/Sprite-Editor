@@ -4,9 +4,9 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-DrawingArea::DrawingArea(Frame* frame, QWidget* parent)
+DrawingArea::DrawingArea(Frame frame, QWidget* parent)
     : QWidget(parent), frame(frame) {
-    setFixedSize(frame->getWidth(), frame->getHeight());
+    setFixedSize(frame.getWidth(), frame.getHeight());
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -37,11 +37,9 @@ void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
-    if (!frame) return;
-
-    if (pos.x() >= 0 && pos.x() < frame->getImage().width() &&
-        pos.y() >= 0 && pos.y() < frame->getImage().height()) {
-        frame->getImage().setPixelColor(pos, brushColor);
+    if (pos.x() >= 0 && pos.x() < frame.getImage().width() &&
+        pos.y() >= 0 && pos.y() < frame.getImage().height()) {
+        frame.getImage().setPixelColor(pos, brushColor);
         update(); // Refresh the drawing
     }
 }
