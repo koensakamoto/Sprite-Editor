@@ -18,9 +18,10 @@ public:
 
     void updateCanvas();
 
-protected:
-    void paintEvent(QPaintEvent*) override;
+signals:
+    void imageUpdated(QPixmap &pixmap);
 
+protected:
     void mousePressEvent(QMouseEvent* event) override;
 
     void mouseMoveEvent(QMouseEvent* event) override;

@@ -14,6 +14,9 @@ void DrawingArea::setBrushColor(const QColor& color) {
 }
 
 void DrawingArea::updateCanvas() {
+    QPixmap pixmap = QPixmap::fromImage(frame.getImage());
+    pixmap.fill(Qt::white);
+    emit imageUpdated(pixmap);
     update();
 }
 
@@ -21,18 +24,21 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {
         drawing = true;
         drawPixel(event->pos());
+        updateCanvas();
     }
 }
 
 void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
     if (drawing) {
         drawPixel(event->pos());
+        updateCanvas();
     }
 }
 
 void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         drawing = false;
+        updateCanvas();
     }
 }
 

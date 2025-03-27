@@ -41,12 +41,12 @@ void Frame::resize(int width, int height){
     this->width = width;
     this->height = height;
 
-    sendImage(this->image);
+    // Frame::sendImage(this->image);
 }
 
 void Frame::clear(){
     this->image = QImage(width, height, QImage::Format_ARGB32);
-    sendImage(this->image);
+    // Frame::sendImage(this->image);
 }
 
 vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
@@ -67,7 +67,7 @@ vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
 
     BFS(visited, x, y, contiguousPixels, startColor);
 
-    sendContiguousPixels(contiguousPixels);
+    // Frame::sendContiguousPixels(contiguousPixels);
 
     // may become return type void
     return contiguousPixels;
@@ -135,29 +135,6 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
             }
         }
     }
-}
-
-
-
-QJsonObject Frame::frameToQJson(int frameId) {
-    QJsonObject frameJson;
-    QJsonArray rowsArray;
-
-    int rowLength = grid.size();
-    int colLength = grid.at(0).size();
-
-    for (int row = 0; row < rowLength; row++) {
-        QJsonArray colsArray;
-        for (int col = 0; col < colLength; col++) {
-            Pixel currentPixel = grid.at(row).at(col);
-            colsArray.append(currentPixel.pixelToQJson());
-        }
-        rowsArray.append(colsArray);
-    }
-
-    const QString frameName = QString("Frame %1").arg(frameId);
-    frameJson[frameName] = rowsArray;
-    return frameJson;
 }
 
 

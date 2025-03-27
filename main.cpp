@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include <vector>
 #include "frame.h"
-#include "drawingarea.h"
 
 #include <QApplication>
 
