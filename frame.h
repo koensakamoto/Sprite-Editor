@@ -14,12 +14,25 @@ class Frame
 private:
 
     QImage image;
+
     int width;
     int height;
+
+    // the image represents the size of a pixel in the matrix
+    int pixelSize;
+    int pixelWidth;
 
     // Used for BFS
     int dRow[4];
     int dCol[4];
+
+    /**
+     * @brief scaleFromImage Uses QImage coordinates and returns scaled down pixel coordinates.
+     * @param x
+     * @param y
+     * @return
+     */
+    Point2D scaleFromImage(int x, int y);
 
     // Helper method for BFS of grid.
     bool isValid(vector<vector<bool>> visited, int row, int col, QColor startColor);
@@ -91,6 +104,13 @@ public:
     * @return A QJsonObject with the frame's data.
     */
     QJsonObject frameToQJson(int frameId);
+
+    /**
+     * @brief setPixelSize
+     * @param pixelSize
+     */
+    void setPixelSize(int pixelSize);
+
 public slots:
     /**
      * @brief getImage from model

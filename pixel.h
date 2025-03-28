@@ -3,19 +3,14 @@
 
 #include <QObject>
 #include <QJsonObject>
+#include <QColor>
 
 class Pixel
 {
 
 private:
 
-    // red, green and blue values ranging from 0 to 255.
-    unsigned char red;
-    unsigned char green;
-    unsigned char blue;
-
-    // transparency
-    unsigned char alpha;
+    QColor color;
 
     // If true, the pixel should be displayed, if false, the pixel is not displayed.
     bool displayed;
