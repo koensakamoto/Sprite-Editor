@@ -155,69 +155,68 @@ void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
      emit updatePixelSize(position);
 }
 
-void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
-    //If there are not frames then return
-    if (frames.empty()) {
-        return;
-    }
+// void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
+//     //If there are not frames then return
+//     if (frames.empty()) {
+//         return;
+//     }
 
-    //Guarantee the file has a .ssp extension
-    if (!filePath.endsWith(".ssp", Qt::CaseInsensitive)) {
-        filePath += ".ssp";
-    }
+//     //Guarantee the file has a .ssp extension
+//     if (!filePath.endsWith(".ssp", Qt::CaseInsensitive)) {
+//         filePath += ".ssp";
+//     }
 
-    //Get the dimension of the frames.
-    Frame& firstFrame = frames.front();
-    int height = firstFrame.getHeight();
-    int width = firstFrame.getWidth();
+//     //Get the dimension of the frames.
+//     Frame& firstFrame = frames.front();
+//     int height = firstFrame.getHeight();
+//     int width = firstFrame.getWidth();
 
+//     QJsonArray frameArray;
 
-    QJsonArray frameArray;
+//     for (size_t frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
+//         QJsonObject frameObject;
+//         frameObject["frame_Index"] = static_cast<int>(frameIndex);
+//         QJsonArray grid;
+//         QImage image = frames[frameIndex].getImage();
+//         qDebug() << frames.size();
+//         for (int y = 0; y < height; y++) {
+//             QJsonArray row;
+//             for (int x = 0; x < width; x++) {
+//                 QColor color = image.pixelColor(x, y);
+//                 // qDebug() << "r," << color.red() << " b" << color.blue();
+//                 QJsonObject pixelObj {
+//                     //Pixel are represented by textual values
+//                     {"r", QString::number(color.red())},
+//                     {"g", QString::number(color.green())},
+//                     {"b", QString::number(color.blue())},
+//                     {"a", QString::number(color.alpha())}
+//                 };
+//                 row.append(pixelObj);
+//             }
+//             grid.append(row);
+//         }
 
-    for (size_t frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
-        QJsonObject frameObject;
-        frameObject["frame_Index"] = static_cast<int>(frameIndex);
-        QJsonArray grid;
-        QImage image = frames[frameIndex].getImage();
-        qDebug() << frames.size();
-        for (int y = 0; y < height; y++) {
-            QJsonArray row;
-            for (int x = 0; x < width; x++) {
-                QColor color = image.pixelColor(x, y);
-                // qDebug() << "r," << color.red() << " b" << color.blue();
-                QJsonObject pixelObj {
-                    //Pixel are represented by textual values
-                    {"r", QString::number(color.red())},
-                    {"g", QString::number(color.green())},
-                    {"b", QString::number(color.blue())},
-                    {"a", QString::number(color.alpha())}
-                };
-                row.append(pixelObj);
-            }
-            grid.append(row);
-        }
+//         frameObject["pixels"] = grid;
+//         frameArray.append(frameObject);
+//     }
 
-        frameObject["pixels"] = grid;
-        frameArray.append(frameObject);
-    }
+//     //Create Json object for spirte editor that stores the height, width, and frames
+//     QJsonObject spriteEditor;
+//     spriteEditor["height"] = height;
+//     spriteEditor["width"] = width;
+//     spriteEditor["frames"] = frameArray;
 
-    //Create Json object for spirte editor that stores the height, width, and frames
-    QJsonObject spriteEditor;
-    spriteEditor["height"] = height;
-    spriteEditor["width"] = width;
-    spriteEditor["frames"] = frameArray;
+//     QFile file(filePath);
+//     if (!file.open(QIODevice::WriteOnly)) {
+//         throw std::runtime_error("Failed to open file for writing: " + filePath.toStdString());
+//     }
 
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly)) {
-        throw std::runtime_error("Failed to open file for writing: " + filePath.toStdString());
-    }
-
-    //Write json contents to the file
-    QJsonDocument jsonDoc(spriteEditor);
-    QByteArray jsonBytes = jsonDoc.toJson(QJsonDocument::Indented);
-    file.write(jsonBytes);
-    file.close();
-}
+//     //Write json contents to the file
+//     QJsonDocument jsonDoc(spriteEditor);
+//     QByteArray jsonBytes = jsonDoc.toJson(QJsonDocument::Indented);
+//     file.write(jsonBytes);
+//     file.close();
+// }
 
 void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
     QFile file(filePath);
@@ -270,12 +269,80 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
 void MainWindow::saveClicked(){
     qDebug() << "clicked";
     QString filePath = "loadJsonFile.txt";
-    saveFrames(this->frames, filePath);
+    std::vector<Frame> framesVector;
+    QImage image1(400, 400, QImage::Format_ARGB32);
+     image1.fill(QColor(255, 0, 0, 255));
+    Frame redFrame(image1);
+     frames.push_back(redFrame);
+
+    saveFrames(framesVector, filePath);
 }
 
 // void MainWindow::loadClicked(){
 //     QString filePath = "test_frames.json";
 //     loadFrames(this->frames, filePath);
 // }
+
+void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath) {
+    //If there are not frames then return
+    if (frames.empty()) {
+        return;
+    }
+
+    //Guarantee the file has a .ssp extension
+    if (!filePath.endsWith(".ssp", Qt::CaseInsensitive)) {
+        filePath += ".ssp";
+    }
+
+    //Get the dimension of the frames.
+    Frame& frame = this->drawingArea.getFrame;
+    int height = frame.getHeight();
+    int width = frame.getWidth();
+
+    QJsonArray frameArray;
+
+        QJsonObject frameObject;
+        frameObject["frame_Index"] = static_cast<int>(1);
+        QJsonArray grid;
+
+        QImage image = frame.getImage();
+        for (int y = 0; y < height; y++) {
+            QJsonArray row;
+            for (int x = 0; x < width; x++) {
+                QColor color = image.pixelColor(x, y);
+                // qDebug() << "r," << color.red() << " b" << color.blue();
+                QJsonObject pixelObj {
+                    //Pixel are represented by textual values
+                    {"r", QString::number(color.red())},
+                    {"g", QString::number(color.green())},
+                    {"b", QString::number(color.blue())},
+                    {"a", QString::number(color.alpha())}
+                };
+                row.append(pixelObj);
+            }
+            grid.append(row);
+
+
+        frameObject["pixels"] = grid;
+        frameArray.append(frameObject);
+    }
+
+    //Create Json object for spirte editor that stores the height, width, and frames
+    QJsonObject spriteEditor;
+    spriteEditor["height"] = height;
+    spriteEditor["width"] = width;
+    spriteEditor["frames"] = frameArray;
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        throw std::runtime_error("Failed to open file for writing: " + filePath.toStdString());
+    }
+
+    //Write json contents to the file
+    QJsonDocument jsonDoc(spriteEditor);
+    QByteArray jsonBytes = jsonDoc.toJson(QJsonDocument::Indented);
+    file.write(jsonBytes);
+    file.close();
+}
 
 
