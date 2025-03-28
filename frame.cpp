@@ -141,6 +141,10 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
     }
 }
 
+void Frame::setPixelSize(int pixelSize){
+
+    this->pixelSize = pixelSize;
+}
 // Point2D Frame::scaleFromImage(int x, int y){
 
 //     int nextX = x/pixelSize;
