@@ -88,6 +88,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
+    // connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
 }
 
 MainWindow::~MainWindow()
@@ -178,12 +179,12 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
         frameObject["frame_Index"] = static_cast<int>(frameIndex);
         QJsonArray grid;
         QImage image = frames[frameIndex].getImage();
-
+        qDebug() << frames.size();
         for (int y = 0; y < height; y++) {
             QJsonArray row;
             for (int x = 0; x < width; x++) {
                 QColor color = image.pixelColor(x, y);
-
+                // qDebug() << "r," << color.red() << " b" << color.blue();
                 QJsonObject pixelObj {
                     //Pixel are represented by textual values
                     {"r", QString::number(color.red())},
@@ -267,8 +268,14 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
 }
 
 void MainWindow::saveClicked(){
+    qDebug() << "clicked";
     QString filePath = "loadJsonFile.txt";
-    loadFrames(this->frames, filePath);
+    saveFrames(this->frames, filePath);
 }
+
+// void MainWindow::loadClicked(){
+//     QString filePath = "test_frames.json";
+//     loadFrames(this->frames, filePath);
+// }
 
 

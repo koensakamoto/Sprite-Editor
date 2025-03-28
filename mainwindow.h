@@ -32,6 +32,7 @@ public slots:
     void onPenClicked();
 
     void saveClicked();
+    // void loadClicked();
 
 private slots:
     void on_fpsSlider_sliderMoved(int position);
