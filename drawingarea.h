@@ -25,7 +25,7 @@ public:
     /**
      * @return The Frames used to store the QImages DrawingArea is drawing onto.
      */
-    std::vector<Frame> DrawingArea::getFrames();
+    std::vector<Frame> getFrames();
 
 signals:
     void imageUpdated(const QPixmap &pixmap);
