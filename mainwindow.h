@@ -31,6 +31,12 @@ public slots:
     void onSelectToolClicked();
     void onPenClicked();
 
+private slots:
+    void on_fpsSlider_sliderMoved(int position);
+    void on_pixelSizeSlider_sliderMoved(int position);
+
+signals :
+    void updatePixelSize(int size);
 private:
     Ui::MainWindow *ui;
     std::vector<Frame> frames;

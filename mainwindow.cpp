@@ -74,6 +74,12 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
    // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
     // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
 
+    // connect color dialog to brush color
+    connect(this->dialog, &QColorDialog::currentColorChanged, drawingArea, &DrawingArea::setBrushColor);
+
+
+    //connect slider to pixelSize
+    connect(this, &MainWindow::updatePixelSize, drawingArea, &DrawingArea::setPixelSize);
     animationPreview();
 
 
@@ -88,11 +94,6 @@ void MainWindow::onColorSelectorClicked(){
     this->dialog->show();
 }
 
-void MainWindow::onColorSelected(const QColor &color){
-    if (color.isValid()) {
-        drawingArea->setBrushColor(color);
-    }
-}
 
 void MainWindow::onPaintBucketClicked() {
 
@@ -100,6 +101,8 @@ void MainWindow::onPaintBucketClicked() {
 
 void MainWindow::onEraserClicked() {
 
+    drawingArea->setBrushColor(QColor(Qt::white)); //FIXME signals and slots
+    animationPreview();
 
 }
 
@@ -108,25 +111,39 @@ void MainWindow::onSelectToolClicked() {
 }
 
 void MainWindow::onPenClicked() {
-
 }
 
 void MainWindow::animationPreview(){
-    for(size_t i = 0; i < frames.size(); i++){
 
+    for(size_t i = 0; i < frames.size(); i++){
         // Ensure delete/add frame buttons are disabled during animation.
         if(i == frames.size()){
             i = 0;
         }
         //edge case 0  fps
-        //int delay = 1000/ previewArea.getFps();
-        int delay = 200;
+        int delay = 1000 / drawingArea->getFps();
+
         Frame currFrame = frames.at(i);
 
         QImage previewImage = currFrame.getImage();
         QPixmap previewPixmap = QPixmap::fromImage(previewImage);
 
-        QTimer::singleShot(delay, &ui->PreviewLabel, QLabel::setPixmap(previewPixmap));
+        // Quickshot: Using a method pointer
+        QTimer::singleShot(delay, this, [=]() {
+            ui->PreviewLabel->setPixmap(previewPixmap);
+        });
     }
+}
+
+
+void MainWindow::on_fpsSlider_sliderMoved(int position)
+{
+
+}
+
+
+void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
+{
+     emit updatePixelSize(position);
 }
 

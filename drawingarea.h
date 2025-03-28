@@ -26,9 +26,11 @@ signals:
     void imageUpdated(const QPixmap &pixmap);
 
 public slots:
-     void updateNextFrame();
+    void updateNextFrame();
 
     void onUpdatedFps(int newFps);
+
+    void setPixelSize(int size);
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -42,11 +44,12 @@ protected:
 private:
     Frame frame;
     bool drawing;
-    QColor brushColor = QColorConstants::Black;
+    QColor brushColor;
 
     void drawPixel(const QPoint& pos);
 
     int fps = 10;
+    int pixelSize = 20;
 };
 
 #endif // DRAWINGAREA_H
