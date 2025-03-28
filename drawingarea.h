@@ -22,6 +22,11 @@ public:
 
     int getFps();
 
+    /**
+     * @return The current Frame used to store the QImage DrawingArea is drawing onto.
+     */
+    Frame getFrame();
+
 signals:
     void imageUpdated(const QPixmap &pixmap);
 

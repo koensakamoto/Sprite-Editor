@@ -99,3 +99,7 @@ void DrawingArea::setPixelSize(int size){
     frame.setPixelSize(pixelSize);
     }
 }
+
+Frame DrawingArea::getFrame(){
+    return frame;
+}
