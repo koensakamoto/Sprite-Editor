@@ -31,6 +31,8 @@ public slots:
     void onSelectToolClicked();
     void onPenClicked();
 
+    void saveClicked();
+
 private slots:
     void on_fpsSlider_sliderMoved(int position);
     void on_pixelSizeSlider_sliderMoved(int position);
@@ -49,5 +51,9 @@ private:
     QColorDialog *dialog;
 
     void animationPreview();
+
+    void saveFrames(std::vector<Frame>& frames, QString& filepath);
+
+    void loadFrames(std::vector<Frame>& frames, QString& filepath);
 };
 #endif // MAINWINDOW_H
