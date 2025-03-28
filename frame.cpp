@@ -141,11 +141,11 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
     }
 }
 
-Point2D Frame::scaleFromImage(int x, int y){
+// Point2D Frame::scaleFromImage(int x, int y){
 
-    int nextX = x/pixelSize;
-    int nextY = y/pixelSize;
+//     int nextX = x/pixelSize;
+//     int nextY = y/pixelSize;
 
 
-}
+// }
 

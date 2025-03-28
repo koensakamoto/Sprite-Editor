@@ -15,13 +15,11 @@ private:
 
     QImage image;
 
-    vector<vector<Pixel>> pixelizedGrid;
     int width;
     int height;
 
     // the image represents the size of a pixel in the matrix
     int pixelSize;
-
     int pixelWidth;
 
     // Used for BFS
