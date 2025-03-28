@@ -8,7 +8,7 @@
 DrawingArea::DrawingArea(Frame frame, QWidget* parent)
     : QWidget(parent), frame(frame), frameVector{} {
     setFixedSize(frame.getWidth(), frame.getHeight());
-    frameVector.push_back(frame);
+    frameVector.push_back(&frame);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -103,6 +103,6 @@ void DrawingArea::setPixelSize(int size){
     }
 }
 
-std::vector<Frame> DrawingArea::getFrames(){
+std::vector<Frame*> DrawingArea::getFrames(){
     return frameVector;
 }
