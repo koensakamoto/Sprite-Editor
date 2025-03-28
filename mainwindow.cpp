@@ -40,7 +40,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     QAction *eraserAction = ui->actionEraser;
     QAction *colorPickerAction = ui->actionColorPicker;
     QAction *penAction = ui->actionPen;
-    QAction *saveAction = ui->saveButton;
 
     QActionGroup *toolActionGroup = new QActionGroup(this);
     toolActionGroup->addAction(penAction);
@@ -266,6 +265,8 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
 }
 
 void MainWindow::saveClicked(){
-    QString filePath = "test_frames.json";
+    QString filePath = "loadJsonFile.txt";
     loadFrames(this->frames, filePath);
 }
+
+
