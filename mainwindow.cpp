@@ -70,6 +70,16 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
         ui->DrawingAreaLabel->setPixmap(pixmap);});
 
+    //
+    connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
+    ui->PreviewLabel->setPixmap(
+        pixmap.scaled(
+            ui->PreviewLabel->size(),
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+            )
+        );});
+
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
     drawingArea->setBrushColor(QColor(Qt::red));
