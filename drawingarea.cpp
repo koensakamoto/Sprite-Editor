@@ -6,8 +6,9 @@
 #include <QMouseEvent>
 
 DrawingArea::DrawingArea(Frame frame, QWidget* parent)
-    : QWidget(parent), frame(frame) {
+    : QWidget(parent), frame(frame), frameVector{} {
     setFixedSize(frame.getWidth(), frame.getHeight());
+    frameVector.push_back(frame);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -47,7 +48,7 @@ void DrawingArea::drawPixel(const QPoint& pos) {
     if (pos.x() >= 0 && pos.x() < frame.getImage().width() &&
         pos.y() >= 0 && pos.y() < frame.getImage().height()) {
 
-    }
+
     int width = frame.getWidth();
     int height = frame.getHeight();
 
@@ -58,7 +59,7 @@ void DrawingArea::drawPixel(const QPoint& pos) {
     int relativeClickY = std::round(clickY / pixelSize) * pixelSize;
 
 
-
+    }
 
     // paint in square of pixel
     for (int row = 0 ; row < pixelSize; row ++){
@@ -98,4 +99,8 @@ void DrawingArea::setPixelSize(int size){
     pixelSize = size;
     frame.setPixelSize(pixelSize);
     }
+}
+
+std::vector<Frame> DrawingArea::getFrames(){
+    return frameVector;
 }

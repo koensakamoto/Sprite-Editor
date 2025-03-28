@@ -22,6 +22,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
+    // WILL NEED TO DELETE FRAME VECTOR
     MainWindow(std::vector<Frame> frames, QWidget *parent = nullptr);
     ~MainWindow();
 
