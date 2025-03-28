@@ -69,7 +69,9 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
-    drawingArea->setBrushColor(QColor(Qt::black));
+    drawingArea->setBrushColor(QColor(Qt::red));
+    dialog->setCurrentColor(QColor(Qt::red));
+
 
    // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
     // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
