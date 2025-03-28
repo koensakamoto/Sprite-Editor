@@ -174,6 +174,10 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
 
     QJsonArray frameArray;
 
+    QImage img = firstFrame.getImage();
+    QColor c = img.pixelColor(1,1);
+    qDebug() << "r" << c.red() << "g" << c.green();
+
     for (size_t frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
         QJsonObject frameObject;
         frameObject["frame_Index"] = static_cast<int>(frameIndex);
@@ -187,10 +191,10 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
                 // qDebug() << "r," << color.red() << " b" << color.blue();
                 QJsonObject pixelObj {
                     //Pixel are represented by textual values
-                    {"r", QString::number(color.red())},
-                    {"g", QString::number(color.green())},
-                    {"b", QString::number(color.blue())},
-                    {"a", QString::number(color.alpha())}
+                    {"r", color.red()},
+                    {"g", color.green()},
+                    {"b", color.blue()},
+                    {"a", color.alpha()}
                 };
                 row.append(pixelObj);
             }
@@ -269,14 +273,9 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
 
 void MainWindow::saveClicked(){
     qDebug() << "clicked";
-    QString filePath = "loadJsonFile.txt";
-    std::vector<Frame> framesVector;
-    QImage image1(400, 400, QImage::Format_ARGB32);
-     image1.fill(QColor(255, 0, 0, 255));
-    Frame redFrame(image1);
-     frames.push_back(redFrame);
-
-    saveFrames(framesVector, filePath);
+    QString filePath = "loadJsonFile123.txt";
+    std::vector<Frame> frames = drawingArea->getFrames();
+    saveFrames(frames, filePath);
 }
 
 // void MainWindow::loadClicked(){

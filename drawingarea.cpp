@@ -18,7 +18,12 @@ void DrawingArea::setBrushColor(const QColor& color) {
 void DrawingArea::setUpCanvas() {
     emit imageUpdated(QPixmap::fromImage(frame.getImage()));
     update();
+   // updateFramesImage();
 }
+
+// void DrawingArea::updateFramesImage(){
+//     frame
+// }
 
 void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {

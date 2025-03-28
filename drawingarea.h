@@ -56,6 +56,8 @@ private:
 
     int fps = 10;
     int pixelSize = 40;
+
+    // void updateFramesImage();
 };
 
 #endif // DRAWINGAREA_H
