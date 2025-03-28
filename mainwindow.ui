@@ -19,8 +19,8 @@
      <rect>
       <x>120</x>
       <y>20</y>
-      <width>441</width>
-      <height>351</height>
+      <width>400</width>
+      <height>400</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -33,10 +33,10 @@
    <widget class="QLabel" name="PreviewLabel">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>20</y>
-      <width>180</width>
-      <height>180</height>
+      <x>600</x>
+      <y>10</y>
+      <width>200</width>
+      <height>200</height>
      </rect>
     </property>
     <property name="text">
