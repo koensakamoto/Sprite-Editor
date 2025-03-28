@@ -48,25 +48,22 @@ void DrawingArea::drawPixel(const QPoint& pos) {
     if (pos.x() >= 0 && pos.x() < frame.getImage().width() &&
         pos.y() >= 0 && pos.y() < frame.getImage().height()) {
 
+        int clickX = pos.x();
+        int clickY = pos.y();
 
-    int width = frame.getWidth();
-    int height = frame.getHeight();
-
-    int clickX = pos.x();
-    int clickY = pos.y();
-
-    int relativeClickX = std::round(clickX / pixelSize) * pixelSize;
-    int relativeClickY = std::round(clickY / pixelSize) * pixelSize;
+        int relativeClickX = std::round(clickX / pixelSize) * pixelSize;
+        int relativeClickY = std::round(clickY / pixelSize) * pixelSize;
 
 
-    }
 
-    // paint in square of pixel
-    for (int row = 0 ; row < pixelSize; row ++){
-        for (int col = 0 ; col < pixelSize ; col++){
 
-        QPoint p(relativeClickX + row , relativeClickY + col);
-        frame.getImage().setPixelColor(p, brushColor);
+        // paint in square of pixel
+        for (int row = 0 ; row < pixelSize; row ++){
+            for (int col = 0 ; col < pixelSize ; col++){
+
+            QPoint p(relativeClickX + row , relativeClickY + col);
+            frame.getImage().setPixelColor(p, brushColor);
+            }
         }
     }
 }
