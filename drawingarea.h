@@ -49,7 +49,7 @@ private:
     void drawPixel(const QPoint& pos);
 
     int fps = 10;
-    int pixelSize = 20;
+    int pixelSize = 40;
 };
 
 #endif // DRAWINGAREA_H

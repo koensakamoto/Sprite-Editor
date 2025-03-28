@@ -38,6 +38,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     QAction *eraserAction = ui->actionEraser;
     QAction *colorPickerAction = ui->actionColorPicker;
     QAction *penAction = ui->actionPen;
+    penAction->setChecked(true);
 
     QActionGroup *toolActionGroup = new QActionGroup(this);
     toolActionGroup->addAction(penAction);
@@ -94,6 +95,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onColorSelectorClicked(){
     this->dialog->show();
+    onPenClicked();
 }
 
 
@@ -102,7 +104,6 @@ void MainWindow::onPaintBucketClicked() {
 }
 
 void MainWindow::onEraserClicked() {
-
     drawingArea->setBrushColor(QColor(Qt::white)); //FIXME signals and slots
     animationPreview();
 
