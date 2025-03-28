@@ -22,6 +22,11 @@ public:
 
     int getFps();
 
+    /**
+     * @return The Frames used to store the QImages DrawingArea is drawing onto.
+     */
+    std::vector<Frame> DrawingArea::getFrames();
+
 signals:
     void imageUpdated(const QPixmap &pixmap);
 
@@ -43,13 +48,14 @@ protected:
 
 private:
     Frame frame;
+    std::vector<Frame> frameVector;
     bool drawing;
     QColor brushColor;
 
     void drawPixel(const QPoint& pos);
 
     int fps = 10;
-    int pixelSize = 20;
+    int pixelSize = 40;
 };
 
 #endif // DRAWINGAREA_H
