@@ -11,7 +11,10 @@
 // private:
 
 //     QColor color;
-
+//
+//     vector<vector<Point2D>>
+//     Point2D center, Point2D topLeftCorner
+//
 //     // If true, the pixel should be displayed, if false, the pixel is not displayed.
 //     bool displayed;
 

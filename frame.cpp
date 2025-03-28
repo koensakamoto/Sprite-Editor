@@ -53,11 +53,11 @@ void Frame::clear(){
     // Frame::sendImage(this->image);
 }
 
+// May go awry if QT determines diagonally contacting pixels are touching.
 vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
 
     vector<Point2D> contiguousPixels;
     vector<vector<bool>> visited;
-
 
     QColor startColor = image.pixelColor(x,y);
     QColor backgroundColor = QColor(255,255,255,255);
@@ -101,9 +101,8 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
  void Frame::BFS(vector<vector<bool>> visited, int row, int col, vector<Point2D> contiguousPixels, QColor startColor)
 {
 
-    // Stores indices of the matrix cells
-
-    // Mark the starting cell as visited
+    // Stores indices of the pixels
+    // Mark the starting pixel as visited
     // and push it into the queue
 
     std::queue<Point2D> q;
@@ -113,8 +112,7 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
     contiguousPixels.push_back(p);
     visited[row][col] = true;
 
-    // Iterate while the queue
-    // is not empty
+    // Iterate through queue
 
     while (!q.empty())
     {
@@ -145,11 +143,3 @@ void Frame::setPixelSize(int pixelSize){
 
     this->pixelSize = pixelSize;
 }
-// Point2D Frame::scaleFromImage(int x, int y){
-
-//     int nextX = x/pixelSize;
-//     int nextY = y/pixelSize;
-
-
-// }
-
