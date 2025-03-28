@@ -111,6 +111,8 @@ void MainWindow::onSelectToolClicked() {
 }
 
 void MainWindow::onPenClicked() {
+
+    drawingArea->setBrushColor(dialog->currentColor()); //FIXME signals and slots
 }
 
 void MainWindow::animationPreview(){
