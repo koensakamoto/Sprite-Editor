@@ -17,6 +17,9 @@ private:
     int width;
     int height;
 
+    // the image represents an pixelSize x pixelSize matrix
+    int pixelSize;
+
     // Used for BFS
     int dRow[4];
     int dCol[4];
@@ -91,6 +94,13 @@ public:
     * @return A QJsonObject with the frame's data.
     */
     QJsonObject frameToQJson(int frameId);
+
+    /**
+     * @brief setPixelSize
+     * @param pixelSize
+     */
+    void setPixelSize(int pixelSize);
+
 public slots:
     /**
      * @brief getImage from model

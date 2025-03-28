@@ -96,5 +96,6 @@ void DrawingArea::setPixelSize(int size){
 
     if (size > 1){
     pixelSize = size;
+    frame.setPixelSize(pixelSize);
     }
 }
