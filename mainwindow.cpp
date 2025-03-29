@@ -109,6 +109,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onColorSelectorClicked(){
     this->dialog->show();
+    this->ui->actionPen->setChecked(true);
     onPenClicked();
 }
 
