@@ -6,10 +6,13 @@
 #include <QMouseEvent>
 #include <QDebug>
 
-DrawingArea::DrawingArea(Frame frame, QWidget* parent)
-    : QWidget(parent), frame(frame), frameVector{}, currFrameIndex(0) {
-    setFixedSize(frame.getWidth(), frame.getHeight());
-    frameVector.push_back(frame);
+DrawingArea::DrawingArea(QWidget* parent, int size)
+    : QWidget(parent), frameVector{}, currFrameIndex(0), size(size) {
+   // setFixedSize(frame.getWidth(), frame.getHeight());
+
+    QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
+    frame1.fill(Qt::white);
+    frameVector.push_back(frame1);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -17,7 +20,7 @@ void DrawingArea::setBrushColor(const QColor& color) {
 }
 
 void DrawingArea::setUpCanvas() {
-    emit imageUpdated(QPixmap::fromImage(frame.getImage()));
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
 }
 
@@ -25,7 +28,7 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {
         drawing = true;
         drawPixel(event->pos());
-        emit imageUpdated(QPixmap::fromImage(frame.getImage()));
+        emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
         update();
         // QImage img = frame.getImage();
         // QColor c = img.pixelColor(1, 1);
@@ -37,7 +40,7 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
 void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
     if (drawing) {
         drawPixel(event->pos());
-        emit imageUpdated(QPixmap::fromImage(frame.getImage()));
+        emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
         update();
     }
 }
@@ -45,13 +48,13 @@ void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
 void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         drawing = false;
-        frameVector[currFrameIndex] = frame;
+        //frameVector[currFrameIndex] = frame;
         update();
     }
 }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
-    if (isWithinImageBounds(pos, frame.getImage())) {
+    if (isWithinImageBounds(pos, frameVector[currFrameIndex])) {
 
         QPoint relativePos = convertToRelativeCoordinates(pos);
 
@@ -60,7 +63,7 @@ void DrawingArea::drawPixel(const QPoint& pos) {
             for (int col = 0 ; col < pixelSize ; col++){
 
                 QPoint p(relativePos.x()+ row , relativePos.y() + col);
-                frame.getImage().setPixelColor(p, brushColor);
+                frameVector[currFrameIndex].setPixelColor(p, brushColor);
             }
         }
     }
@@ -73,19 +76,16 @@ void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
 
     for(QPoint pos: contiguousPixels){
 
-        if (isWithinImageBounds(pos, frame.getImage())){
+        if (isWithinImageBounds(pos, frameVector[currFrameIndex])){
 
             QPoint relativePos = convertToRelativeCoordinates(pos);
-
-            // int relativeClickX = std::round(x / pixelSize) * pixelSize;
-            // int relativeClickY = std::round(y / pixelSize) * pixelSize;
 
             // paint in square of pixel
             for (int row = 0 ; row < pixelSize; row ++){
                 for (int col = 0 ; col < pixelSize ; col++){
 
                     QPoint p(relativePos.x() + row , relativePos.y() + col);
-                    frame.getImage().setPixelColor(p, brushColor);
+                    frameVector[currFrameIndex].setPixelColor(p, brushColor);
                 }
             }
             qDebug()<< relativePos.x() + " " + relativePos.y();
@@ -100,17 +100,18 @@ void DrawingArea::paintEvent(QPaintEvent*) {
     // painter.drawImage(120, 20, frame.getImage());
 }
 
-void DrawingArea::setFrame(const Frame& otherFrame){
-    this->frame = otherFrame;
-}
+// void DrawingArea::setFrame(const QImage& otherFrame){
+//     this->frame = otherFrame;
+// }
 
-void DrawingArea::setFrameVector(std::vector<Frame>& frameVector){
+void DrawingArea::setFrameVector(std::vector<QImage>& frameVector){
     this->frameVector = frameVector;
-    frame = frameVector.at(0);
+    //frame = frameVector.at(0);
+    currFrameIndex = 0;
 }
 
 void DrawingArea::updateNextFrame(){
-    emit imageUpdated(QPixmap::fromImage(frame.getImage()));
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
 }
 
@@ -124,13 +125,11 @@ int DrawingArea::getFps(){
 
 void DrawingArea::setPixelSize(int size){
 
-    if (size > 1){
-    pixelSize = size;
-    frame.setPixelSize(pixelSize);
-    }
+    if (size > 1)
+        pixelSize = size;
 }
 
-std::vector<Frame>& DrawingArea::getFrames(){
+std::vector<QImage>& DrawingArea::getFrames(){
     return frameVector;
 }
 

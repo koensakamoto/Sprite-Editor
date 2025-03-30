@@ -44,8 +44,8 @@ signals :
     void updatePixelSize(int size);
 private:
     Ui::MainWindow *ui;
-    std::vector<Frame> frames;
-    void loadProject(const QString& filePath, QVector<Frame> frames);
+    std::vector<QImage> frames;
+    void loadProject(const QString& filePath, QVector<QImage> frames);
 
     int currentFrame;
     DrawingArea *drawingArea;
@@ -55,8 +55,8 @@ private:
 
     void animationPreview();
 
-    void saveFrames(std::vector<Frame>& frames, QString& filepath);
+    void saveFrames(std::vector<QImage>& frames, QString& filepath);
 
-    void loadFrames(std::vector<Frame>& frames, QString& filepath);
+    void loadFrames(std::vector<QImage>& frames, QString& filepath);
 };
 #endif // MAINWINDOW_H

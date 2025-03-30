@@ -12,22 +12,22 @@ class DrawingArea : public QWidget {
     Q_OBJECT
 
 public:
-    DrawingArea(Frame frame, QWidget* parent);
+    DrawingArea(QWidget* parent, int size);
 
     void setBrushColor(const QColor& color);
 
     void setUpCanvas();
 
-    void setFrame(const Frame& otherFrame);
+    // void setFrame(const Frame& otherFrame);
 
-    void setFrameVector(std::vector<Frame>& frames);
+    void setFrameVector(std::vector<QImage>& frames);
 
     int getFps();
 
     /**
      * @return The Frames used to store the QImages DrawingArea is drawing onto.
      */
-    std::vector<Frame>& getFrames();
+    std::vector<QImage>& getFrames();
 
 signals:
     void imageUpdated(const QPixmap &pixmap);
@@ -49,13 +49,20 @@ protected:
     void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
-    Frame frame;
-    std::vector<Frame> frameVector;
+
+    std::vector<QImage> frameVector;
+
     bool drawing;
+
     QColor brushColor;
+
     int fps = 10;
+
+    int size;
+
     int pixelSize = 40;
-    int currFrameIndex;
+
+    int currFrameIndex = 0;
 
 
     void drawPixel(const QPoint& pos);

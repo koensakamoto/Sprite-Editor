@@ -24,15 +24,15 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     ui->PreviewLabel->setGeometry(600,50,100,100);
 
 
-    frames.push_back(Frame(400, 400));
+    //frames.push_back(Frame(400, 400));
 
-    currentFrame = 0;
+    //currentFrame = 0;
 
-    this->frames = frames;
+    //this->frames = frames;
 
     QToolBar *toolBar = ui->toolBar;
 
-    drawingArea = new DrawingArea(frames[currentFrame], parent);
+    drawingArea = new DrawingArea(parent, 400);
 
     QAction *paintBucketAction = ui->actionPaintBucket;
 
@@ -165,7 +165,7 @@ void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
      emit updatePixelSize(position);
 }
 
-void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
+void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
     //If there are not frames then return
     if (frames.empty()) {
         return;
@@ -177,9 +177,9 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
     }
 
     //Get the dimension of the frames.
-    Frame& firstFrame = frames.at(0);
-    int height = firstFrame.getHeight();
-    int width = firstFrame.getWidth();
+    QImage firstFrame = frames.at(0);
+    int height = firstFrame.height();
+    int width = firstFrame.width();
 
     QJsonArray frameArray;
 
@@ -187,7 +187,7 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
         QJsonObject frameObject;
         frameObject["frame_Index"] = frameIndex;
         QJsonArray grid;
-        QImage& image = frames[frameIndex].getImage();
+        QImage& image = frames[frameIndex];
         for (int y = 0; y < height; y++) {
             QJsonArray row;
             for (int x = 0; x < width; x++) {
@@ -226,7 +226,7 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
     file.close();
 }
 
-void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
+void MainWindow::loadFrames(std::vector<QImage>& frames, QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         throw std::runtime_error("Failed to open file for reading: " + filePath.toStdString());
@@ -270,7 +270,7 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
                 image.setPixel(x, y, color);
             }
         }
-        frames.push_back(Frame(image));
+        frames.push_back(image);
     }
 }
 
@@ -283,7 +283,7 @@ void MainWindow::loadClicked(){
      QString filePath = QFileDialog::getOpenFileName(this, QDir::homePath());
     loadFrames(drawingArea->getFrames(), filePath);
 
-    std::vector<Frame> framesVector = drawingArea->getFrames();
+    std::vector<QImage> framesVector = drawingArea->getFrames();
 
     drawingArea->setFrameVector(framesVector);
 
