@@ -267,7 +267,7 @@ void MainWindow::loadFrames(std::vector<QImage>& frames, QString& filePath) {
 }
 
 void MainWindow::saveClicked(){
-    QString filePath = QFileDialog::getOpenFileName(this, QDir::homePath());
+    QString filePath = QFileDialog::getSaveFileName(this, QDir::homePath());
     saveFrames(drawingArea->getFrames(), filePath);
 }
 
