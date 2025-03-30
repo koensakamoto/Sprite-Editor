@@ -51,28 +51,49 @@ void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
-    if (pos.x() >= 0 && pos.x() < frame.getImage().width() &&
-        pos.y() >= 0 && pos.y() < frame.getImage().height()) {
+    if (isWithinImageBounds(pos, frame.getImage())) {
 
-        int clickX = pos.x();
-        int clickY = pos.y();
-
-        int relativeClickX = std::round(clickX / pixelSize) * pixelSize;
-        int relativeClickY = std::round(clickY / pixelSize) * pixelSize;
-
-
-
+        QPoint relativePos = convertToRelativeCoordinates(pos);
 
         // paint in square of pixel
         for (int row = 0 ; row < pixelSize; row ++){
             for (int col = 0 ; col < pixelSize ; col++){
 
-            QPoint p(relativeClickX + row , relativeClickY + col);
-            frame.getImage().setPixelColor(p, brushColor);
+                QPoint p(relativePos.x()+ row , relativePos.y() + col);
+                frame.getImage().setPixelColor(p, brushColor);
             }
         }
     }
 }
+
+void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
+    if (contiguousPixels.empty()){
+        qDebug() << " no pixels found";
+    }
+
+    for(QPoint pos: contiguousPixels){
+
+        if (isWithinImageBounds(pos, frame.getImage())){
+
+            QPoint relativePos = convertToRelativeCoordinates(pos);
+
+            // int relativeClickX = std::round(x / pixelSize) * pixelSize;
+            // int relativeClickY = std::round(y / pixelSize) * pixelSize;
+
+            // paint in square of pixel
+            for (int row = 0 ; row < pixelSize; row ++){
+                for (int col = 0 ; col < pixelSize ; col++){
+
+                    QPoint p(relativePos.x() + row , relativePos.y() + col);
+                    frame.getImage().setPixelColor(p, brushColor);
+                }
+            }
+            qDebug()<< relativePos.x() + " " + relativePos.y();
+        }
+
+    }
+}
+
 
 void DrawingArea::paintEvent(QPaintEvent*) {
     QPainter painter(this);
@@ -111,4 +132,21 @@ void DrawingArea::setPixelSize(int size){
 
 std::vector<Frame>& DrawingArea::getFrames(){
     return frameVector;
+}
+
+bool DrawingArea::isWithinImageBounds(QPoint clickPos, QImage img){
+
+    if (clickPos.x() >= 0 && clickPos.x() < img.width() && clickPos.y() >= 0 && clickPos.y() < img.height()) {
+
+        return true;
+    }
+    return false;
+}
+
+QPoint DrawingArea::convertToRelativeCoordinates(QPoint p){
+
+    int relativeX = std::round(p.x() / pixelSize) * pixelSize;
+    int relativeY = std::round(p.y() / pixelSize) * pixelSize;
+
+    return QPoint(relativeX,relativeY);
 }

@@ -53,14 +53,32 @@ private:
     std::vector<Frame> frameVector;
     bool drawing;
     QColor brushColor;
+    int fps = 10;
+    int pixelSize = 40;
+    int currFrameIndex;
+
 
     void drawPixel(const QPoint& pos);
 
-    int fps = 10;
-    int pixelSize = 40;
 
-    int currFrameIndex;
+    /**
+     * @brief drawMultiplePixels Draws all pixels at pixelSize from a vector of QPoints.
+     * Each QPoint represents the (x,y) of the top left corner of the pixel to be drawn.
+     * @param contiguousPixels
+     */
+    void drawMultiplePixels(std::vector<QPoint> contiguousPixels);
 
+    /**
+     * isWithinImageBounds Returns true if the QPoint representing the click cooridinates is
+     * within the bounds of the QImage img. Returns false if the click is out of image bounds.
+     */
+    bool isWithinImageBounds(QPoint clickPos, QImage img);
+
+    /**
+     * Turns a QPoint p from screen coordinates to relative coordinates within the DrawingFrame's image.
+     * (0,0) is the top left corner of the DrawingFrame's image.
+     */
+    QPoint convertToRelativeCoordinates(QPoint p);
 };
 
 #endif // DRAWINGAREA_H
