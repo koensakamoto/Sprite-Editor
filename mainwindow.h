@@ -23,8 +23,7 @@ class MainWindow : public QMainWindow
 
 public:
 
-    // WILL NEED TO DELETE FRAME VECTOR
-    MainWindow(std::vector<Frame> frames, QWidget *parent = nullptr);
+    MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 public slots:
@@ -44,7 +43,7 @@ signals :
     void updatePixelSize(int size);
 private:
     Ui::MainWindow *ui;
-    std::vector<QImage> frames;
+    //std::vector<QImage> frames;
     void loadProject(const QString& filePath, QVector<QImage> frames);
 
     int currentFrame;

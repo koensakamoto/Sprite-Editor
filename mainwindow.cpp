@@ -15,7 +15,7 @@
 #include <QFileDialog>
 #include <QDir>
 
-MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -23,19 +23,12 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     ui->DrawingAreaLabel->setGeometry(120,50,400,400);
     ui->PreviewLabel->setGeometry(600,50,100,100);
 
-
-    //frames.push_back(Frame(400, 400));
-
-    //currentFrame = 0;
-
-    //this->frames = frames;
-
     QToolBar *toolBar = ui->toolBar;
 
+    // Instantiation of the model
     drawingArea = new DrawingArea(parent, 400);
 
     QAction *paintBucketAction = ui->actionPaintBucket;
-
 
     QAction *selectToolAction = ui->actionSelectTool;
     QAction *eraserAction = ui->actionEraser;
@@ -58,8 +51,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     this->dialog = new QColorDialog(this);
 
     dialog->setOption(QColorDialog::ShowAlphaChannel);
-
-
 
     connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
     connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
@@ -134,6 +125,8 @@ void MainWindow::onPenClicked() {
 
 void MainWindow::animationPreview(){
 
+    std::vector<QImage> frames = drawingArea->getFrames();
+
     for(size_t i = 0; i < frames.size(); i++){
         // Ensure delete/add frame buttons are disabled during animation.
         if(i == frames.size()){
@@ -153,7 +146,6 @@ void MainWindow::animationPreview(){
         });
     }
 }
-
 
 void MainWindow::on_fpsSlider_sliderMoved(int position)
 {
