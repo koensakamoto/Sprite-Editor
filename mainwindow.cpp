@@ -12,7 +12,8 @@
 #include "drawingarea.h"
 #include <QTimer>
 #include <QDebug>
-
+#include <QFileDialog>
+#include <QDir>
 
 MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     : QMainWindow(parent)
@@ -99,7 +100,7 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
-    // connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
+    connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
 }
 
 MainWindow::~MainWindow()
@@ -114,7 +115,6 @@ void MainWindow::onColorSelectorClicked(){
 
 
 void MainWindow::onPaintBucketClicked() {
-
 }
 
 void MainWindow::onEraserClicked() {
@@ -157,7 +157,6 @@ void MainWindow::animationPreview(){
 
 void MainWindow::on_fpsSlider_sliderMoved(int position)
 {
-
 }
 
 
@@ -171,34 +170,28 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
     if (frames.empty()) {
         return;
     }
-    frames = drawingArea->getFrames();
+
     //Guarantee the file has a .ssp extension
     if (!filePath.endsWith(".ssp", Qt::CaseInsensitive)) {
         filePath += ".ssp";
     }
 
     //Get the dimension of the frames.
-    Frame& firstFrame = frames.front();
+    Frame& firstFrame = frames.at(0);
     int height = firstFrame.getHeight();
     int width = firstFrame.getWidth();
 
     QJsonArray frameArray;
 
-    QImage img = firstFrame.getImage();
-    QColor c = img.pixelColor(1,1);
-    qDebug() << "r" << c.red() << "g" << c.green();
-
-    for (size_t frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
+    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
         QJsonObject frameObject;
-        frameObject["frame_Index"] = static_cast<int>(frameIndex);
+        frameObject["frame_Index"] = frameIndex;
         QJsonArray grid;
-        QImage image = frames[frameIndex].getImage();
-        qDebug() << frames.size();
+        QImage& image = frames[frameIndex].getImage();
         for (int y = 0; y < height; y++) {
             QJsonArray row;
             for (int x = 0; x < width; x++) {
                 QColor color = image.pixelColor(x, y);
-                // qDebug() << "r," << color.red() << " b" << color.blue();
                 QJsonObject pixelObj {
                     //Pixel are represented by textual values
                     {"r", color.red()},
@@ -269,10 +262,10 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
             for (int x = 0; x < width; x++) {
                 QJsonObject pixelObj = rowJson[x].toObject();
                 QRgb color = qRgba(
-                    pixelObj["r"].toString().toInt(),
-                    pixelObj["g"].toString().toInt(),
-                    pixelObj["b"].toString().toInt(),
-                    pixelObj["a"].toString().toInt()
+                    pixelObj["r"].toInt(),
+                    pixelObj["g"].toInt(),
+                    pixelObj["b"].toInt(),
+                    pixelObj["a"].toInt()
                     );
                 image.setPixel(x, y, color);
             }
@@ -282,14 +275,18 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
 }
 
 void MainWindow::saveClicked(){
-    qDebug() << "clicked";
-    QString filePath = "loadJsonFile123.txt";
-    std::vector<Frame> frames = drawingArea->getFrames();
-    saveFrames(frames, filePath);
+    QString filePath = QFileDialog::getOpenFileName(this, QDir::homePath());
+    saveFrames(drawingArea->getFrames(), filePath);
 }
 
-// void MainWindow::loadClicked(){
-//     QString filePath = "test_frames.json";
-//     loadFrames(this->frames, filePath);
-// }
+void MainWindow::loadClicked(){
+     QString filePath = QFileDialog::getOpenFileName(this, QDir::homePath());
+    loadFrames(drawingArea->getFrames(), filePath);
+
+    std::vector<Frame> framesVector = drawingArea->getFrames();
+
+    drawingArea->setFrameVector(framesVector);
+
+    drawingArea->setUpCanvas();
+}
 

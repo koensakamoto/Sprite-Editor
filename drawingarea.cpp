@@ -4,11 +4,12 @@
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
+#include <QDebug>
 
 DrawingArea::DrawingArea(Frame frame, QWidget* parent)
-    : QWidget(parent), frame(frame), frameVector{} {
+    : QWidget(parent), frame(frame), frameVector{}, currFrameIndex(0) {
     setFixedSize(frame.getWidth(), frame.getHeight());
-    frameVector.push_back(&frame);
+    frameVector.push_back(frame);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -18,12 +19,7 @@ void DrawingArea::setBrushColor(const QColor& color) {
 void DrawingArea::setUpCanvas() {
     emit imageUpdated(QPixmap::fromImage(frame.getImage()));
     update();
-   // updateFramesImage();
 }
-
-// void DrawingArea::updateFramesImage(){
-//     frame
-// }
 
 void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {
@@ -31,6 +27,10 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
         drawPixel(event->pos());
         emit imageUpdated(QPixmap::fromImage(frame.getImage()));
         update();
+        // QImage img = frame.getImage();
+        // QColor c = img.pixelColor(1, 1);
+        // qDebug() << "r" << c.red() << "g" << c.green();
+        // frameVector[currFrameIndex] = frame;
     }
 }
 
@@ -45,6 +45,7 @@ void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
 void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         drawing = false;
+        frameVector[currFrameIndex] = frame;
         update();
     }
 }
@@ -78,8 +79,13 @@ void DrawingArea::paintEvent(QPaintEvent*) {
     // painter.drawImage(120, 20, frame.getImage());
 }
 
-void DrawingArea::setFrame(Frame otherFrame){
+void DrawingArea::setFrame(const Frame& otherFrame){
     this->frame = otherFrame;
+}
+
+void DrawingArea::setFrameVector(std::vector<Frame>& frameVector){
+    this->frameVector = frameVector;
+    frame = frameVector.at(0);
 }
 
 void DrawingArea::updateNextFrame(){
@@ -103,6 +109,6 @@ void DrawingArea::setPixelSize(int size){
     }
 }
 
-std::vector<Frame*> DrawingArea::getFrames(){
+std::vector<Frame>& DrawingArea::getFrames(){
     return frameVector;
 }

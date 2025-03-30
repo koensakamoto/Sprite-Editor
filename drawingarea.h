@@ -18,14 +18,16 @@ public:
 
     void setUpCanvas();
 
-    void setFrame(Frame otherFrame);
+    void setFrame(const Frame& otherFrame);
+
+    void setFrameVector(std::vector<Frame>& frames);
 
     int getFps();
 
     /**
      * @return The Frames used to store the QImages DrawingArea is drawing onto.
      */
-    std::vector<Frame*> getFrames();
+    std::vector<Frame>& getFrames();
 
 signals:
     void imageUpdated(const QPixmap &pixmap);
@@ -48,7 +50,7 @@ protected:
 
 private:
     Frame frame;
-    std::vector<Frame*> frameVector;
+    std::vector<Frame> frameVector;
     bool drawing;
     QColor brushColor;
 
@@ -57,7 +59,8 @@ private:
     int fps = 10;
     int pixelSize = 40;
 
-    // void updateFramesImage();
+    int currFrameIndex;
+
 };
 
 #endif // DRAWINGAREA_H
