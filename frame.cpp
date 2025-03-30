@@ -54,7 +54,7 @@ void Frame::clear(){
 }
 
 // May go awry if QT determines diagonally contacting pixels are touching.
-ector<QPoint> Frame::getAllContiguousPixels(QImage img, int x, int y){
+vector<QPoint> Frame::getAllContiguousPixels(QImage img, int x, int y){
 
     this->image = img;
     vector<QPoint> contiguousPixels;
