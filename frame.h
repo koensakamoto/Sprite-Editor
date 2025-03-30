@@ -19,7 +19,7 @@ private:
     int height;
 
     // the image represents the size of a pixel in the matrix
-    int pixelSize;
+    int pixelSize = 1;
     int pixelWidth;
 
     // Used for BFS
@@ -38,7 +38,7 @@ private:
     bool isValid(vector<vector<bool>> visited, int row, int col, QColor startColor);
 
     //BFS used to getAllContiguousPixels()
-    void BFS(vector<vector<bool>> visited, int row, int col, vector<Point2D> contiguousPixels, QColor startColor);
+    void BFS(vector<vector<bool>> visited, int row, int col, vector<QPoint> contiguousPixels, QColor startColor);
 
 public:
 
@@ -97,7 +97,8 @@ public:
      * @param y y-coordinate of the pixel selected.
      * @return
      */
-    vector<Point2D> getAllContiguousPixels(int x, int y);
+    vector<QPoint> getAllContiguousPixels(QImage img, int x, int y);
+
 
     /**
     * @brief Converts frame data to a QJsonObject.
@@ -121,7 +122,7 @@ public slots:
 
 signals:
     void sendImage(QImage image);
-    void sendContiguousPixels(vector<Point2D>);
+    void sendContiguousPixels(vector<QPoint>);
 };
 
 #endif // FRAME_H

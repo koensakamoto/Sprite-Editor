@@ -54,17 +54,21 @@ void Frame::clear(){
 }
 
 // May go awry if QT determines diagonally contacting pixels are touching.
-vector<Point2D> Frame::getAllContiguousPixels(int x, int y){
+ector<QPoint> Frame::getAllContiguousPixels(QImage img, int x, int y){
 
-    vector<Point2D> contiguousPixels;
+    this->image = img;
+    vector<QPoint> contiguousPixels;
     vector<vector<bool>> visited;
 
     QColor startColor = image.pixelColor(x,y);
-    QColor backgroundColor = QColor(255,255,255,255);
+    QColor backgroundColor = QColor(QColorConstants::White);
 
 
     //Rejecting clicks to the background
     if (startColor == backgroundColor){
+        qDebug() << "early exit";
+        QPoint p = QPoint(x,y);
+        qDebug() << p << startColor.red() << startColor.blue();
         return contiguousPixels;
     }
 
@@ -98,16 +102,15 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
     return true;
 }
 
- void Frame::BFS(vector<vector<bool>> visited, int row, int col, vector<Point2D> contiguousPixels, QColor startColor)
+void Frame::BFS(vector<vector<bool>> visited, int row, int col, vector<QPoint> contiguousPixels, QColor startColor)
 {
-
     // Stores indices of the pixels
     // Mark the starting pixel as visited
     // and push it into the queue
 
-    std::queue<Point2D> q;
+    std::queue<QPoint> q;
 
-    Point2D p = Point2D(row,col);
+    QPoint p = QPoint(row,col);
     q.push(p);
     contiguousPixels.push_back(p);
     visited[row][col] = true;
@@ -116,9 +119,9 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
 
     while (!q.empty())
     {
-        Point2D cell = q.front();
-        int x = cell.getX();
-        int y = cell.getY();
+        QPoint cell = q.front();
+        int x = cell.x();
+        int y = cell.y();
 
         q.pop();
 
@@ -126,11 +129,11 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
         for(int i = 0; i < 4; i++)
         {
             int adjx = x + dRow[i];
-            int adjy = y + dCol[i];
+            int adjy = y  + dCol[i];
 
             if (isValid(visited, adjx, adjy, startColor))
             {
-                Point2D p = Point2D(adjx,adjy);
+                QPoint p = QPoint(adjx,adjy);
                 q.push(p);
                 contiguousPixels.push_back(p);
                 visited[adjx][adjy] = true;
@@ -138,7 +141,6 @@ bool Frame::isValid(vector<vector<bool>> visited, int row, int col, QColor start
         }
     }
 }
-
 void Frame::setPixelSize(int pixelSize){
 
     this->pixelSize = pixelSize;
