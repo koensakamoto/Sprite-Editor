@@ -25,27 +25,58 @@ public:
     ~MainWindow();
 
 protected:
+    /**
+     * @brief mousePressEvent
+     * @param event
+     */
     void mousePressEvent(QMouseEvent* event) override;
 
+    /**
+     * @brief mouseMoveEvent
+     * @param event
+     */
     void mouseMoveEvent(QMouseEvent* event) override;
 
+    /**
+     * @brief mouseReleaseEvent
+     * @param event
+     */
     void mouseReleaseEvent(QMouseEvent* event) override;
 
 public slots:
+    /**
+     * @brief onPaintBucketClicked
+     */
     void onPaintBucketClicked();
+    /**
+     * @brief onEraserClicked
+     */
     void onEraserClicked();
+    /**
+     * @brief onSelectToolClicked
+     */
     void onSelectToolClicked();
+    /**
+     * @brief onPenClicked
+     */
     void onPenClicked();
-
+    /**
+     * @brief saveClicked
+     */
     void saveClicked();
+    /**
+     * @brief loadClicked
+     */
     void loadClicked();
-
+    /**
+     * @brief updatedPreviewFrame
+     * @param pixmap
+     */
     void updatedPreviewFrame(const QPixmap& pixmap);
 
 
 private slots:
     void on_pixelSizeSlider_sliderMoved(int position);
-
 
     void on_actionAddFrame_triggered();
 
@@ -54,7 +85,7 @@ private slots:
     void on_frameTabBar_tabBarClicked(int index);
 
 
-signals :
+signals:
     void updatePixelSize(int size);
     void addFrame(int pixelSize, int copyIndex);
     void deleteFrame(int index);
@@ -67,7 +98,6 @@ signals :
 
 
 private:
-
     Ui::MainWindow *ui;
     //std::vector<QImage> frames;
     void loadProject(const QString& filePath, QVector<QImage> frames);
