@@ -21,9 +21,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+
+    void mouseMoveEvent(QMouseEvent* event) override;
+
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
 public slots:
     void onPaintBucketClicked();
@@ -53,8 +59,15 @@ signals :
     void addFrame(int pixelSize, int copyIndex);
     void deleteFrame(int index);
     void updateCurrentFrame(int index);
+    void changeTool(DrawingArea::PaintTool tool);
+    void mousePressPosition(QPoint point);
+    void mouseMovePosition(QPoint point);
+    void mouseReleasePosition(QPoint point);
+
+
 
 private:
+
     Ui::MainWindow *ui;
     //std::vector<QImage> frames;
     void loadProject(const QString& filePath, QVector<QImage> frames);

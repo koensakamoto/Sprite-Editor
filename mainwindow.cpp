@@ -23,6 +23,10 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->DrawingAreaLabel->setGeometry(120,50,400,400);
     ui->PreviewLabel->setGeometry(600,50,100,100);
+    ui->DrawingAreaLabel->setStyleSheet("QLabel { background-color: white; }");
+    ui->PreviewLabel->setStyleSheet("QLabel { background-color: white; }");
+
+
 
     QToolBar *toolBar = ui->toolBar;
     // frame toolbar
@@ -85,7 +89,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
         ui->DrawingAreaLabel->setPixmap(pixmap);});
 
-    //
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
     ui->PreviewLabel->setPixmap(
         pixmap.scaled(
@@ -139,20 +142,24 @@ void MainWindow::onColorSelectorClicked(){
 
 
 void MainWindow::onPaintBucketClicked() {
+    emit changeTool(DrawingArea::PaintTool::PAINTBUCKET);
+
 }
 
 void MainWindow::onEraserClicked() {
+    emit changeTool(DrawingArea::PaintTool::ERASER);
     drawingArea->setBrushColor(QColor(Qt::white)); //FIXME signals and slots
-    animationPreview();
+    // emit eraserClicked
+    // animationPreview();
 
 }
 
 void MainWindow::onSelectToolClicked() {
-
+    emit changeTool(DrawingArea::PaintTool::SELECT);
 }
 
 void MainWindow::onPenClicked() {
-
+    emit changeTool(DrawingArea::PaintTool::PEN);
     drawingArea->setBrushColor(dialog->currentColor()); //FIXME signals and slots
 }
 
@@ -318,9 +325,8 @@ void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
             Qt::SmoothTransformation
             )
         );
-
-
 }
+
 void MainWindow::on_actionAddFrame_triggered()
 {
     totalNumFrames++;
@@ -365,3 +371,20 @@ void MainWindow::on_frameTabBar_tabBarClicked(int index)
     currentFrame = index;
     emit updateCurrentFrame(index);
 }
+
+void MainWindow::mousePressEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        emit mousePressPosition(event->pos());
+    }
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        emit mouseMovePosition(event->pos());
+    }}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent* event) {
+    if (event->button() == Qt::LeftButton) {
+        emit mouseReleasePosition(event->pos());
+    }}
+
