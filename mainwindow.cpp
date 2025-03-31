@@ -12,9 +12,10 @@
 #include "drawingarea.h"
 #include <QTimer>
 #include <QDebug>
+#include <QFileDialog>
+#include <QDir>
 
-
-MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
+MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
@@ -22,19 +23,12 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     ui->DrawingAreaLabel->setGeometry(120,50,400,400);
     ui->PreviewLabel->setGeometry(600,50,100,100);
 
-
-    frames.push_back(Frame(400, 400));
-
-    currentFrame = 0;
-
-    this->frames = frames;
-
     QToolBar *toolBar = ui->toolBar;
 
-    drawingArea = new DrawingArea(frames[currentFrame], parent);
+    // Instantiation of the model
+    drawingArea = new DrawingArea(parent, 400);
 
     QAction *paintBucketAction = ui->actionPaintBucket;
-
 
     QAction *selectToolAction = ui->actionSelectTool;
     QAction *eraserAction = ui->actionEraser;
@@ -57,8 +51,6 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
     this->dialog = new QColorDialog(this);
 
     dialog->setOption(QColorDialog::ShowAlphaChannel);
-
-
 
     connect(paintBucketAction, &QAction::triggered, this, &MainWindow::onPaintBucketClicked);
     connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
@@ -99,7 +91,12 @@ MainWindow::MainWindow(std::vector<Frame> frames, QWidget *parent)
 
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
-    // connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
+    connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
+
+    connect(drawingArea, &DrawingArea::previewUpdated, this, &MainWindow::updatedPreviewFrame);
+    connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewSelected);
+    connect(ui->fpsSlider, &QSlider::valueChanged, drawingArea, &DrawingArea::onUpdatedFps);
+
 }
 
 MainWindow::~MainWindow()
@@ -115,7 +112,6 @@ void MainWindow::onColorSelectorClicked(){
 
 
 void MainWindow::onPaintBucketClicked() {
-
 }
 
 void MainWindow::onEraserClicked() {
@@ -134,6 +130,8 @@ void MainWindow::onPenClicked() {
 }
 
 void MainWindow::animationPreview(){
+
+    std::vector<QImage> frames = drawingArea->getFrames();
 
     for(size_t i = 0; i < frames.size(); i++){
         // Ensure delete/add frame buttons are disabled during animation.
@@ -155,10 +153,8 @@ void MainWindow::animationPreview(){
     }
 }
 
-
 void MainWindow::on_fpsSlider_sliderMoved(int position)
 {
-
 }
 
 
@@ -167,7 +163,7 @@ void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
      emit updatePixelSize(position);
 }
 
-void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
+void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
     //If there are not frames then return
     if (frames.empty()) {
         return;
@@ -179,30 +175,27 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
     }
 
     //Get the dimension of the frames.
-    Frame& firstFrame = frames.front();
-    int height = firstFrame.getHeight();
-    int width = firstFrame.getWidth();
-
+    QImage firstFrame = frames.at(0);
+    int height = firstFrame.height();
+    int width = firstFrame.width();
 
     QJsonArray frameArray;
 
-    for (size_t frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
+    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
         QJsonObject frameObject;
-        frameObject["frame_Index"] = static_cast<int>(frameIndex);
+        frameObject["frame_Index"] = frameIndex;
         QJsonArray grid;
-        QImage image = frames[frameIndex].getImage();
-        qDebug() << frames.size();
+        QImage& image = frames[frameIndex];
         for (int y = 0; y < height; y++) {
             QJsonArray row;
             for (int x = 0; x < width; x++) {
                 QColor color = image.pixelColor(x, y);
-                // qDebug() << "r," << color.red() << " b" << color.blue();
                 QJsonObject pixelObj {
                     //Pixel are represented by textual values
-                    {"r", QString::number(color.red())},
-                    {"g", QString::number(color.green())},
-                    {"b", QString::number(color.blue())},
-                    {"a", QString::number(color.alpha())}
+                    {"r", color.red()},
+                    {"g", color.green()},
+                    {"b", color.blue()},
+                    {"a", color.alpha()}
                 };
                 row.append(pixelObj);
             }
@@ -231,7 +224,7 @@ void MainWindow::saveFrames(std::vector<Frame>& frames, QString& filePath){
     file.close();
 }
 
-void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
+void MainWindow::loadFrames(std::vector<QImage>& frames, QString& filePath) {
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
         throw std::runtime_error("Failed to open file for reading: " + filePath.toStdString());
@@ -267,27 +260,34 @@ void MainWindow::loadFrames(std::vector<Frame>& frames, QString& filePath) {
             for (int x = 0; x < width; x++) {
                 QJsonObject pixelObj = rowJson[x].toObject();
                 QRgb color = qRgba(
-                    pixelObj["r"].toString().toInt(),
-                    pixelObj["g"].toString().toInt(),
-                    pixelObj["b"].toString().toInt(),
-                    pixelObj["a"].toString().toInt()
+                    pixelObj["r"].toInt(),
+                    pixelObj["g"].toInt(),
+                    pixelObj["b"].toInt(),
+                    pixelObj["a"].toInt()
                     );
                 image.setPixel(x, y, color);
             }
         }
-        frames.push_back(Frame(image));
+        frames.push_back(image);
     }
 }
 
 void MainWindow::saveClicked(){
-    qDebug() << "clicked";
-    QString filePath = "loadJsonFile.txt";
-    saveFrames(this->frames, filePath);
+    QString filePath = QFileDialog::getSaveFileName(this, QDir::homePath());
+    saveFrames(drawingArea->getFrames(), filePath);
 }
 
-// void MainWindow::loadClicked(){
-//     QString filePath = "test_frames.json";
-//     loadFrames(this->frames, filePath);
-// }
+void MainWindow::loadClicked(){
+     QString filePath = QFileDialog::getOpenFileName(this, QDir::homePath());
+    loadFrames(drawingArea->getFrames(), filePath);
 
+    std::vector<QImage> framesVector = drawingArea->getFrames();
 
+    drawingArea->setFrameVector(framesVector);
+
+    drawingArea->setUpCanvas();
+}
+
+void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
+    ui->PreviewLabel->setPixmap(pixmap);
+}
