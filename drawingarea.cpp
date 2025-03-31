@@ -11,7 +11,8 @@
 DrawingArea::DrawingArea(QWidget* parent, int size):
     QWidget(parent), frameVector{}, currFrameIndex{}, size(size),
     dRow{ -1, 0, 1, 0 },
-    dCol{ 0, 1, 0, -1 }
+    dCol{ 0, 1, 0, -1 },
+    currentTool(PaintTool::PEN)
 {
 
     QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
@@ -62,11 +63,33 @@ void DrawingArea::mousePressed(QPoint point) {
 }
 
 void DrawingArea::mouseMoved(QPoint point) {
-    if (drawing) {
-        drawPixel(event->pos());
+     QPoint pos = convertToRelativeCoordinates(point);
+
+    switch(currentTool){
+
+    case PaintTool::PEN:
+        drawing = true;
+        drawPixel(pos);
+        break;
+
+    case PaintTool::ERASER:
+        drawing = false;
+        brushColor = Qt::white;
+        drawPixel(pos);
+        break;
+    case PaintTool::SELECT:
+        drawing = true;
+        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+        break;
+    case PaintTool::PAINTBUCKET:
+        drawing = true;
+        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+        break;
+    }
+
         emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
         update();
-    }
+
 }
 
 void DrawingArea::mouseReleased(QPoint point) {
