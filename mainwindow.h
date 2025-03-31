@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include <QColorDialog>
 #include <vector>
-#include "frame.h"
 #include "drawingarea.h"
 
 /**
@@ -37,18 +36,31 @@ public slots:
 
     void updatedPreviewFrame(const QPixmap& pixmap);
 
+
 private slots:
-    void on_fpsSlider_sliderMoved(int position);
     void on_pixelSizeSlider_sliderMoved(int position);
+
+
+    void on_actionAddFrame_triggered();
+
+    void on_actionDeleteFrame_triggered();
+
+    void on_frameTabBar_tabBarClicked(int index);
+
 
 signals :
     void updatePixelSize(int size);
+    void addFrame(int pixelSize, int copyIndex);
+    void deleteFrame(int index);
+    void updateCurrentFrame(int index);
+
 private:
     Ui::MainWindow *ui;
     //std::vector<QImage> frames;
     void loadProject(const QString& filePath, QVector<QImage> frames);
 
-    int currentFrame;
+    int currentFrame =0;
+    int totalNumFrames =1;
     DrawingArea *drawingArea;
     void onColorSelected(const QColor &color);
     void onColorSelectorClicked();

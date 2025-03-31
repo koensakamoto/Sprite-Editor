@@ -9,7 +9,7 @@
 #include <QTimer>
 
 DrawingArea::DrawingArea(QWidget* parent, int size):
-    QWidget(parent), frameVector{}, currFrameIndex(0), size(size),
+    QWidget(parent), frameVector{}, currFrameIndex{}, size(size),
     dRow{ -1, 0, 1, 0 },
     dCol{ 0, 1, 0, -1 }
 {
@@ -17,14 +17,6 @@ DrawingArea::DrawingArea(QWidget* parent, int size):
     QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
     frame1.fill(Qt::white);
     frameVector.push_back(frame1);
-
-    QImage frame2 = QImage(size, size, QImage::Format_ARGB32);
-    frame2.fill(Qt::red);
-    frameVector.push_back(frame2);
-
-    QImage frame3 = QImage(size, size, QImage::Format_ARGB32);
-    frame2.fill(Qt::green);
-    frameVector.push_back(frame2);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -278,6 +270,35 @@ void DrawingArea::previewFrames(){
     previewIndex++;
 
     QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
+}
+void DrawingArea::addFrame(int newPixelSize, int copyIndex){
+
+    // if index is -1 create new QImage
+    QImage newFrame;
+
+    if(copyIndex == -1){
+        newFrame = QImage(size, size, QImage::Format_ARGB32);
+        newFrame.fill(Qt::white);
+    }else {
+        QImage copyImage = frameVector.at(copyIndex);
+        newFrame = copyImage;
+    }
+    frameVector.push_back(newFrame);
+
+
+
+}
+
+void DrawingArea::deleteFrame(int index) {
+    if (index >= 0 && index < (int)frameVector.size()) {
+        frameVector.erase(frameVector.begin() + index);
+    }
+    updateNextFrame();
+}
+
+void DrawingArea::updateCurrentFrame(int index){
+    currFrameIndex = index;
+    updateNextFrame();
 }
 
 

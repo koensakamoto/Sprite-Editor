@@ -52,6 +52,10 @@ public slots:
 
     void previewSelected();
 
+    void updateCurrentFrame(int index);
+    void addFrame(int index, int copyIndex);
+    void deleteFrame(int index);
+
 protected:
     void paintEvent(QPaintEvent*) override;
 
