@@ -31,6 +31,7 @@ public:
 
 signals:
     void imageUpdated(const QPixmap &pixmap);
+    void previewUpdated(const QPixmap& pixmap);
 
 public slots:
     void updateNextFrame();
@@ -38,6 +39,8 @@ public slots:
     void onUpdatedFps(int newFps);
 
     void setPixelSize(int size);
+
+    void previewSelected();
 
 protected:
     void paintEvent(QPaintEvent*) override;
@@ -69,6 +72,12 @@ private:
     int dCol[4];
 
     void drawPixel(const QPoint& pos);
+
+    bool previewOn = false;
+
+    void previewFrames();
+
+    int previewIndex = 0;
 
 
     /**

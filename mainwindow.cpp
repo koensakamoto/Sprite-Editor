@@ -92,6 +92,11 @@ MainWindow::MainWindow(QWidget *parent)
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
     connect(ui->loadButton, &QAction::triggered, this, &MainWindow::loadClicked);
+
+    connect(drawingArea, &DrawingArea::previewUpdated, this, &MainWindow::updatedPreviewFrame);
+    connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewSelected);
+    connect(ui->fpsSlider, &QSlider::valueChanged, drawingArea, &DrawingArea::onUpdatedFps);
+
 }
 
 MainWindow::~MainWindow()
@@ -282,3 +287,6 @@ void MainWindow::loadClicked(){
     drawingArea->setUpCanvas();
 }
 
+void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
+    ui->PreviewLabel->setPixmap(pixmap);
+}

@@ -35,6 +35,8 @@ public slots:
     void saveClicked();
     void loadClicked();
 
+    void updatedPreviewFrame(const QPixmap& pixmap);
+
 private slots:
     void on_fpsSlider_sliderMoved(int position);
     void on_pixelSizeSlider_sliderMoved(int position);

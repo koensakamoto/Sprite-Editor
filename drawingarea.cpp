@@ -6,6 +6,7 @@
 #include <QMouseEvent>
 #include <QDebug>
 #include <queue>
+#include <QTimer>
 
 DrawingArea::DrawingArea(QWidget* parent, int size):
     QWidget(parent), frameVector{}, currFrameIndex(0), size(size),
@@ -16,6 +17,14 @@ DrawingArea::DrawingArea(QWidget* parent, int size):
     QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
     frame1.fill(Qt::white);
     frameVector.push_back(frame1);
+
+    QImage frame2 = QImage(size, size, QImage::Format_ARGB32);
+    frame2.fill(Qt::red);
+    frameVector.push_back(frame2);
+
+    QImage frame3 = QImage(size, size, QImage::Format_ARGB32);
+    frame2.fill(Qt::green);
+    frameVector.push_back(frame2);
 }
 
 void DrawingArea::setBrushColor(const QColor& color) {
@@ -245,3 +254,35 @@ vector<QPoint> DrawingArea::BFS(vector<vector<bool>> visited, int row, int col, 
     }
     return contiguousPixels;
 }
+
+void DrawingArea::previewSelected(){
+    previewOn = !previewOn;
+    previewIndex = 0;
+
+    if(previewOn) {
+        previewFrames();
+    }
+}
+
+void DrawingArea::previewFrames(){
+    if(!previewOn || frameVector.empty()) {
+        return;
+    }
+
+    if(previewIndex >= frameVector.size()) {
+        previewIndex = 0;
+    }
+
+    QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
+    QPixmap scaledPixmap = currPixMap.scaled(200, 200,
+                                             Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation);
+    emit previewUpdated(scaledPixmap);
+
+    previewIndex++;
+
+    QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
+}
+
+
+
