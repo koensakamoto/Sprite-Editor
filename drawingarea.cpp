@@ -41,17 +41,13 @@ void DrawingArea::mousePressEvent(QMouseEvent* event) {
         drawing = true;
         QPoint pos = convertToRelativeCoordinates(event->pos());
 
-        //drawPixel(pos);
+        drawPixel(pos);
 
         // call this to activate select tool
-        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+        // drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
 
         emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
         update();
-        // QImage img = frame.getImage();
-        // QColor c = img.pixelColor(1, 1);
-        // qDebug() << "r" << c.red() << "g" << c.green();
-        // frameVector[currFrameIndex] = frame;
     }
 }
 
