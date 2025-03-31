@@ -60,10 +60,13 @@ private:
 
     int size;
 
-    int pixelSize = 40;
+    int pixelSize = 100;
 
     int currFrameIndex = 0;
 
+    // Used for BFS
+    int dRow[4];
+    int dCol[4];
 
     void drawPixel(const QPoint& pos);
 
@@ -86,6 +89,21 @@ private:
      * (0,0) is the top left corner of the DrawingFrame's image.
      */
     QPoint convertToRelativeCoordinates(QPoint p);
+
+    /**
+     * @brief getAllContiguousPixels returns a list of Point2D objects. Each point is an x and y
+     * coordinate for a pixel that is continous with the original pixel from x and y.
+     * @param x x-coordinate of the pixel selected.
+     * @param y y-coordinate of the pixel selected.
+     * @return
+     */
+    vector<QPoint> getAllContiguousPixels(int x, int y);
+
+    // Helper method for BFS of grid.
+    bool isValid(vector<vector<bool>> visited, int row, int col, QColor& startColor);
+
+    //BFS used to getAllContiguousPixels()
+    vector<QPoint> BFS(vector<vector<bool>> visited, int row, int col, QColor& startColor);
 };
 
 #endif // DRAWINGAREA_H

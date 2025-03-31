@@ -5,10 +5,13 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <QDebug>
+#include <queue>
 
-DrawingArea::DrawingArea(QWidget* parent, int size)
-    : QWidget(parent), frameVector{}, currFrameIndex(0), size(size) {
-   // setFixedSize(frame.getWidth(), frame.getHeight());
+DrawingArea::DrawingArea(QWidget* parent, int size):
+    QWidget(parent), frameVector{}, currFrameIndex(0), size(size),
+    dRow{ -1, 0, 1, 0 },
+    dCol{ 0, 1, 0, -1 }
+{
 
     QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
     frame1.fill(Qt::white);
@@ -27,7 +30,13 @@ void DrawingArea::setUpCanvas() {
 void DrawingArea::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton ) {
         drawing = true;
-        drawPixel(event->pos());
+        QPoint pos = convertToRelativeCoordinates(event->pos());
+
+        //drawPixel(pos);
+
+        // call this to activate select tool
+        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+
         emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
         update();
         // QImage img = frame.getImage();
@@ -48,7 +57,7 @@ void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
 void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         drawing = false;
-        //frameVector[currFrameIndex] = frame;
+
         update();
     }
 }
@@ -71,27 +80,22 @@ void DrawingArea::drawPixel(const QPoint& pos) {
 
 void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
     if (contiguousPixels.empty()){
-        qDebug() << " no pixels found";
+        //qDebug() << " no pixels found";
+        return;
     }
 
     for(QPoint pos: contiguousPixels){
 
         if (isWithinImageBounds(pos, frameVector[currFrameIndex])){
 
-            QPoint relativePos = convertToRelativeCoordinates(pos);
+            frameVector[currFrameIndex].setPixelColor(pos, brushColor);
 
-            // paint in square of pixel
-            for (int row = 0 ; row < pixelSize; row ++){
-                for (int col = 0 ; col < pixelSize ; col++){
-
-                    QPoint p(relativePos.x() + row , relativePos.y() + col);
-                    frameVector[currFrameIndex].setPixelColor(p, brushColor);
-                }
-            }
-            qDebug()<< relativePos.x() + " " + relativePos.y();
         }
 
     }
+
+    // scale image back to original size
+    frameVector[currFrameIndex] = frameVector[currFrameIndex].scaled(size,size, Qt::KeepAspectRatioByExpanding);
 }
 
 
@@ -148,4 +152,96 @@ QPoint DrawingArea::convertToRelativeCoordinates(QPoint p){
     int relativeY = std::round(p.y() / pixelSize) * pixelSize;
 
     return QPoint(relativeX,relativeY);
+}
+
+vector<QPoint> DrawingArea::getAllContiguousPixels(int x, int y){
+
+    vector<QPoint> contiguousPixels = {};
+
+    QColor startColor = frameVector[currFrameIndex].pixelColor(x,y);
+
+    QColor backgroundColor = Qt::white;
+
+    //Rejecting clicks to the background
+    if (startColor.operator ==( backgroundColor)){
+        //qDebug() << "early exit";
+        QPoint p = QPoint(x,y);
+        //qDebug() << p << startColor.red() << startColor.blue();
+        return contiguousPixels;
+    }
+
+    // shrink image to make BFS quicker
+    frameVector[currFrameIndex] = frameVector[currFrameIndex].scaled(size/pixelSize, size/pixelSize);
+
+    vector<vector<bool>> visited(size/pixelSize, vector<bool>(size/pixelSize, false));
+
+    qDebug() << frameVector[currFrameIndex].size();
+
+    qDebug() << contiguousPixels;
+    return BFS(visited, x/pixelSize, y/pixelSize, startColor);
+
+}
+
+bool DrawingArea::isValid(vector<vector<bool>> visited, int row, int col, QColor& startColor){
+
+    // If cell lies out of bounds
+    // should it be row>width?
+    if (row < 0 || col < 0 ||
+        row >= size/pixelSize || col >= size/pixelSize)
+        return false;
+
+    // Invalid cells are already visited or a different color from the original.
+    if (visited[row][col]){
+        return false;
+    }
+
+    if (frameVector[currFrameIndex].pixelColor(row,col).operator != (startColor)){
+        return false;
+    }
+
+    return true;
+}
+
+vector<QPoint> DrawingArea::BFS(vector<vector<bool>> visited, int row, int col, QColor& startColor)
+{
+
+
+    // Stores indices of the pixels
+    // Mark the starting pixel as visited
+    // and push it into the queue
+
+    std::queue<QPoint> q;
+    vector<QPoint> contiguousPixels;
+
+    QPoint p = QPoint(row,col);
+    q.push(p);
+    contiguousPixels.push_back(p);
+    visited[row][col] = true;
+
+    // Iterate through queue
+
+    while (!q.empty())
+    {
+        QPoint cell = q.front();
+        int x = cell.x();
+        int y = cell.y();
+
+        q.pop();
+
+        // Go to the adjacent cells
+        for(int i = 0; i < 4; i++)
+        {
+            int adjx = x + dRow[i];
+            int adjy = y  + dCol[i];
+
+            if (isValid(visited, adjx, adjy, startColor))
+            {
+                QPoint p = QPoint(adjx,adjy);
+                q.push(p);
+                contiguousPixels.push_back(p);
+                visited[adjx][adjy] = true;
+            }
+        }
+    }
+    return contiguousPixels;
 }
