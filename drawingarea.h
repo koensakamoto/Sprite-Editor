@@ -8,10 +8,20 @@
 #include <QMouseEvent>
 #include "frame.h"
 
+/**
+ * @brief The DrawingArea class defines the area in the MainWindow that allows for drawing. This class keeps track of the mouse and tools
+ * so that the user can correctly interact with the program.
+ * This is our Model.
+ */
 class DrawingArea : public QWidget {
     Q_OBJECT
 
 public:
+    /**
+     * @brief This is the constructor for our drawing area that takes a parent Widget and a size as parameters.
+     * @param parent - The parent Widget
+     * @param size
+     */
     DrawingArea(QWidget* parent, int size);
 
     void setBrushColor(const QColor& color);
@@ -41,6 +51,10 @@ public slots:
     void setPixelSize(int size);
 
     void previewSelected();
+
+    void updateCurrentFrame(int index);
+    void addFrame(int index, int copyIndex);
+    void deleteFrame(int index);
 
 protected:
     void paintEvent(QPaintEvent*) override;

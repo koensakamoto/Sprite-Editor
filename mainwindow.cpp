@@ -14,6 +14,7 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QDir>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,6 +25,28 @@ MainWindow::MainWindow(QWidget *parent)
     ui->PreviewLabel->setGeometry(600,50,100,100);
 
     QToolBar *toolBar = ui->toolBar;
+    // frame toolbar
+    QToolBar *frameToolBar = ui->frameToolBar;
+    frameToolBar->setMovable(false);
+
+    QAction *newFrameAction = ui->actionAddFrame;
+    QAction *deleteFrameAction = ui->actionDeleteFrame;
+
+    frameToolBar->addAction(newFrameAction);
+    frameToolBar->addAction(deleteFrameAction);
+
+    //frame tab bar
+    QTabWidget *frameTabBar = ui->frameTabBar;
+    ui->frameToolBar->addWidget(frameTabBar);
+    // Create a simple widget for the first tab
+    QWidget *firstTab = new QWidget();
+    QLabel *firstLabel = new QLabel(QString("Frame %1").arg(1), firstTab);
+    ui->frameTabBar->addTab(firstLabel, QString("Frame %1").arg(1));
+
+
+
+
+
 
     // Instantiation of the model
     drawingArea = new DrawingArea(parent, 400);
@@ -97,6 +120,11 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewSelected);
     connect(ui->fpsSlider, &QSlider::valueChanged, drawingArea, &DrawingArea::onUpdatedFps);
 
+    //connect add + delete frames
+    connect(this, &MainWindow::addFrame, drawingArea, &DrawingArea::addFrame);
+    connect(this, &MainWindow::deleteFrame, drawingArea, &DrawingArea::deleteFrame);
+    connect(this, &MainWindow::updateCurrentFrame, drawingArea, &DrawingArea::updateCurrentFrame);
+
 }
 
 MainWindow::~MainWindow()
@@ -153,11 +181,6 @@ void MainWindow::animationPreview(){
     }
 }
 
-void MainWindow::on_fpsSlider_sliderMoved(int position)
-{
-}
-
-
 void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
 {
      emit updatePixelSize(position);
@@ -181,7 +204,7 @@ void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
 
     QJsonArray frameArray;
 
-    for (int frameIndex = 0; frameIndex < frames.size(); frameIndex++) {
+    for (int frameIndex = 0; frameIndex < (int)frames.size(); frameIndex++) {
         QJsonObject frameObject;
         frameObject["frame_Index"] = frameIndex;
         QJsonArray grid;
@@ -289,5 +312,57 @@ void MainWindow::loadClicked(){
 }
 
 void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
-    ui->PreviewLabel->setPixmap(pixmap);
+    ui->PreviewLabel->setPixmap(
+        pixmap.scaled(
+            ui->PreviewLabel->size(),
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+            )
+        );
+
+
+}
+void MainWindow::on_actionAddFrame_triggered()
+{
+    totalNumFrames++;
+    // ask user for size + copy
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Add Frame", "Do you want to copy current frame?", QMessageBox::Yes | QMessageBox::No);
+        if (reply == QMessageBox::Yes) {
+            emit addFrame(40, currentFrame);
+        } else {
+            emit addFrame(40, -1);
+        }
+
+        // Create a simple widget for the first tab
+        QWidget *firstTab = new QWidget();
+        QLabel *firstLabel = new QLabel(QString("Frame %1").arg(totalNumFrames), firstTab);
+
+
+        // Add the first tab with text
+        ui->frameTabBar->addTab(firstLabel, QString("Frame %1").arg(totalNumFrames));
+
+}
+
+
+void MainWindow::on_actionDeleteFrame_triggered()
+{
+    // Ask the user for confirmation
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Delete Frame", "Are you sure you want to delete this frame?", QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        ui->frameTabBar->removeTab(currentFrame);
+        emit deleteFrame(currentFrame);
+        // reset frame selected to first
+        on_frameTabBar_tabBarClicked(0);
+    }
+}
+
+
+void MainWindow::on_frameTabBar_tabBarClicked(int index)
+{
+    currentFrame = index;
+    emit updateCurrentFrame(index);
 }
