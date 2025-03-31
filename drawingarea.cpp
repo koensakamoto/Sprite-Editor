@@ -28,22 +28,40 @@ void DrawingArea::setUpCanvas() {
     update();
 }
 
-void DrawingArea::mousePressEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton ) {
+void DrawingArea::mousePressed(QPoint point) {
+    QPoint pos = convertToRelativeCoordinates(point);
+
+    if (currentTool != PaintTool::ERASER){
         drawing = true;
-        QPoint pos = convertToRelativeCoordinates(event->pos());
-
-        drawPixel(pos);
-
-        // call this to activate select tool
-        // drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-
-        emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-        update();
     }
+
+    switch(currentTool){
+
+    case PaintTool::PEN:
+        drawing = true;
+        drawPixel(pos);
+        break;
+
+    case PaintTool::ERASER:
+        drawing = false;
+        brushColor = Qt::white;
+        drawPixel(pos);
+        break;
+    case PaintTool::SELECT:
+        drawing = true;
+        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+        break;
+    case PaintTool::PAINTBUCKET:
+        drawing = true;
+        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+        break;
+    }
+
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
 }
 
-void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
+void DrawingArea::mouseMoved(QPoint point) {
     if (drawing) {
         drawPixel(event->pos());
         emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
@@ -51,12 +69,10 @@ void DrawingArea::mouseMoveEvent(QMouseEvent* event) {
     }
 }
 
-void DrawingArea::mouseReleaseEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton) {
-        drawing = false;
+void DrawingArea::mouseReleased(QPoint point) {
+    drawing = false;
 
-        update();
-    }
+    update();
 }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
@@ -94,16 +110,6 @@ void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
     // scale image back to original size
     frameVector[currFrameIndex] = frameVector[currFrameIndex].scaled(size,size, Qt::KeepAspectRatioByExpanding);
 }
-
-
-void DrawingArea::paintEvent(QPaintEvent*) {
-    QPainter painter(this);
-    // painter.drawImage(120, 20, frame.getImage());
-}
-
-// void DrawingArea::setFrame(const QImage& otherFrame){
-//     this->frame = otherFrame;
-// }
 
 void DrawingArea::setFrameVector(std::vector<QImage>& frameVector){
     this->frameVector = frameVector;

@@ -17,6 +17,13 @@ class DrawingArea : public QWidget {
     Q_OBJECT
 
 public:
+    enum class PaintTool {
+        PEN,
+        PAINTBUCKET,
+        SELECT,
+        ERASER
+    };
+
     /**
      * @brief This is the constructor for our drawing area that takes a parent Widget and a size as parameters.
      * @param parent - The parent Widget
@@ -56,16 +63,14 @@ public slots:
     void addFrame(int index, int copyIndex);
     void deleteFrame(int index);
 
-protected:
-    void paintEvent(QPaintEvent*) override;
+    void mousePressed(QPoint point);
 
-    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoved(QPoint point);
 
-    void mouseMoveEvent(QMouseEvent* event) override;
-
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseReleased(QPoint point);
 
 private:
+    PaintTool currentTool;
 
     std::vector<QImage> frameVector;
 
