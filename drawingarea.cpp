@@ -63,7 +63,7 @@ void DrawingArea::mousePressed(QPoint point) {
 }
 
 void DrawingArea::mouseMoved(QPoint point) {
-     QPoint pos = convertToRelativeCoordinates(point);
+    QPoint pos = convertToRelativeCoordinates(point);
 
     switch(currentTool){
 
@@ -77,23 +77,47 @@ void DrawingArea::mouseMoved(QPoint point) {
         brushColor = Qt::white;
         drawPixel(pos);
         break;
+
     case PaintTool::SELECT:
-        drawing = true;
-        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
         break;
+
     case PaintTool::PAINTBUCKET:
-        drawing = true;
-        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
         break;
     }
 
-        emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-        update();
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
 
 }
 
 void DrawingArea::mouseReleased(QPoint point) {
+
+    QPoint pos = convertToRelativeCoordinates(point);
+
+    // switch(currentTool){
+
+    // case PaintTool::PEN:
+    //     drawing = true;
+    //     drawPixel(pos);
+    //     break;
+
+    // case PaintTool::ERASER:
+    //     drawing = false;
+    //     brushColor = Qt::white;
+    //     drawPixel(pos);
+    //     break;
+    // case PaintTool::SELECT:
+    //     drawing = true;
+    //     drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+    //     break;
+    // case PaintTool::PAINTBUCKET:
+    //     drawing = true;
+    //     drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+    //     break;
+    // }
+
     drawing = false;
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
 
     update();
 }
