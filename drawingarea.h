@@ -28,19 +28,32 @@ public:
 
     /**
      * @brief This is the constructor for our drawing area that takes a parent Widget and a size as parameters.
-     * @param parent - The parent Widget
-     * @param size
+     * @param parent - The parent Widget that will be the MainWindow.
+     * @param size - Size of the drawing area.
      */
     DrawingArea(QWidget* parent, int size);
 
+    /**
+     * @brief Sets the brush color of the color tools.
+     * @param color - Color that will be set.
+     */
     void setBrushColor(const QColor& color);
 
+    /**
+     * @brief Sets up the canvas when MainWindow is run.
+     */
     void setUpCanvas();
 
-    // void setFrame(const Frame& otherFrame);
-
+    /**
+     * @brief Sets the frame vector when loading a file.
+     * @param frames - Vector of frames that will be be loaded.
+     */
     void setFrameVector(std::vector<QImage>& frames);
 
+    /**
+     * @brief Gets the FPS of the preview windows.
+     * @return - The FPS of the preview windows as an integer.
+     */
     int getFps();
 
     /**
@@ -49,7 +62,12 @@ public:
     std::vector<QImage>& getFrames();
 
 signals:
+    /**
+     * @brief Signal that is emitted when the image is updated.
+     * @param pixmap - Passes along the updated pixmap to be put into the QLabel in MainWindow.
+     */
     void imageUpdated(const QPixmap &pixmap);
+
     void previewUpdated(const QPixmap& pixmap);
 
 public slots:
