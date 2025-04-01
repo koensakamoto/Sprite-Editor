@@ -185,11 +185,13 @@ vector<QPoint> DrawingArea::getAllContiguousPixels(int x, int y){
 
     QColor backgroundColor = Qt::white;
 
-    //Rejecting clicks to the background
-    if (startColor.operator ==( backgroundColor)){
-        //qDebug() << "early exit";
-        QPoint p = QPoint(x,y);
-        //qDebug() << p << startColor.red() << startColor.blue();
+    //Rejecting clicks to the background if select tool is active
+    if (startColor.operator ==( backgroundColor) && currentTool == PaintTool::SELECT){
+
+        return contiguousPixels;
+    }
+
+    if (startColor != backgroundColor && currentTool == PaintTool::PAINTBUCKET){
         return contiguousPixels;
     }
 
@@ -218,9 +220,17 @@ bool DrawingArea::isValid(vector<vector<bool>> visited, int row, int col, QColor
         return false;
     }
 
-    if (frameVector[currFrameIndex].pixelColor(row,col).operator != (startColor)){
-        return false;
-    }
+
+        if (frameVector[currFrameIndex].pixelColor(row,col).operator != (startColor)){
+            return false;
+        }
+
+
+    // if (currentTool == PaintTool::PAINTBUCKET){
+    //     if (frameVector[currFrameIndex].pixelColor(row,col).operator != (startColor)){
+    //         return false;
+    //     }
+    // }
 
     return true;
 }
