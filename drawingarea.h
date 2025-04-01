@@ -68,64 +68,167 @@ public:
 signals:
     /**
      * @brief Signal that is emitted when the image is updated.
-     * @param pixmap - Passes along the updated pixmap to be put into the QLabel in MainWindow.
+     * @param pixmap - Passes along the updated pixmap to be put into the drawing area QLabel in MainWindow.
      */
     void imageUpdated(const QPixmap &pixmap);
 
+    /**
+     * @brief Signal that is emitted when the preview is updated.
+     * @param pixmap - Passes along the updated pixmap to be put into the preview QLabel in MainWindow.
+     */
     void previewUpdated(const QPixmap& pixmap);
 
 public slots:
+    /**
+     * @brief Used for updating the next frame in the Vector of frames stored.
+     */
     void updateNextFrame();
 
+    /**
+     * @brief Provides a new FPS when the FPS slider is updated.
+     * @param newFps - New FPS to be used for preview window.
+     */
     void onUpdatedFps(int newFps);
 
+    /**
+     * @brief Sets the pixel size for the drawing area which acts as our way of sizing the image.
+     * @param size - Size of the pixels.
+     */
     void setPixelSize(int size);
 
+    /**
+     * @brief Used for when the preview play/pause is selected to play/pause the preview animation.
+     */
     void previewSelected();
+
+    /**
+     * @brief Displays animation of all the frames at the actual size of the sprite in pixels.
+     */
     void previewFramesTrueSize();
 
+    /**
+     * @brief When frame that is being edited is changed, this updates the current frame variable to that index.
+     * @param index - New index of the current frame.
+     */
     void updateCurrentFrame(int index);
+
+    /**
+     * @brief Adds a new frame that can be edited.
+     * @param index - Index of the new frame being added.
+     * @param copyIndex - Index of the last frame if the new frame being added is a copy of that one.
+     */
     void addFrame(int index, int copyIndex);
+
+    /**
+     * @brief Deletes a frame.
+     * @param index - Index of the frame to be deleted.
+     */
     void deleteFrame(int index);
 
+    /**
+     * @brief Mirrors the frame horizontally.
+     */
     void mirrorHorizontally();
+
+    /**
+     * @brief Mirrors the frame vertically.
+     */
     void mirrorVertically();
 
+    /**
+     * @brief Sets the current tool being used by the program.
+     * @param tool - Tool being used.
+     */
     void setCurrentTool(DrawingArea::PaintTool tool);
 
 protected:
-
+    /**
+     * @brief When the mouse is pressed this method checks the current tool and begins drawing.
+     * @param event - Where the mouse was pressed.
+     */
     void mousePressEvent(QMouseEvent* event) override;
+
+    /**
+     * @brief When the mouse is moved, this method checks if it is drawing and then will draw.
+     * @param event - Where the mouse was moved.
+     */
     void mouseMoveEvent(QMouseEvent* event) override;
+
+    /**
+     * @brief When the mouse button is released, this method stops drawing.
+     * @param event - Where the mouse button was released.
+     */
     void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
+    /**
+     * @brief Defines the currently selected tool from the toolbar. Can be either Eraser, Select Tool, Paint Bucket, and Pen.
+     */
     PaintTool currentTool;
 
+    /**
+     * @brief Vector of frames that represent the frames that can be animated.
+     */
     std::vector<QImage> frameVector;
 
+    /**
+     * @brief Represents whether the mouse is pressed down and drawing.
+     */
     bool drawing;
 
+    /**
+     * @brief Represents the currently selected brush color.
+     */
     QColor brushColor;
 
+    /**
+     * @brief FPS for the preview animations.
+     */
     int fps = 10;
 
+    /**
+     * @brief Size of the main drawing area where the user can edit.
+     */
     int size;
 
-    int pixelSize = 100;
+    /**
+     * @brief Size of the pixel when drawing.
+     */
+    int pixelSize = 40;
 
+    /**
+     * @brief Index of frame currently being displayed in the main drawing area.
+     */
     int currFrameIndex = 0;
 
-    // Used for BFS
+    /**
+     * @brief Used to navigate a 2D array in BFS.
+     */
     int dRow[4];
+    /**
+     * @brief Used to navigate a 2D array in BFS.
+     */
     int dCol[4];
 
+    /**
+     * @brief Private method for drawing the pixel on the image.
+     * @param pos - Position of the pixel in the image to be drawn.
+     */
     void drawPixel(const QPoint& pos);
 
+    /**
+     * @brief Represents whether the preview button is on or off.
+     */
     bool previewOn = false;
 
+    /**
+     * @brief Sends the frames to be displayed in the preview label.
+     */
     void previewFrames();
 
+    /**
+     * @brief Index of the current frame in the animation being displayed.
+     */
     int previewIndex = 0;
 
 
@@ -153,14 +256,28 @@ private:
      * coordinate for a pixel that is continous with the original pixel from x and y.
      * @param x x-coordinate of the pixel selected.
      * @param y y-coordinate of the pixel selected.
-     * @return
+     * @return - Vector of QPoints that represent the Contiguous Pixels.
      */
     vector<QPoint> getAllContiguousPixels(int x, int y);
 
-    // Helper method for BFS of grid.
+    /**
+     * @brief Helper method for BFS that determines if a pixel is already visited.
+     * @param visited - 2D Vector of pixels already visited.
+     * @param row - Rows of the 2D Array.
+     * @param col - Columns of the 2D Array.
+     * @param startColor - Current starting color for figuring out which pixels are Contiguous.
+     * @return - Returns true if the pixel is contiguous, false if not.
+     */
     bool isValid(vector<vector<bool>> visited, int row, int col, QColor& startColor);
 
-    //BFS used to getAllContiguousPixels()
+    /**
+     * @brief Breadth First Search used for the Paint Bucket and Select Tools.
+     * @param visited - 2D Vector of bools for if a pixel was visited.
+     * @param row - Rows of the 2D Array.
+     * @param col - Columns of the 2D Array.
+     * @param startColor - Current starting color for figuring out which pixels are Contiguous.
+     * @return - Vector of the contiguous pixels.
+     */
     vector<QPoint> BFS(vector<vector<bool>> visited, int row, int col, QColor& startColor);
 };
 
