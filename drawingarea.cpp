@@ -29,18 +29,41 @@ void DrawingArea::setUpCanvas() {
     update();
 }
 
-void DrawingArea::mousePressed(QPoint point) {
-    QPoint pos = convertToRelativeCoordinates(point);
+void DrawingArea::setCurrentTool(DrawingArea::PaintTool tool){
+    currentTool = tool;
+}
 
-    if (currentTool != PaintTool::ERASER){
+void DrawingArea::mousePressEvent(QMouseEvent *event){
+    if (event->button() == Qt::LeftButton){
         drawing = true;
+        drawPixel(event->pos());
     }
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+void DrawingArea::mouseMoveEvent(QMouseEvent *event){
+    if (drawing){
+        drawPixel(event->pos());
+    }
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+void DrawingArea::mouseReleaseEvent(QMouseEvent *event){
+    if (event->button() == Qt::LeftButton){
+        drawing = false;
+    }
+    update();
+}
 
+void DrawingArea::mousePressed(QMouseEvent* event) {
+QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
+    QPoint p1 = QPoint (200, 200);
     switch(currentTool){
 
     case PaintTool::PEN:
         drawing = true;
         drawPixel(pos);
+        drawPixel(p1);
         break;
 
     case PaintTool::ERASER:
@@ -48,10 +71,12 @@ void DrawingArea::mousePressed(QPoint point) {
         brushColor = Qt::white;
         drawPixel(pos);
         break;
+
     case PaintTool::SELECT:
         drawing = true;
         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
         break;
+
     case PaintTool::PAINTBUCKET:
         drawing = true;
         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
@@ -62,15 +87,15 @@ void DrawingArea::mousePressed(QPoint point) {
     update();
 }
 
-void DrawingArea::mouseMoved(QPoint point) {
-    QPoint pos = convertToRelativeCoordinates(point);
+void DrawingArea::mouseMoved(QMouseEvent* event) {
+    QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
 
     switch(currentTool){
 
     case PaintTool::PEN:
-        drawing = true;
-        drawPixel(pos);
-        break;
+
+            drawPixel(pos);
+
 
     case PaintTool::ERASER:
         drawing = false;
@@ -90,9 +115,9 @@ void DrawingArea::mouseMoved(QPoint point) {
 
 }
 
-void DrawingArea::mouseReleased(QPoint point) {
+void DrawingArea::mouseReleased(QMouseEvent* event) {
 
-    QPoint pos = convertToRelativeCoordinates(point);
+    // QPoint pos = convertToRelativeCoordinates(point);
 
     // switch(currentTool){
 
@@ -117,7 +142,7 @@ void DrawingArea::mouseReleased(QPoint point) {
     // }
 
     drawing = false;
-    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    // emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
 
     update();
 }

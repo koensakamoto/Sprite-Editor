@@ -63,11 +63,19 @@ public slots:
     void addFrame(int index, int copyIndex);
     void deleteFrame(int index);
 
-    void mousePressed(QPoint point);
+    void mousePressed(QMouseEvent* event);
 
-    void mouseMoved(QPoint point);
+    void mouseMoved(QMouseEvent* event);
 
-    void mouseReleased(QPoint point);
+    void mouseReleased(QMouseEvent* event);
+
+    void setCurrentTool(DrawingArea::PaintTool tool);
+
+protected:
+
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
 
 private:
     PaintTool currentTool;

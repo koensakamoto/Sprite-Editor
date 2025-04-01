@@ -128,6 +128,12 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::deleteFrame, drawingArea, &DrawingArea::deleteFrame);
     connect(this, &MainWindow::updateCurrentFrame, drawingArea, &DrawingArea::updateCurrentFrame);
 
+    // // Connecting the drawing tools to drawing area
+    // connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
+    // connect(this,&MainWindow::mouseMovePosition, drawingArea, &DrawingArea::mouseMoved);
+    // connect(this,&MainWindow::mousePressPosition, drawingArea, &DrawingArea::mousePressed);
+    // connect(this,&MainWindow::mouseReleasePosition, drawingArea, &DrawingArea::mouseReleased);
+
 }
 
 MainWindow::~MainWindow()
@@ -156,6 +162,7 @@ void MainWindow::onEraserClicked() {
 }
 
 void MainWindow::onSelectToolClicked() {
+    drawingArea->setBrushColor(dialog->currentColor());
     emit changeTool(DrawingArea::PaintTool::SELECT);
 }
 
@@ -373,19 +380,29 @@ void MainWindow::on_frameTabBar_tabBarClicked(int index)
     emit updateCurrentFrame(index);
 }
 
-void MainWindow::mousePressEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton) {
-        emit mousePressPosition(event->pos());
-    }
-}
+// void MainWindow::mousePressEvent(QMouseEvent* event) {
 
-void MainWindow::mouseMoveEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton) {
-        emit mouseMovePosition(event->pos());
-    }}
+//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
+//     if (event->button() == Qt::LeftButton) {
 
-void MainWindow::mouseReleaseEvent(QMouseEvent* event) {
-    if (event->button() == Qt::LeftButton) {
-        emit mouseReleasePosition(event->pos());
-    }}
+//         emit mousePressPosition(event);
+//     }
+// }
+
+// void MainWindow::mouseMoveEvent(QMouseEvent* event) {
+//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
+//     emit mouseMovePosition(event);
+
+//     if (event->button() == Qt::LeftButton) {
+
+//         qDebug() <<relativePos;
+//     }
+// }
+
+// void MainWindow::mouseReleaseEvent(QMouseEvent* event) {
+//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
+
+//     if (event->button() == Qt::LeftButton) {
+//         emit mouseReleasePosition(event);
+//     }}
 

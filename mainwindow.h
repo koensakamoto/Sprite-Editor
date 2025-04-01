@@ -25,23 +25,23 @@ public:
     ~MainWindow();
 
 protected:
-    /**
-     * @brief mousePressEvent
-     * @param event
-     */
-    void mousePressEvent(QMouseEvent* event) override;
+    // /**
+    //  * @brief mousePressEvent
+    //  * @param event
+    //  */
+    // void mousePressEvent(QMouseEvent* event) override;
 
-    /**
-     * @brief mouseMoveEvent
-     * @param event
-     */
-    void mouseMoveEvent(QMouseEvent* event) override;
+    // /**
+    //  * @brief mouseMoveEvent
+    //  * @param event
+    //  */
+    // void mouseMoveEvent(QMouseEvent* event) override;
 
-    /**
-     * @brief mouseReleaseEvent
-     * @param event
-     */
-    void mouseReleaseEvent(QMouseEvent* event) override;
+    // /**
+    //  * @brief mouseReleaseEvent
+    //  * @param event
+    //  */
+    // void mouseReleaseEvent(QMouseEvent* event) override;
 
 public slots:
     /**
@@ -91,9 +91,10 @@ signals:
     void deleteFrame(int index);
     void updateCurrentFrame(int index);
     void changeTool(DrawingArea::PaintTool tool);
-    void mousePressPosition(QPoint point);
-    void mouseMovePosition(QPoint point);
-    void mouseReleasePosition(QPoint point);
+
+    // void mousePressPosition(QMouseEvent* event);
+    // void mouseMovePosition(QMouseEvent* event);
+    // void mouseReleasePosition(QMouseEvent* event);
 
 
 
