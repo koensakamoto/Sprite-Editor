@@ -36,14 +36,54 @@ void DrawingArea::setCurrentTool(DrawingArea::PaintTool tool){
 void DrawingArea::mousePressEvent(QMouseEvent *event){
     if (event->button() == Qt::LeftButton){
         drawing = true;
-        drawPixel(event->pos());
+        switch(currentTool){
+
+        case PaintTool::PEN:
+            drawing = true;
+            drawPixel(pos);
+            break;
+
+        case PaintTool::ERASER:
+            drawing = false;
+            brushColor = Qt::white;
+            drawPixel(pos);
+            break;
+
+        case PaintTool::SELECT:
+            drawing = true;
+            drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+            break;
+
+        case PaintTool::PAINTBUCKET:
+            drawing = true;
+            drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+            break;
+        }
     }
     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
 }
 void DrawingArea::mouseMoveEvent(QMouseEvent *event){
     if (drawing){
-        drawPixel(event->pos());
+        switch(currentTool){
+
+        case PaintTool::PEN:
+            drawing = true;
+            drawPixel(pos);
+            break;
+
+        case PaintTool::ERASER:
+            drawing = false;
+            brushColor = Qt::white;
+            drawPixel(pos);
+            break;
+
+        case PaintTool::SELECT:
+            break;
+
+        case PaintTool::PAINTBUCKET:
+            break;
+        }
     }
     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
@@ -55,67 +95,67 @@ void DrawingArea::mouseReleaseEvent(QMouseEvent *event){
     update();
 }
 
-void DrawingArea::mousePressed(QMouseEvent* event) {
-QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
-    QPoint p1 = QPoint (200, 200);
-    switch(currentTool){
+// void DrawingArea::mousePressed(QMouseEvent* event) {
+// QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
+//     QPoint p1 = QPoint (200, 200);
+//     switch(currentTool){
 
-    case PaintTool::PEN:
-        drawing = true;
-        drawPixel(pos);
-        drawPixel(p1);
-        break;
+//     case PaintTool::PEN:
+//         drawing = true;
+//         drawPixel(pos);
+//         drawPixel(p1);
+//         break;
 
-    case PaintTool::ERASER:
-        drawing = false;
-        brushColor = Qt::white;
-        drawPixel(pos);
-        break;
+//     case PaintTool::ERASER:
+//         drawing = false;
+//         brushColor = Qt::white;
+//         drawPixel(pos);
+//         break;
 
-    case PaintTool::SELECT:
-        drawing = true;
-        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-        break;
+//     case PaintTool::SELECT:
+//         drawing = true;
+//         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+//         break;
 
-    case PaintTool::PAINTBUCKET:
-        drawing = true;
-        drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-        break;
-    }
+//     case PaintTool::PAINTBUCKET:
+//         drawing = true;
+//         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
+//         break;
+//     }
 
-    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-    update();
-}
+//     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+//     update();
+// }
 
-void DrawingArea::mouseMoved(QMouseEvent* event) {
-    QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
+// void DrawingArea::mouseMoved(QMouseEvent* event) {
+//     QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
 
-    switch(currentTool){
+//     switch(currentTool){
 
-    case PaintTool::PEN:
+//     case PaintTool::PEN:
 
-            drawPixel(pos);
+//         drawPixel(pos);
 
 
-    case PaintTool::ERASER:
-        drawing = false;
-        brushColor = Qt::white;
-        drawPixel(pos);
-        break;
+//     case PaintTool::ERASER:
+//         drawing = false;
+//         brushColor = Qt::white;
+//         drawPixel(pos);
+//         break;
 
-    case PaintTool::SELECT:
-        break;
+//     case PaintTool::SELECT:
+//         break;
 
-    case PaintTool::PAINTBUCKET:
-        break;
-    }
+//     case PaintTool::PAINTBUCKET:
+//         break;
+//     }
 
-    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-    update();
+//     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+//     update();
 
-}
+// }
 
-void DrawingArea::mouseReleased(QMouseEvent* event) {
+// void DrawingArea::mouseReleased(QMouseEvent* event) {
 
     // QPoint pos = convertToRelativeCoordinates(point);
 
@@ -141,11 +181,11 @@ void DrawingArea::mouseReleased(QMouseEvent* event) {
     //     break;
     // }
 
-    drawing = false;
+    // drawing = false;
     // emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
 
-    update();
-}
+    // update();
+// }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
     if (isWithinImageBounds(pos, frameVector[currFrameIndex])) {
