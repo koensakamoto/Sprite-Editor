@@ -318,6 +318,31 @@ void DrawingArea::previewFrames(){
 
     QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
 }
+
+void DrawingArea::previewFramesTrueSize(){
+    if(!previewOn || frameVector.empty()) {
+        return;
+    }
+
+    if(previewIndex >= frameVector.size()) {
+        previewIndex = 0;
+    }
+
+    QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
+
+    int size = frameVector[previewIndex].height();
+
+    int scaledSize = size/pixelSize;
+    QPixmap scaledPixmap = currPixMap.scaled(scaledSize, scaledSize,
+                                             Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation);
+    emit previewUpdated(scaledPixmap);
+
+    previewIndex++;
+
+    QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
+
+}
 void DrawingArea::addFrame(int newPixelSize, int copyIndex){
 
     // if index is -1 create new QImage

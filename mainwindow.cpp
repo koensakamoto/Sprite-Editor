@@ -26,8 +26,6 @@ MainWindow::MainWindow(QWidget *parent)
     ui->DrawingAreaLabel->setStyleSheet("QLabel { background-color: white; }");
     ui->PreviewLabel->setStyleSheet("QLabel { background-color: white; }");
 
-
-
     QToolBar *toolBar = ui->toolBar;
     // frame toolbar
     QToolBar *frameToolBar = ui->frameToolBar;
@@ -125,6 +123,10 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(drawingArea, &DrawingArea::previewUpdated, this, &MainWindow::updatedPreviewFrame);
     connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewSelected);
+
+    connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewFramesTrueSize);
+
+
     connect(ui->fpsSlider, &QSlider::valueChanged, drawingArea, &DrawingArea::onUpdatedFps);
 
     //connect add + delete frames
@@ -135,6 +137,8 @@ MainWindow::MainWindow(QWidget *parent)
     // // Connecting the drawing tools to drawing area
     connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
 
+    int trueSize = drawingArea->size/drawingArea->pixelSize;
+    ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
 }
 
 MainWindow::~MainWindow()
