@@ -61,6 +61,10 @@ public:
      */
     std::vector<QImage>& getFrames();
 
+    int getSize();
+
+    int getPixelSize();
+
 signals:
     /**
      * @brief Signal that is emitted when the image is updated.
@@ -78,6 +82,7 @@ public slots:
     void setPixelSize(int size);
 
     void previewSelected();
+    void previewFramesTrueSize();
 
     void updateCurrentFrame(int index);
     void addFrame(int index, int copyIndex);
