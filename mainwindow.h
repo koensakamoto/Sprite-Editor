@@ -66,11 +66,11 @@ public slots:
     // void updateTrueLabelSize(const QPixmap& pixmap);
 
 private slots:
-    /**
-     * @brief on_pixelSizeSlider_sliderMoved - Handles change in brush/pixel size slider
-     * @param position - The size that the user sets in the slider
-     */
-    void on_pixelSizeSlider_sliderMoved(int position);
+
+    //  * @brief on_pixelSizeSlider_sliderMoved - Handles change in brush/pixel size slider
+    //  * @param position - The size that the user sets in the slider
+    //
+    // void on_pixelSizeSlider_sliderMoved(int position);
 
     /**
      * @brief on_actionAddFrame_triggered - Handles the creation of a copied frame from the current drawing area's frame when clicked

@@ -71,45 +71,17 @@
      <enum>QSlider::TickPosition::TicksBelow</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="pixelSizeSlider">
-    <property name="geometry">
-     <rect>
-      <x>5</x>
-      <y>25</y>
-      <width>100</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>40</number>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="singleStep">
-     <number>10</number>
-    </property>
-    <property name="value">
-     <number>40</number>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Orientation::Horizontal</enum>
-    </property>
-    <property name="tickPosition">
-     <enum>QSlider::TickPosition::TicksBelow</enum>
-    </property>
-   </widget>
    <widget class="QPushButton" name="previewButton">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>270</y>
+      <x>650</x>
+      <y>240</y>
       <width>93</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
-     <string>start</string>
+     <string>play/pause</string>
     </property>
    </widget>
    <widget class="QTabWidget" name="frameTabBar">
@@ -133,6 +105,19 @@
     </property>
     <property name="text">
      <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>670</x>
+      <y>430</y>
+      <width>71</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Actual size</string>
     </property>
    </widget>
   </widget>

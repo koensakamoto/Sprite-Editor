@@ -135,16 +135,13 @@ MainWindow::MainWindow(QWidget *parent)
     int trueSize = drawingArea->getSize()/drawingArea->getPixelSize();
     ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
 
-   // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
-    // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
-
     // connect color dialog to brush color
     connect(this->dialog, &QColorDialog::currentColorChanged, drawingArea, &DrawingArea::setBrushColor);
 
 
     //connect slider to pixelSize
-    connect(this, &MainWindow::updatePixelSize, drawingArea, &DrawingArea::setPixelSize);
-    // animationPreview();
+    // connect(this, &MainWindow::updatePixelSize, drawingArea, &DrawingArea::setPixelSize);
+    // // animationPreview();
 
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
@@ -201,12 +198,12 @@ void MainWindow::onPenClicked() {
 }
 
 
-void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
-{
-     emit updatePixelSize(position);
-    // setting up the true to scale sprite preview
+// void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
+// {
+//      emit updatePixelSize(position);
+//     // setting up the true to scale sprite preview
 
-}
+// }
 
 void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
     //If there are not frames then return
@@ -350,16 +347,6 @@ void MainWindow::updatedPreviewFrame(const QPixmap& pixmap, const QPixmap& trueS
             )
         );
 }
-
-// void MainWindow::updateTrueLabelSize(const QPixmap& pixmap){
-//     ui->trueSizeLabel->setPixmap(
-//         pixmap.scaled(
-//             ui->PreviewLabel->size(),
-//             Qt::KeepAspectRatio,
-//             Qt::SmoothTransformation
-//             )
-//         );
-// }
 
 
 void MainWindow::on_actionAddFrame_triggered()
