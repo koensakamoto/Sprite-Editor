@@ -34,6 +34,8 @@ void DrawingArea::setCurrentTool(DrawingArea::PaintTool tool){
 }
 
 void DrawingArea::mousePressEvent(QMouseEvent *event){
+    QPoint pos = QPoint(event->pos());
+
     if (event->button() == Qt::LeftButton){
         drawing = true;
         switch(currentTool){
@@ -44,18 +46,15 @@ void DrawingArea::mousePressEvent(QMouseEvent *event){
             break;
 
         case PaintTool::ERASER:
-            drawing = false;
             brushColor = Qt::white;
             drawPixel(pos);
             break;
 
         case PaintTool::SELECT:
-            drawing = true;
             drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
             break;
 
         case PaintTool::PAINTBUCKET:
-            drawing = true;
             drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
             break;
         }
@@ -64,6 +63,7 @@ void DrawingArea::mousePressEvent(QMouseEvent *event){
     update();
 }
 void DrawingArea::mouseMoveEvent(QMouseEvent *event){
+    QPoint pos = QPoint(event->pos());
     if (drawing){
         switch(currentTool){
 
@@ -73,7 +73,6 @@ void DrawingArea::mouseMoveEvent(QMouseEvent *event){
             break;
 
         case PaintTool::ERASER:
-            drawing = false;
             brushColor = Qt::white;
             drawPixel(pos);
             break;
@@ -95,97 +94,6 @@ void DrawingArea::mouseReleaseEvent(QMouseEvent *event){
     update();
 }
 
-// void DrawingArea::mousePressed(QMouseEvent* event) {
-// QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
-//     QPoint p1 = QPoint (200, 200);
-//     switch(currentTool){
-
-//     case PaintTool::PEN:
-//         drawing = true;
-//         drawPixel(pos);
-//         drawPixel(p1);
-//         break;
-
-//     case PaintTool::ERASER:
-//         drawing = false;
-//         brushColor = Qt::white;
-//         drawPixel(pos);
-//         break;
-
-//     case PaintTool::SELECT:
-//         drawing = true;
-//         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-//         break;
-
-//     case PaintTool::PAINTBUCKET:
-//         drawing = true;
-//         drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-//         break;
-//     }
-
-//     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-//     update();
-// }
-
-// void DrawingArea::mouseMoved(QMouseEvent* event) {
-//     QPoint pos = QPoint (event->pos().x()-120, event->pos().y()-50);
-
-//     switch(currentTool){
-
-//     case PaintTool::PEN:
-
-//         drawPixel(pos);
-
-
-//     case PaintTool::ERASER:
-//         drawing = false;
-//         brushColor = Qt::white;
-//         drawPixel(pos);
-//         break;
-
-//     case PaintTool::SELECT:
-//         break;
-
-//     case PaintTool::PAINTBUCKET:
-//         break;
-//     }
-
-//     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-//     update();
-
-// }
-
-// void DrawingArea::mouseReleased(QMouseEvent* event) {
-
-    // QPoint pos = convertToRelativeCoordinates(point);
-
-    // switch(currentTool){
-
-    // case PaintTool::PEN:
-    //     drawing = true;
-    //     drawPixel(pos);
-    //     break;
-
-    // case PaintTool::ERASER:
-    //     drawing = false;
-    //     brushColor = Qt::white;
-    //     drawPixel(pos);
-    //     break;
-    // case PaintTool::SELECT:
-    //     drawing = true;
-    //     drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-    //     break;
-    // case PaintTool::PAINTBUCKET:
-    //     drawing = true;
-    //     drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-    //     break;
-    // }
-
-    // drawing = false;
-    // emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
-
-    // update();
-// }
 
 void DrawingArea::drawPixel(const QPoint& pos) {
     if (isWithinImageBounds(pos, frameVector[currFrameIndex])) {
@@ -205,7 +113,7 @@ void DrawingArea::drawPixel(const QPoint& pos) {
 
 void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
     if (contiguousPixels.empty()){
-        //qDebug() << " no pixels found";
+        qDebug() << " no pixels found";
         return;
     }
 

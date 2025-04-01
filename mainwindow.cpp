@@ -129,7 +129,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(this, &MainWindow::updateCurrentFrame, drawingArea, &DrawingArea::updateCurrentFrame);
 
     // // Connecting the drawing tools to drawing area
-    // connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
+    connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
     // connect(this,&MainWindow::mouseMovePosition, drawingArea, &DrawingArea::mouseMoved);
     // connect(this,&MainWindow::mousePressPosition, drawingArea, &DrawingArea::mousePressed);
     // connect(this,&MainWindow::mouseReleasePosition, drawingArea, &DrawingArea::mouseReleased);

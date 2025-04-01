@@ -63,11 +63,11 @@ public slots:
     void addFrame(int index, int copyIndex);
     void deleteFrame(int index);
 
-    void mousePressed(QMouseEvent* event);
+    // void mousePressed(QMouseEvent* event);
 
-    void mouseMoved(QMouseEvent* event);
+    // void mouseMoved(QMouseEvent* event);
 
-    void mouseReleased(QMouseEvent* event);
+    // void mouseReleased(QMouseEvent* event);
 
     void setCurrentTool(DrawingArea::PaintTool tool);
 
