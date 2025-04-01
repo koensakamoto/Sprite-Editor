@@ -24,25 +24,6 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-protected:
-    // /**
-    //  * @brief mousePressEvent
-    //  * @param event
-    //  */
-    // void mousePressEvent(QMouseEvent* event) override;
-
-    // /**
-    //  * @brief mouseMoveEvent
-    //  * @param event
-    //  */
-    // void mouseMoveEvent(QMouseEvent* event) override;
-
-    // /**
-    //  * @brief mouseReleaseEvent
-    //  * @param event
-    //  */
-    // void mouseReleaseEvent(QMouseEvent* event) override;
-
 public slots:
     /**
      * @brief onPaintBucketClicked
@@ -73,8 +54,7 @@ public slots:
      * @param pixmap
      */
     void updatedPreviewFrame(const QPixmap& pixmap);
-    void onMirrorVertically();
-    void onMirrorHorizontally();
+
 
 
 private slots:
@@ -94,9 +74,7 @@ signals:
     void updateCurrentFrame(int index);
     void changeTool(DrawingArea::PaintTool tool);
 
-    // void mousePressPosition(QMouseEvent* event);
-    // void mouseMovePosition(QMouseEvent* event);
-    // void mouseReleasePosition(QMouseEvent* event);
+
 
 
 
@@ -112,7 +90,7 @@ private:
     void onColorSelectorClicked();
     QColorDialog *dialog;
 
-    void animationPreview();
+    // void animationPreview();
 
     void saveFrames(std::vector<QImage>& frames, QString& filepath);
 

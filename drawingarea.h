@@ -6,7 +6,9 @@
 #include <QWidget>
 #include <QPainter>
 #include <QMouseEvent>
-#include "frame.h"
+#include <vector>
+
+using std::vector;
 
 /**
  * @brief The DrawingArea class defines the area in the MainWindow that allows for drawing. This class keeps track of the mouse and tools

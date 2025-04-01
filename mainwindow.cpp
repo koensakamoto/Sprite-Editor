@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "frame.h"
+// #include "frame.h"
 #include <vector>
 #include <QActionGroup>
 #include <QFile>
@@ -46,11 +46,6 @@ MainWindow::MainWindow(QWidget *parent)
     QWidget *firstTab = new QWidget();
     QLabel *firstLabel = new QLabel(QString("Frame %1").arg(1), firstTab);
     ui->frameTabBar->addTab(firstLabel, QString("Frame %1").arg(1));
-
-
-
-
-
 
     // Instantiation of the model
     drawingArea = new DrawingArea(parent, 400);
@@ -122,7 +117,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     //connect slider to pixelSize
     connect(this, &MainWindow::updatePixelSize, drawingArea, &DrawingArea::setPixelSize);
-    animationPreview();
+    // animationPreview();
 
     //connect save button
     connect(ui->saveButton, &QAction::triggered, this, &MainWindow::saveClicked);
@@ -139,9 +134,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // // Connecting the drawing tools to drawing area
     connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
-    // connect(this,&MainWindow::mouseMovePosition, drawingArea, &DrawingArea::mouseMoved);
-    // connect(this,&MainWindow::mousePressPosition, drawingArea, &DrawingArea::mousePressed);
-    // connect(this,&MainWindow::mouseReleasePosition, drawingArea, &DrawingArea::mouseReleased);
 
 }
 
@@ -180,29 +172,8 @@ void MainWindow::onPenClicked() {
     drawingArea->setBrushColor(dialog->currentColor()); //FIXME signals and slots
 }
 
-void MainWindow::animationPreview(){
 
-    std::vector<QImage> frames = drawingArea->getFrames();
 
-    for(size_t i = 0; i < frames.size(); i++){
-        // Ensure delete/add frame buttons are disabled during animation.
-        if(i == frames.size()){
-            i = 0;
-        }
-        //edge case 0  fps
-        int delay = 1000 / drawingArea->getFps();
-
-        Frame currFrame = frames.at(i);
-
-        QImage previewImage = currFrame.getImage();
-        QPixmap previewPixmap = QPixmap::fromImage(previewImage);
-
-        // Quickshot: Using a method pointer
-        QTimer::singleShot(delay, this, [=]() {
-            ui->PreviewLabel->setPixmap(previewPixmap);
-        });
-    }
-}
 
 void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
 {
@@ -388,37 +359,4 @@ void MainWindow::on_frameTabBar_tabBarClicked(int index)
     currentFrame = index;
     emit updateCurrentFrame(index);
 }
-
-void MainWindow::onMirrorHorizontally() {
-
-}
-
-void MainWindow::onMirrorVertically() {
-
-}
-// void MainWindow::mousePressEvent(QMouseEvent* event) {
-
-//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
-//     if (event->button() == Qt::LeftButton) {
-
-//         emit mousePressPosition(event);
-//     }
-// }
-
-// void MainWindow::mouseMoveEvent(QMouseEvent* event) {
-//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
-//     emit mouseMovePosition(event);
-
-//     if (event->button() == Qt::LeftButton) {
-
-//         qDebug() <<relativePos;
-//     }
-// }
-
-// void MainWindow::mouseReleaseEvent(QMouseEvent* event) {
-//     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);
-
-//     if (event->button() == Qt::LeftButton) {
-//         emit mouseReleasePosition(event);
-//     }}
 

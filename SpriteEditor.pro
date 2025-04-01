@@ -10,18 +10,12 @@ CONFIG += c++17
 
 SOURCES += \
     drawingarea.cpp \
-    frame.cpp \
     main.cpp \
-    mainwindow.cpp \
-    pixel.cpp \
-    point2d.cpp
+    mainwindow.cpp
 
 HEADERS += \
     drawingarea.h \
-    frame.h \
-    mainwindow.h \
-    pixel.h \
-    point2d.h
+    mainwindow.h
 
 FORMS += \
     mainwindow.ui
