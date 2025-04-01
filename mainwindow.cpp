@@ -25,6 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->PreviewLabel->setGeometry(600,50,100,100);
     ui->DrawingAreaLabel->setStyleSheet("QLabel { background-color: white; }");
     ui->PreviewLabel->setStyleSheet("QLabel { background-color: white; }");
+    ui->trueSizeLabel->setStyleSheet("QLabel { background-color: white; }");
 
     QToolBar *toolBar = ui->toolBar;
     // frame toolbar
@@ -84,8 +85,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
     connect(penAction, &QAction::triggered, this, &MainWindow::onPenClicked);
 
-
-
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
@@ -99,6 +98,9 @@ MainWindow::MainWindow(QWidget *parent)
             Qt::SmoothTransformation
             )
         );});
+
+    connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
+        ui->trueSizeLabel->setPixmap(pixmap);});
 
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
@@ -137,8 +139,9 @@ MainWindow::MainWindow(QWidget *parent)
     // // Connecting the drawing tools to drawing area
     connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
 
-    int trueSize = drawingArea->size/drawingArea->pixelSize;
-    ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
+
+
+
 }
 
 MainWindow::~MainWindow()
@@ -177,11 +180,12 @@ void MainWindow::onPenClicked() {
 }
 
 
-
-
 void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
 {
      emit updatePixelSize(position);
+    // setting up the true to scale sprite preview
+    int trueSize = drawingArea->getSize()/drawingArea->getPixelSize();
+    ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
 }
 
 void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
@@ -319,6 +323,15 @@ void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
         );
 }
 
+void MainWindow::updateTrueLabelSize(const QPixmap& pixmap){
+    ui->PreviewLabel->setPixmap(
+        pixmap.scaled(
+            ui->PreviewLabel->size(),
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+            )
+        );
+}
 void MainWindow::on_actionAddFrame_triggered()
 {
     totalNumFrames++;

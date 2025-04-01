@@ -319,7 +319,12 @@ void DrawingArea::previewFrames(){
     QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
 }
 
-
+int DrawingArea::getSize(){
+    return size;
+}
+int DrawingArea::getPixelSize(){
+    return pixelSize;
+}
 void DrawingArea::previewFramesTrueSize(){
     if(!previewOn || frameVector.empty()) {
         return;
