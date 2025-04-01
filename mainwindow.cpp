@@ -61,6 +61,13 @@ MainWindow::MainWindow(QWidget *parent)
     QAction *eraserAction = ui->actionEraser;
     QAction *colorPickerAction = ui->actionColorPicker;
     QAction *penAction = ui->actionPen;
+
+    QAction *actionHorizontalMirror = ui->actionHorizontalMirror;
+    QAction *actionVerticalMirror = ui->actionVerticalMirror;
+
+    connect(actionHorizontalMirror, &QAction::triggered, drawingArea, &DrawingArea::mirrorHorizontally);
+    connect(actionVerticalMirror, &QAction::triggered, drawingArea, &DrawingArea::mirrorVertically);
+
     penAction->setChecked(true);
 
     QActionGroup *toolActionGroup = new QActionGroup(this);
@@ -83,6 +90,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(selectToolAction, &QAction::triggered, this, &MainWindow::onSelectToolClicked);
     connect(eraserAction, &QAction::triggered, this, &MainWindow::onEraserClicked);
     connect(penAction, &QAction::triggered, this, &MainWindow::onPenClicked);
+
+
 
     connect(ui->actionColorPicker, &QAction::triggered, this, &MainWindow::onColorSelectorClicked);
 
@@ -380,6 +389,13 @@ void MainWindow::on_frameTabBar_tabBarClicked(int index)
     emit updateCurrentFrame(index);
 }
 
+void MainWindow::onMirrorHorizontally() {
+
+}
+
+void MainWindow::onMirrorVertically() {
+
+}
 // void MainWindow::mousePressEvent(QMouseEvent* event) {
 
 //     QPoint relativePos = QPoint (event->pos().x()-120, event->pos().y()-50);

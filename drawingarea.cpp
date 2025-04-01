@@ -131,6 +131,17 @@ void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
     frameVector[currFrameIndex] = frameVector[currFrameIndex].scaled(size,size, Qt::KeepAspectRatioByExpanding);
 }
 
+void DrawingArea::mirrorHorizontally(){
+    frameVector[currFrameIndex] = frameVector[currFrameIndex].mirrored(true, false);
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+void DrawingArea::mirrorVertically(){
+    frameVector[currFrameIndex] = frameVector[currFrameIndex].mirrored(false,true);
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+
 void DrawingArea::setFrameVector(std::vector<QImage>& frameVector){
     this->frameVector = frameVector;
     //frame = frameVector.at(0);

@@ -130,7 +130,7 @@
      <x>0</x>
      <y>0</y>
      <width>895</width>
-     <height>26</height>
+     <height>24</height>
     </rect>
    </property>
    <widget class="QMenu" name="fileMenu">
@@ -145,6 +145,10 @@
      <string>View</string>
     </property>
     <addaction name="actionSize"/>
+    <addaction name="separator"/>
+    <addaction name="actionVerticalMirror"/>
+    <addaction name="separator"/>
+    <addaction name="actionHorizontalMirror"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="menuView"/>
@@ -290,6 +294,22 @@
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
+   </property>
+  </action>
+  <action name="actionVerticalMirror">
+   <property name="text">
+    <string>Vertical Mirror...</string>
+   </property>
+   <property name="toolTip">
+    <string>Mirrors the image vertically</string>
+   </property>
+  </action>
+  <action name="actionHorizontalMirror">
+   <property name="text">
+    <string>Horizontal Mirror...</string>
+   </property>
+   <property name="toolTip">
+    <string>Mirrors the image horizontally.</string>
    </property>
   </action>
  </widget>

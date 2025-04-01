@@ -73,6 +73,8 @@ public slots:
      * @param pixmap
      */
     void updatedPreviewFrame(const QPixmap& pixmap);
+    void onMirrorVertically();
+    void onMirrorHorizontally();
 
 
 private slots:
