@@ -299,6 +299,15 @@ void DrawingArea::previewSelected(){
     }
 }
 
+// void DrawingArea::previewTrueSizeSelected(){
+//     // previewOn = !previewOn;
+//     previewIndex = 0;
+
+//     if(previewOn) {
+//         previewFramesTrueSize();
+//     }
+// }
+
 void DrawingArea::previewFrames(){
     if(!previewOn || frameVector.empty()) {
         return;
@@ -307,12 +316,20 @@ void DrawingArea::previewFrames(){
     if(previewIndex >= frameVector.size()) {
         previewIndex = 0;
     }
+    int size = frameVector[previewIndex].height();
+
+    int scaledSize = size/pixelSize;
 
     QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
     QPixmap scaledPixmap = currPixMap.scaled(200, 200,
                                              Qt::KeepAspectRatio,
                                              Qt::SmoothTransformation);
-    emit previewUpdated(scaledPixmap);
+
+    QPixmap trueScaledPixmap = currPixMap.scaled(scaledSize, scaledSize,
+                                             Qt::KeepAspectRatio,
+                                             Qt::SmoothTransformation);
+
+    emit previewUpdated(scaledPixmap, trueScaledPixmap);
 
     previewIndex++;
 
@@ -325,30 +342,32 @@ int DrawingArea::getSize(){
 int DrawingArea::getPixelSize(){
     return pixelSize;
 }
-void DrawingArea::previewFramesTrueSize(){
-    if(!previewOn || frameVector.empty()) {
-        return;
-    }
 
-    if(previewIndex >= frameVector.size()) {
-        previewIndex = 0;
-    }
+// void DrawingArea::previewFramesTrueSize(){
+//     if(!previewOn || frameVector.empty()) {
+//         return;
+//     }
 
-    QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
+//     if(previewIndex >= frameVector.size()) {
+//         previewIndex = 0;
+//     }
 
-    int size = frameVector[previewIndex].height();
+//     QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
 
-    int scaledSize = size/pixelSize;
-    QPixmap scaledPixmap = currPixMap.scaled(scaledSize, scaledSize,
-                                             Qt::KeepAspectRatio,
-                                             Qt::SmoothTransformation);
-    emit previewUpdated(scaledPixmap);
+//     int size = frameVector[previewIndex].height();
 
-    previewIndex++;
+//     int scaledSize = size/pixelSize;
+//     QPixmap scaledPixmap = currPixMap.scaled(scaledSize, scaledSize,
+//                                              Qt::KeepAspectRatio,
+//                                              Qt::SmoothTransformation);
+//     emit previewUpdated(scaledPixmap);
 
-    QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFrames);
 
-}
+//     previewIndex++;
+
+//     //QTimer::singleShot(1000 / fps, this, &DrawingArea::previewFramesTrueSize);
+
+// }
 void DrawingArea::addFrame(int newPixelSize, int copyIndex){
 
     // if index is -1 create new QImage

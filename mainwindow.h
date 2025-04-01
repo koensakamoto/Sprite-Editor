@@ -57,9 +57,13 @@ public slots:
      * @brief updatedPreviewFrame - Updates the pixmap in the preview window to reflect the current frame
      * @param pixmap
      */
-    void updatedPreviewFrame(const QPixmap& pixmap);
+    void updatedPreviewFrame(const QPixmap& pixmap, const QPixmap& trueSizePixmap);
 
-
+    /**
+     * @brief updatedPreviewFrame - Updates the pixmap in the trueSize window to reflect the current frame
+     * @param pixmap
+     */
+    // void updateTrueLabelSize(const QPixmap& pixmap);
 
 private slots:
     /**

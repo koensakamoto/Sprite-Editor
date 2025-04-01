@@ -15,6 +15,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <QMessageBox>
+#include <QInputDialog>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -47,8 +48,24 @@ MainWindow::MainWindow(QWidget *parent)
     ui->frameTabBar->addTab(firstLabel, QString("Frame %1").arg(1));
 
     // Instantiation of the model
-    drawingArea = new DrawingArea(parent, 400);
+    //ask user for sprite size
+    QStringList options = {"10", "16", "25", "40", "80", "100"};
+    bool ok;
+    QString selectedItem = QInputDialog::getItem(
+        nullptr,
+        "Enter the Sprite Dimension",
+        "Sprite Size:",
+        options,
+        0,  // Default index
+        false,  // Editable
+        &ok
+        );
 
+    int dim = selectedItem.toInt();
+    int pSize = 400/ dim;
+
+    drawingArea = new DrawingArea(parent, pSize*dim);
+    drawingArea->setPixelSize(pSize);
     QAction *paintBucketAction = ui->actionPaintBucket;
 
     QAction *selectToolAction = ui->actionSelectTool;
@@ -100,13 +117,23 @@ MainWindow::MainWindow(QWidget *parent)
         );});
 
     connect(drawingArea, &DrawingArea::imageUpdated, this, [=](const QPixmap &pixmap) {
-        ui->trueSizeLabel->setPixmap(pixmap);});
+        ui->trueSizeLabel->setPixmap(
+            pixmap.scaled(
+                ui->trueSizeLabel->size(),
+                Qt::KeepAspectRatio,
+                Qt::SmoothTransformation
+                )
+            );});
+
+
 
     drawingArea->setUpCanvas();
     drawingArea->setParent(ui->DrawingAreaLabel);
     drawingArea->setBrushColor(QColor(Qt::red));
     dialog->setCurrentColor(QColor(Qt::red));
 
+    int trueSize = drawingArea->getSize()/drawingArea->getPixelSize();
+    ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
 
    // DrawingArea* previewArea = new DrawingArea(frames[currentFrame], parent);
     // connect(previewArea, &DrawingArea::onUpdatedFps, ui->fpsSlider, &QSlider::setValue);
@@ -126,8 +153,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(drawingArea, &DrawingArea::previewUpdated, this, &MainWindow::updatedPreviewFrame);
     connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewSelected);
 
-    connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewFramesTrueSize);
-
+    // connect(ui->previewButton, &QPushButton::clicked, drawingArea, &DrawingArea::previewTrueSizeSelected);
 
     connect(ui->fpsSlider, &QSlider::valueChanged, drawingArea, &DrawingArea::onUpdatedFps);
 
@@ -138,9 +164,6 @@ MainWindow::MainWindow(QWidget *parent)
 
     // // Connecting the drawing tools to drawing area
     connect(this,&MainWindow::changeTool, drawingArea, &DrawingArea::setCurrentTool);
-
-
-
 
 }
 
@@ -163,9 +186,7 @@ void MainWindow::onPaintBucketClicked() {
 
 void MainWindow::onEraserClicked() {
     emit changeTool(DrawingArea::PaintTool::ERASER);
-    drawingArea->setBrushColor(QColor(Qt::white)); //FIXME signals and slots
-    // emit eraserClicked
-    // animationPreview();
+    drawingArea->setBrushColor(QColor(Qt::white));
 
 }
 
@@ -176,7 +197,7 @@ void MainWindow::onSelectToolClicked() {
 
 void MainWindow::onPenClicked() {
     emit changeTool(DrawingArea::PaintTool::PEN);
-    drawingArea->setBrushColor(dialog->currentColor()); //FIXME signals and slots
+    drawingArea->setBrushColor(dialog->currentColor());
 }
 
 
@@ -184,8 +205,7 @@ void MainWindow::on_pixelSizeSlider_sliderMoved(int position)
 {
      emit updatePixelSize(position);
     // setting up the true to scale sprite preview
-    int trueSize = drawingArea->getSize()/drawingArea->getPixelSize();
-    ui->trueSizeLabel->setGeometry(650,320,trueSize,trueSize);
+
 }
 
 void MainWindow::saveFrames(std::vector<QImage>& frames, QString& filePath){
@@ -313,7 +333,15 @@ void MainWindow::loadClicked(){
     drawingArea->setUpCanvas();
 }
 
-void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
+void MainWindow::updatedPreviewFrame(const QPixmap& pixmap, const QPixmap& trueSizePixmap){
+    ui->trueSizeLabel->setPixmap(
+        trueSizePixmap.scaled(
+            ui->trueSizeLabel->size(),
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+            )
+        );
+
     ui->PreviewLabel->setPixmap(
         pixmap.scaled(
             ui->PreviewLabel->size(),
@@ -323,15 +351,17 @@ void MainWindow::updatedPreviewFrame(const QPixmap& pixmap){
         );
 }
 
-void MainWindow::updateTrueLabelSize(const QPixmap& pixmap){
-    ui->PreviewLabel->setPixmap(
-        pixmap.scaled(
-            ui->PreviewLabel->size(),
-            Qt::KeepAspectRatio,
-            Qt::SmoothTransformation
-            )
-        );
-}
+// void MainWindow::updateTrueLabelSize(const QPixmap& pixmap){
+//     ui->trueSizeLabel->setPixmap(
+//         pixmap.scaled(
+//             ui->PreviewLabel->size(),
+//             Qt::KeepAspectRatio,
+//             Qt::SmoothTransformation
+//             )
+//         );
+// }
+
+
 void MainWindow::on_actionAddFrame_triggered()
 {
     totalNumFrames++;

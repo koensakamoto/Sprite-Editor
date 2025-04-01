@@ -76,7 +76,7 @@ signals:
      * @brief Signal that is emitted when the preview is updated.
      * @param pixmap - Passes along the updated pixmap to be put into the preview QLabel in MainWindow.
      */
-    void previewUpdated(const QPixmap& pixmap);
+    void previewUpdated(const QPixmap& pixmap, const QPixmap& trueSizePixmap);
 
 public slots:
     /**
@@ -101,10 +101,12 @@ public slots:
      */
     void previewSelected();
 
+    // void previewTrueSizeSelected();
+
     /**
      * @brief Displays animation of all the frames at the actual size of the sprite in pixels.
      */
-    void previewFramesTrueSize();
+    // void previewFramesTrueSize();
 
     /**
      * @brief When frame that is being edited is changed, this updates the current frame variable to that index.
