@@ -56,11 +56,9 @@ MainWindow::MainWindow(QWidget *parent)
     QLabel *firstLabel = new QLabel(QString("Frame %1").arg(1), firstTab);
     ui->frameTabBar->addTab(firstLabel, QString("Frame %1").arg(1));
 
-    // Connect frame management buttons
-    connect(ui->addFrameButton, &QPushButton::clicked, this, &MainWindow::on_addFrameButton_clicked);
-    connect(ui->deleteFrameButton, &QPushButton::clicked, this, &MainWindow::on_deleteFrameButton_clicked);
-
     // Add keyboard shortcuts for frame management
+    // Qt auto-connects slots based on naming convention (on_<objectName>_<signalName>)
+    // so we don't need manual connections for the buttons
     this->addAction(ui->actionAddFrame);
     this->addAction(ui->actionDeleteFrame);
     this->addAction(ui->actionNextFrame);
