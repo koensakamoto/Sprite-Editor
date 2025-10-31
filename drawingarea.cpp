@@ -33,6 +33,10 @@ void DrawingArea::resetCanvas(int newSize, int newPixelSize) {
     // Clear existing frames
     frameVector.clear();
 
+    // Clear all undo/redo history
+    undoStacks.clear();
+    redoStacks.clear();
+
     // Update size
     size = newSize;
     pixelSize = newPixelSize;
@@ -65,6 +69,9 @@ void DrawingArea::mousePressEvent(QMouseEvent *event){
     }
 
     if (event->button() == Qt::LeftButton){
+        // Save state before starting to draw
+        saveState();
+
         drawing = true;
         switch(currentTool){
 
@@ -161,11 +168,13 @@ void DrawingArea::drawMultiplePixels(vector<QPoint> contiguousPixels) {
 }
 
 void DrawingArea::mirrorHorizontally(){
+    saveState();
     frameVector[currFrameIndex] = frameVector[currFrameIndex].mirrored(true, false);
     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
 }
 void DrawingArea::mirrorVertically(){
+    saveState();
     frameVector[currFrameIndex] = frameVector[currFrameIndex].mirrored(false,true);
     emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
     update();
@@ -175,6 +184,10 @@ void DrawingArea::setFrameVector(std::vector<QImage>& frameVector){
     this->frameVector = frameVector;
     //frame = frameVector.at(0);
     currFrameIndex = 0;
+
+    // Clear undo/redo history when loading new frames
+    undoStacks.clear();
+    redoStacks.clear();
 }
 
 void DrawingArea::updateNextFrame(){
@@ -403,13 +416,98 @@ void DrawingArea::addFrame(int newPixelSize, int copyIndex){
 void DrawingArea::deleteFrame(int index) {
     if (index >= 0 && index < (int)frameVector.size()) {
         frameVector.erase(frameVector.begin() + index);
+
+        // Remove undo/redo history for deleted frame
+        undoStacks.erase(index);
+        redoStacks.erase(index);
+
+        // Shift all frame indices down for frames after the deleted one
+        std::map<int, std::vector<QImage>> newUndoStacks;
+        std::map<int, std::vector<QImage>> newRedoStacks;
+
+        for (auto& pair : undoStacks) {
+            int frameIndex = pair.first;
+            if (frameIndex > index) {
+                newUndoStacks[frameIndex - 1] = pair.second;
+            } else if (frameIndex < index) {
+                newUndoStacks[frameIndex] = pair.second;
+            }
+        }
+
+        for (auto& pair : redoStacks) {
+            int frameIndex = pair.first;
+            if (frameIndex > index) {
+                newRedoStacks[frameIndex - 1] = pair.second;
+            } else if (frameIndex < index) {
+                newRedoStacks[frameIndex] = pair.second;
+            }
+        }
+
+        undoStacks = newUndoStacks;
+        redoStacks = newRedoStacks;
     }
     updateNextFrame();
 }
 
 void DrawingArea::updateCurrentFrame(int index){
     currFrameIndex = index;
+    // Don't clear stacks - each frame keeps its own history
     updateNextFrame();
+}
+
+void DrawingArea::saveState() {
+    // Save current frame state to undo stack for this specific frame
+    undoStacks[currFrameIndex].push_back(frameVector[currFrameIndex].copy());
+
+    // Limit undo history to MAX_HISTORY
+    if (undoStacks[currFrameIndex].size() > MAX_HISTORY) {
+        undoStacks[currFrameIndex].erase(undoStacks[currFrameIndex].begin());
+    }
+
+    // Clear redo stack for this frame when new action is performed
+    redoStacks[currFrameIndex].clear();
+}
+
+void DrawingArea::undo() {
+    if (!canUndo()) return;
+
+    // Save current state to redo stack for this frame
+    redoStacks[currFrameIndex].push_back(frameVector[currFrameIndex].copy());
+
+    // Restore previous state from undo stack for this frame
+    frameVector[currFrameIndex] = undoStacks[currFrameIndex].back().copy();
+    undoStacks[currFrameIndex].pop_back();
+
+    // Update display
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+
+void DrawingArea::redo() {
+    if (!canRedo()) return;
+
+    // Save current state to undo stack for this frame
+    undoStacks[currFrameIndex].push_back(frameVector[currFrameIndex].copy());
+
+    // Restore state from redo stack for this frame
+    frameVector[currFrameIndex] = redoStacks[currFrameIndex].back().copy();
+    redoStacks[currFrameIndex].pop_back();
+
+    // Update display
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+
+bool DrawingArea::canUndo() const {
+    // Check if current frame has undo history
+    auto it = undoStacks.find(currFrameIndex);
+    return it != undoStacks.end() && !it->second.empty();
+}
+
+bool DrawingArea::canRedo() const {
+    // Check if current frame has redo history
+    auto it = redoStacks.find(currFrameIndex);
+    return it != redoStacks.end() && !it->second.empty();
 }
 
 

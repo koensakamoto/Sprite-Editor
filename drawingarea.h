@@ -7,6 +7,7 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <vector>
+#include <map>
 
 using std::vector;
 
@@ -150,6 +151,28 @@ public slots:
      */
     void setCurrentTool(DrawingArea::PaintTool tool);
 
+    /**
+     * @brief Undo the last drawing action.
+     */
+    void undo();
+
+    /**
+     * @brief Redo the previously undone action.
+     */
+    void redo();
+
+    /**
+     * @brief Check if undo is available.
+     * @return True if there are actions to undo.
+     */
+    bool canUndo() const;
+
+    /**
+     * @brief Check if redo is available.
+     * @return True if there are actions to redo.
+     */
+    bool canRedo() const;
+
 protected:
     /**
      * @brief When the mouse is pressed this method checks the current tool and begins drawing.
@@ -240,6 +263,25 @@ private:
      */
     int previewIndex = 0;
 
+    /**
+     * @brief Undo history stacks - one per frame, indexed by frame number.
+     */
+    std::map<int, std::vector<QImage>> undoStacks;
+
+    /**
+     * @brief Redo history stacks - one per frame, indexed by frame number.
+     */
+    std::map<int, std::vector<QImage>> redoStacks;
+
+    /**
+     * @brief Maximum number of undo/redo states to keep in memory per frame.
+     */
+    static const int MAX_HISTORY = 50;
+
+    /**
+     * @brief Save the current frame state to undo stack before making changes.
+     */
+    void saveState();
 
     /**
      * @brief drawMultiplePixels Draws all pixels at pixelSize from a vector of QPoints.

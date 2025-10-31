@@ -478,6 +478,103 @@ QPushButton:pressed {
 }</string>
     </property>
    </widget>
+   <widget class="QLabel" name="editLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>185</y>
+      <width>110</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>EDIT</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #34495e;
+    font-size: 13px;
+    background-color: #ecf0f1;
+    padding: 5px;
+    border-radius: 3px;
+}</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="undoButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>225</y>
+      <width>60</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Undo</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-weight: bold;
+    font-size: 10px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+QPushButton:pressed {
+    background-color: #21618c;
+}
+QPushButton:disabled {
+    background-color: #cccccc;
+    color: #888888;
+}</string>
+    </property>
+    <property name="toolTip">
+     <string>Undo last action (Ctrl+Z)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="redoButton">
+    <property name="geometry">
+     <rect>
+      <x>85</x>
+      <y>225</y>
+      <width>60</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Redo</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 10px;
+    font-weight: bold;
+    font-size: 10px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+QPushButton:pressed {
+    background-color: #21618c;
+}
+QPushButton:disabled {
+    background-color: #cccccc;
+    color: #888888;
+}</string>
+    </property>
+    <property name="toolTip">
+     <string>Redo previously undone action (Ctrl+Shift+Z)</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menuBar">
@@ -496,6 +593,13 @@ QPushButton:pressed {
     <addaction name="saveButton"/>
     <addaction name="loadButton"/>
    </widget>
+   <widget class="QMenu" name="menuEdit">
+    <property name="title">
+     <string>Edit</string>
+    </property>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+   </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>View</string>
@@ -507,6 +611,7 @@ QPushButton:pressed {
     <addaction name="actionHorizontalMirror"/>
    </widget>
    <addaction name="fileMenu"/>
+   <addaction name="menuEdit"/>
    <addaction name="menuView"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
@@ -670,6 +775,28 @@ QPushButton:pressed {
    </property>
    <property name="shortcut">
     <string>Ctrl+Left</string>
+   </property>
+  </action>
+  <action name="actionUndo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
+   <property name="toolTip">
+    <string>Undo last action</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
+   </property>
+   <property name="toolTip">
+    <string>Redo previously undone action</string>
    </property>
   </action>
  </widget>

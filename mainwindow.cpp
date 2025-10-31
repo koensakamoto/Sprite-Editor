@@ -63,6 +63,8 @@ MainWindow::MainWindow(QWidget *parent)
     this->addAction(ui->actionDeleteFrame);
     this->addAction(ui->actionNextFrame);
     this->addAction(ui->actionPrevFrame);
+    this->addAction(ui->actionUndo);
+    this->addAction(ui->actionRedo);
 
     // Update frame count display
     updateFrameCount();
@@ -138,6 +140,21 @@ MainWindow::MainWindow(QWidget *parent)
     // connect color dialog to brush color
     connect(this->dialog, &QColorDialog::currentColorChanged, drawingArea, &DrawingArea::setBrushColor);
 
+    // Connect undo/redo actions and buttons to drawingArea
+    connect(ui->actionUndo, &QAction::triggered, drawingArea, &DrawingArea::undo);
+    connect(ui->actionRedo, &QAction::triggered, drawingArea, &DrawingArea::redo);
+    connect(ui->undoButton, &QPushButton::clicked, drawingArea, &DrawingArea::undo);
+    connect(ui->redoButton, &QPushButton::clicked, drawingArea, &DrawingArea::redo);
+
+    // Initially disable undo/redo buttons (nothing to undo/redo yet)
+    ui->undoButton->setEnabled(false);
+    ui->redoButton->setEnabled(false);
+
+    // Update button states after each drawing action
+    connect(drawingArea, &DrawingArea::imageUpdated, this, [this]() {
+        ui->undoButton->setEnabled(drawingArea->canUndo());
+        ui->redoButton->setEnabled(drawingArea->canRedo());
+    });
 
     //connect slider to pixelSize
     // connect(this, &MainWindow::updatePixelSize, drawingArea, &DrawingArea::setPixelSize);
@@ -371,6 +388,10 @@ void MainWindow::on_addFrameButton_clicked()
     // Update UI
     updateFrameCount();
     ui->deleteFrameButton->setEnabled(totalNumFrames > 1);
+
+    // Update undo/redo states (new frame has no history)
+    ui->undoButton->setEnabled(drawingArea->canUndo());
+    ui->redoButton->setEnabled(drawingArea->canRedo());
 }
 
 void MainWindow::on_actionAddFrame_triggered()
@@ -407,6 +428,10 @@ void MainWindow::on_deleteFrameButton_clicked()
         // Update UI
         updateFrameCount();
         ui->deleteFrameButton->setEnabled(totalNumFrames > 1);
+
+        // Update undo/redo states
+        ui->undoButton->setEnabled(drawingArea->canUndo());
+        ui->redoButton->setEnabled(drawingArea->canRedo());
     }
 }
 
@@ -421,6 +446,10 @@ void MainWindow::on_frameTabBar_tabBarClicked(int index)
     currentFrame = index;
     emit updateCurrentFrame(index);
     updateFrameCount();
+
+    // Update undo/redo button states when switching frames
+    ui->undoButton->setEnabled(drawingArea->canUndo());
+    ui->redoButton->setEnabled(drawingArea->canRedo());
 }
 
 void MainWindow::updateFrameCount()
@@ -483,6 +512,10 @@ void MainWindow::on_newSpriteButton_clicked()
         // Update frame count display and button states
         updateFrameCount();
         ui->deleteFrameButton->setEnabled(false);
+
+        // Update undo/redo states (new sprite has no history)
+        ui->undoButton->setEnabled(false);
+        ui->redoButton->setEnabled(false);
     }
 }
 
@@ -509,6 +542,11 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
     // Only scale if window is larger than base size
     if (scale > 1.0f) {
+        // Scale left panel controls
+        ui->editLabel->setGeometry(20 * scale, 185 * scale, 110 * scale, 30 * scale);
+        ui->undoButton->setGeometry(20 * scale, 225 * scale, 60 * scale, 32 * scale);
+        ui->redoButton->setGeometry(85 * scale, 225 * scale, 60 * scale, 32 * scale);
+
         // Scale canvas
         int newCanvasSize = baseCanvasSize * scale;
         ui->DrawingAreaLabel->setGeometry(180 * scale, 60 * scale, newCanvasSize, newCanvasSize);
