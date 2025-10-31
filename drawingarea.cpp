@@ -29,12 +29,40 @@ void DrawingArea::setUpCanvas() {
     update();
 }
 
+void DrawingArea::resetCanvas(int newSize, int newPixelSize) {
+    // Clear existing frames
+    frameVector.clear();
+
+    // Update size
+    size = newSize;
+    pixelSize = newPixelSize;
+
+    // Create new blank frame
+    QImage frame1 = QImage(size, size, QImage::Format_ARGB32);
+    frame1.fill(Qt::white);
+    frameVector.push_back(frame1);
+
+    // Reset to first frame
+    currFrameIndex = 0;
+
+    // Update display
+    emit imageUpdated(QPixmap::fromImage(frameVector[currFrameIndex]));
+    update();
+}
+
 void DrawingArea::setCurrentTool(DrawingArea::PaintTool tool){
     currentTool = tool;
 }
 
 void DrawingArea::mousePressEvent(QMouseEvent *event){
     QPoint pos = QPoint(event->pos());
+
+    // Map widget coordinates to image coordinates
+    if (this->width() != size || this->height() != size) {
+        float scaleX = (float)size / this->width();
+        float scaleY = (float)size / this->height();
+        pos = QPoint(pos.x() * scaleX, pos.y() * scaleY);
+    }
 
     if (event->button() == Qt::LeftButton){
         drawing = true;
@@ -50,10 +78,6 @@ void DrawingArea::mousePressEvent(QMouseEvent *event){
             drawPixel(pos);
             break;
 
-        case PaintTool::SELECT:
-            drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
-            break;
-
         case PaintTool::PAINTBUCKET:
             drawMultiplePixels(getAllContiguousPixels(pos.x(), pos.y()));
             break;
@@ -64,6 +88,14 @@ void DrawingArea::mousePressEvent(QMouseEvent *event){
 }
 void DrawingArea::mouseMoveEvent(QMouseEvent *event){
     QPoint pos = QPoint(event->pos());
+
+    // Map widget coordinates to image coordinates
+    if (this->width() != size || this->height() != size) {
+        float scaleX = (float)size / this->width();
+        float scaleY = (float)size / this->height();
+        pos = QPoint(pos.x() * scaleX, pos.y() * scaleY);
+    }
+
     if (drawing){
         switch(currentTool){
 
@@ -75,9 +107,6 @@ void DrawingArea::mouseMoveEvent(QMouseEvent *event){
         case PaintTool::ERASER:
             brushColor = Qt::white;
             drawPixel(pos);
-            break;
-
-        case PaintTool::SELECT:
             break;
 
         case PaintTool::PAINTBUCKET:
@@ -194,15 +223,8 @@ vector<QPoint> DrawingArea::getAllContiguousPixels(int x, int y){
 
     QColor startColor = frameVector[currFrameIndex].pixelColor(x,y);
 
-    QColor backgroundColor = Qt::white;
-
-    //Rejecting clicks to the background if select tool is active
-    if (startColor.operator ==( backgroundColor) && currentTool == PaintTool::SELECT){
-
-        return contiguousPixels;
-    }
-
-    if (startColor != backgroundColor && currentTool == PaintTool::PAINTBUCKET){
+    // Paint bucket: Don't fill if clicking on same color as brush (no-op)
+    if (startColor == brushColor && currentTool == PaintTool::PAINTBUCKET){
         return contiguousPixels;
     }
 
@@ -316,20 +338,12 @@ void DrawingArea::previewFrames(){
     if(previewIndex >= frameVector.size()) {
         previewIndex = 0;
     }
-    int size = frameVector[previewIndex].height();
-
-    int scaledSize = size/pixelSize;
-
     QPixmap currPixMap = QPixmap::fromImage(frameVector[previewIndex]);
     QPixmap scaledPixmap = currPixMap.scaled(200, 200,
                                              Qt::KeepAspectRatio,
                                              Qt::SmoothTransformation);
 
-    QPixmap trueScaledPixmap = currPixMap.scaled(scaledSize, scaledSize,
-                                             Qt::KeepAspectRatio,
-                                             Qt::SmoothTransformation);
-
-    emit previewUpdated(scaledPixmap, trueScaledPixmap);
+    emit previewUpdated(scaledPixmap);
 
     previewIndex++;
 

@@ -45,6 +45,13 @@ public:
     void setUpCanvas();
 
     /**
+     * @brief Resets the canvas with a new size and pixel size.
+     * @param newSize - New canvas size
+     * @param newPixelSize - New pixel grid size
+     */
+    void resetCanvas(int newSize, int newPixelSize);
+
+    /**
      * @brief Sets the frame vector when loading a file.
      * @param frames - Vector of frames that will be be loaded.
      */
@@ -76,7 +83,7 @@ signals:
      * @brief Signal that is emitted when the preview is updated.
      * @param pixmap - Passes along the updated pixmap to be put into the preview QLabel in MainWindow.
      */
-    void previewUpdated(const QPixmap& pixmap, const QPixmap& trueSizePixmap);
+    void previewUpdated(const QPixmap& pixmap);
 
 public slots:
     /**

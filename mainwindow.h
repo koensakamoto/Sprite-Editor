@@ -38,10 +38,6 @@ public slots:
      */
     void onEraserClicked();
     /**
-     * @brief onSelectToolClicked - Handles tool selection for the Select Tool
-     */
-    void onSelectToolClicked();
-    /**
      * @brief onPenClicked - Handles tool selection for the Pen
      */
     void onPenClicked();
@@ -57,7 +53,7 @@ public slots:
      * @brief updatedPreviewFrame - Updates the pixmap in the preview window to reflect the current frame
      * @param pixmap
      */
-    void updatedPreviewFrame(const QPixmap& pixmap, const QPixmap& trueSizePixmap);
+    void updatedPreviewFrame(const QPixmap& pixmap);
 
     /**
      * @brief updatedPreviewFrame - Updates the pixmap in the trueSize window to reflect the current frame
@@ -71,6 +67,16 @@ private slots:
     //  * @param position - The size that the user sets in the slider
     //
     // void on_pixelSizeSlider_sliderMoved(int position);
+
+    /**
+     * @brief on_addFrameButton_clicked - Handles the creation of a new frame
+     */
+    void on_addFrameButton_clicked();
+
+    /**
+     * @brief on_deleteFrameButton_clicked - Handles the deletion of the current frame
+     */
+    void on_deleteFrameButton_clicked();
 
     /**
      * @brief on_actionAddFrame_triggered - Handles the creation of a copied frame from the current drawing area's frame when clicked
@@ -87,6 +93,21 @@ private slots:
      * @param index - The index of the frame to change to
      */
     void on_frameTabBar_tabBarClicked(int index);
+
+    /**
+     * @brief on_newSpriteButton_clicked - Handles creating a new sprite with selected dimensions
+     */
+    void on_newSpriteButton_clicked();
+
+    /**
+     * @brief on_actionNextFrame_triggered - Navigate to next frame
+     */
+    void on_actionNextFrame_triggered();
+
+    /**
+     * @brief on_actionPrevFrame_triggered - Navigate to previous frame
+     */
+    void on_actionPrevFrame_triggered();
 
 
 signals:
@@ -121,9 +142,12 @@ signals:
      */
     void changeTool(DrawingArea::PaintTool tool);
 
-
-
-
+protected:
+    /**
+     * @brief resizeEvent - Handles window resize to scale UI elements for fullscreen
+     * @param event - The resize event
+     */
+    void resizeEvent(QResizeEvent *event) override;
 
 private:
     /**
@@ -185,5 +209,10 @@ private:
      * @param filepath
      */
     void loadFrames(std::vector<QImage>& frames, QString& filepath);
+
+    /**
+     * @brief updateFrameCount - Updates the frame count label display
+     */
+    void updateFrameCount();
 };
 #endif // MAINWINDOW_H

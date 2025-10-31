@@ -6,21 +6,56 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>895</width>
-    <height>600</height>
+    <width>1200</width>
+    <height>750</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Sprite Editor</string>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>1000</width>
+    <height>650</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="projectLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>20</y>
+      <width>110</width>
+      <height>30</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>PROJECT</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #34495e;
+    font-size: 13px;
+    background-color: #ecf0f1;
+    padding: 5px;
+    border-radius: 3px;
+}</string>
+    </property>
+   </widget>
    <widget class="QLabel" name="DrawingAreaLabel">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>20</y>
-      <width>400</width>
-      <height>400</height>
+      <x>180</x>
+      <y>60</y>
+      <width>500</width>
+      <height>500</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -29,14 +64,17 @@
     <property name="text">
      <string/>
     </property>
+    <property name="scaledContents">
+     <bool>true</bool>
+    </property>
    </widget>
    <widget class="QLabel" name="PreviewLabel">
     <property name="geometry">
      <rect>
-      <x>600</x>
-      <y>10</y>
-      <width>200</width>
-      <height>200</height>
+      <x>720</x>
+      <y>80</y>
+      <width>250</width>
+      <height>250</height>
      </rect>
     </property>
     <property name="text">
@@ -46,9 +84,9 @@
    <widget class="QSlider" name="fpsSlider">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>220</y>
-      <width>160</width>
+      <x>745</x>
+      <y>365</y>
+      <width>200</width>
       <height>25</height>
      </rect>
     </property>
@@ -74,50 +112,370 @@
    <widget class="QPushButton" name="previewButton">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>240</y>
-      <width>93</width>
-      <height>29</height>
+      <x>785</x>
+      <y>400</y>
+      <width>120</width>
+      <height>40</height>
      </rect>
     </property>
     <property name="text">
-     <string>play/pause</string>
+     <string>Play / Pause</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-weight: bold;
+}
+QPushButton:hover {
+    background-color: #45a049;
+}
+QPushButton:pressed {
+    background-color: #3d8b40;
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="framesLabel">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>570</y>
+      <width>120</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>FRAMES</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 13px;
+    background-color: #ecf0f1;
+    padding: 5px;
+    border-radius: 3px;
+}</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="frameCountLabel">
+    <property name="geometry">
+     <rect>
+      <x>310</x>
+      <y>570</y>
+      <width>80</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>1 / 1</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #555;
+    font-size: 12px;
+    padding: 3px 8px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="addFrameButton">
+    <property name="geometry">
+     <rect>
+      <x>570</x>
+      <y>570</y>
+      <width>50</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>+ Add</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-weight: bold;
+    font-size: 10px;
+}
+QPushButton:hover {
+    background-color: #45a049;
+}
+QPushButton:pressed {
+    background-color: #3d8b40;
+}</string>
+    </property>
+    <property name="toolTip">
+     <string>Add a new frame (Ctrl+N)</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="deleteFrameButton">
+    <property name="geometry">
+     <rect>
+      <x>625</x>
+      <y>570</y>
+      <width>55</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Delete</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 4px 8px;
+    font-weight: bold;
+    font-size: 10px;
+}
+QPushButton:hover {
+    background-color: #c0392b;
+}
+QPushButton:pressed {
+    background-color: #a93226;
+}
+QPushButton:disabled {
+    background-color: #cccccc;
+    color: #888888;
+}</string>
+    </property>
+    <property name="toolTip">
+     <string>Delete current frame (Delete)</string>
     </property>
    </widget>
    <widget class="QTabWidget" name="frameTabBar">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>450</y>
-      <width>135</width>
+      <x>180</x>
+      <y>600</y>
+      <width>500</width>
       <height>80</height>
      </rect>
     </property>
+    <property name="styleSheet">
+     <string>QTabWidget::pane {
+    border: 2px solid #4a9eff;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+QTabBar::tab {
+    background-color: #e0e0e0;
+    border: 1px solid #ccc;
+    padding: 8px 16px;
+    margin-right: 2px;
+    border-radius: 4px 4px 0 0;
+    font-weight: bold;
+    color: #555;
+    min-width: 60px;
+}
+QTabBar::tab:selected {
+    background-color: #4a9eff;
+    color: white;
+    border-bottom: 2px solid #4a9eff;
+}
+QTabBar::tab:hover:!selected {
+    background-color: #d0d0d0;
+}
+QTabBar::tab:selected:hover {
+    background-color: #3a8eef;
+}</string>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::North</enum>
+    </property>
    </widget>
-   <widget class="QLabel" name="trueSizeLabel">
+   <widget class="QLabel" name="fpsLabel">
     <property name="geometry">
      <rect>
-      <x>647</x>
-      <y>320</y>
-      <width>101</width>
-      <height>101</height>
+      <x>745</x>
+      <y>340</y>
+      <width>200</width>
+      <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string/>
+     <string>Animation FPS: 6</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #555;
+    font-size: 11px;
+}</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
+   <widget class="QLabel" name="previewTitleLabel">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>430</y>
-      <width>71</width>
-      <height>16</height>
+      <x>720</x>
+      <y>50</y>
+      <width>250</width>
+      <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Actual size</string>
+     <string>Animation Preview</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 13px;
+}</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="canvasTitleLabel">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>30</y>
+      <width>500</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Drawing Canvas</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #2c3e50;
+    font-size: 14px;
+}</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignmentFlag::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="spriteSizeLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>60</y>
+      <width>100</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Sprite Dimensions:</string>
+    </property>
+    <property name="styleSheet">
+     <string>QLabel {
+    font-weight: bold;
+    color: #333;
+    font-size: 12px;
+}</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="spriteSizeComboBox">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>90</y>
+      <width>125</width>
+      <height>32</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string>QComboBox {
+    background-color: white;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    padding: 4px;
+    font-size: 11px;
+}
+QComboBox:hover {
+    border-color: #4a9eff;
+}
+QComboBox::drop-down {
+    border: none;
+}
+QComboBox::down-arrow {
+    image: url(:/icons/down-arrow.png);
+    width: 12px;
+    height: 12px;
+}</string>
+    </property>
+    <item>
+     <property name="text">
+      <string>10x10 (XL pixels)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16x16 (Large)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>25x25 (Medium)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>40x40 (Small)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>80x80 (Tiny)</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>100x100 (Micro)</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QPushButton" name="newSpriteButton">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>130</y>
+      <width>125</width>
+      <height>38</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>New Sprite</string>
+    </property>
+    <property name="styleSheet">
+     <string>QPushButton {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 14px;
+    font-weight: bold;
+    font-size: 11px;
+}
+QPushButton:hover {
+    background-color: #45a049;
+}
+QPushButton:pressed {
+    background-color: #3d8b40;
+}</string>
     </property>
    </widget>
   </widget>
@@ -127,7 +485,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>895</width>
+     <width>1200</width>
      <height>24</height>
     </rect>
    </property>
@@ -181,24 +539,6 @@
   <action name="loadButton">
    <property name="text">
     <string>Load File...</string>
-   </property>
-  </action>
-  <action name="actionSelectTool">
-   <property name="checkable">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/icons/ICON_selector.png</normaloff>:/icons/ICON_selector.png</iconset>
-   </property>
-   <property name="text">
-    <string>SelectTool</string>
-   </property>
-   <property name="toolTip">
-    <string>Allows you to draw an area to be selected and moved.</string>
-   </property>
-   <property name="menuRole">
-    <enum>QAction::MenuRole::NoRole</enum>
    </property>
   </action>
   <action name="actionEraser">
@@ -279,6 +619,9 @@
    <property name="text">
     <string>AddFrame</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
    </property>
@@ -289,6 +632,9 @@
    </property>
    <property name="text">
     <string>DeleteFrame</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
    <property name="menuRole">
     <enum>QAction::MenuRole::NoRole</enum>
@@ -308,6 +654,22 @@
    </property>
    <property name="toolTip">
     <string>Mirrors the image horizontally.</string>
+   </property>
+  </action>
+  <action name="actionNextFrame">
+   <property name="text">
+    <string>Next Frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Right</string>
+   </property>
+  </action>
+  <action name="actionPrevFrame">
+   <property name="text">
+    <string>Previous Frame</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Left</string>
    </property>
   </action>
  </widget>
