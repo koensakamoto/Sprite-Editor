@@ -1,50 +1,92 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+# Temporary files
 *~
 *.autosave
+*.orig
+*.rej
+.#*
+*.*#
+tags
+
+# OS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+.directory
+Thumbs.db
+*.dSYM/
+
+# Compiled Object files
 *.a
 *.core
 *.moc
 *.o
 *.obj
-*.orig
-*.rej
 *.so
 *.so.*
+*.dll
+*.dylib
+core
+!core/
+
+# Qt generated files
 *_pch.h.cpp
 *_resource.rc
 *.qm
-.#*
-*.*#
-core
-!core/
-tags
-.DS_Store
-.directory
-*.debug
-Makefile*
 *.prl
-*.app
 moc_*.cpp
 ui_*.h
 qrc_*.cpp
-Thumbs.db
 *.res
 *.rc
-/.qmake.cache
-/.qmake.stash
+.qmake.cache
+.qmake.stash
 
-# qtcreator generated files
+# Qt Creator generated files
 *.pro.user*
 *.qbs.user*
+*.user
 CMakeLists.txt.user*
 
-# xemacs temporary files
-*.flc
+# Build files and directories
+Makefile*
+.moc/
+.obj/
+.pch/
+.rcc/
+.uic/
+/build*/
+build/
+debug/
+release/
+Debug/
+Release/
 
-# Vim temporary files
+# Executables and bundles
+*.exe
+*.app
+*.debug
+*.Debug
+*.Release
+SpriteEditor
+SpriteEditor.exe
+SpriteEditor.app/
+
+# Qt frameworks (if bundled locally)
+QtCore.framework/
+QtGui.framework/
+QtWidgets.framework/
+QtDBus.framework/
+
+# Editor temporary files
+# Vim
 .*.swp
+*.swp
+
+# Emacs
+*.flc
 
 # Visual Studio generated files
 *.ib_pdb_index
@@ -68,15 +110,19 @@ CMakeLists.txt.user*
 # Python byte code
 *.pyc
 
-# Binaries
-# --------
-*.dll
-*.exe
+# IDE specific
+.vscode/
+.idea/
+*.sublime-*
 
-# Directories with generated files
-.moc/
-.obj/
-.pch/
-.rcc/
-.uic/
-/build*/
+# Generated documentation
+doc/html/
+doc/latex/
+
+# Crash logs and dumps
+*.log
+*.stackdump
+crash_*.txt
+
+# Project save files (optional - uncomment if you don't want to track them)
+# *.ssp

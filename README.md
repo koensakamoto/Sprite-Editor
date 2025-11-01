@@ -1,44 +1,84 @@
 # 🎨 Sprite Editor
 
-A pixel-perfect sprite editor built with Qt C++ that allows you to create and animate pixel art sprites with multiple frames.
+A modern, feature-rich pixel-perfect sprite editor built with Qt C++ for creating and animating pixel art sprites with multiple frames.
 
 ## ✨ Features
 
 ### 🖌️ Drawing Tools
 - **Pen Tool** - Draw individual pixels with selected color
-- **Paint Bucket** - Fill contiguous areas with selected color using flood fill algorithm
+- **Paint Bucket** - Fill contiguous areas with selected color using advanced flood fill algorithm
 - **Eraser** - Remove pixels (sets them to white/background color)
-- **Select Tool** - Select contiguous areas of the same color
+- **Color Picker** - Choose colors with full RGBA support including alpha channel
+
+### ↩️ Undo/Redo System
+- **Per-Frame History** - Each frame maintains its own independent undo/redo history (up to 50 states)
+- **Persistent Across Frames** - Switch between frames without losing your undo/redo state
+- **Smart History** - History is preserved when navigating, cleared when deleting frames
+- **Multiple Access Methods** - Buttons, menu items, and keyboard shortcuts
 
 ### 🎭 Image Manipulation
 - **Horizontal Mirror** - Flip the current frame horizontally
 - **Vertical Mirror** - Flip the current frame vertically
-- **Color Picker** - Choose colors with full RGBA support including alpha channel
+- **Undoable Operations** - All transformations can be undone
 
 ### 🎬 Animation Features
-- **Multi-frame Support** - Create sprites with multiple animation frames
-- **Frame Management** - Add, delete, and navigate between frames
-- **Live Preview** - Real-time animation preview at scaled size
-- **True Size Preview** - View animation at actual pixel dimensions
-- **Adjustable FPS** - Control animation speed from 1-60 FPS
+- **Multi-frame Support** - Create sprites with unlimited animation frames
+- **Advanced Frame Management**:
+  - Visual frame counter showing "Current / Total"
+  - Add new frames (blank or copied from current)
+  - Delete frames with confirmation
+  - Navigate between frames with tabs
+  - Drag and drop support (coming soon)
+- **Live Preview** - Real-time animation preview with smooth scaling
+- **Adjustable FPS** - Control animation speed from 1-60 FPS with visual slider
+- **Auto-Play Controls** - Play/Pause button for animation preview
+
+### 🎨 Canvas & UI
+- **Flexible Sprite Dimensions** - Choose from 6 preset sizes:
+  - 10x10 (XL pixels) - Great for large, blocky sprites
+  - 16x16 (Large) - Classic retro game size
+  - 25x25 (Medium) - Default balanced size
+  - 40x40 (Small) - Detailed pixel art
+  - 80x80 (Tiny) - High-detail sprites
+  - 100x100 (Micro) - Maximum detail
+- **Responsive Design** - UI scales beautifully in fullscreen mode
+- **Modern Interface** - Clean, intuitive layout with color-coded sections
+- **Visual Feedback** - Buttons change state based on availability
 
 ### 💾 File Management
 - **Save Projects** - Save sprites in custom `.ssp` (Sprite Editor Project) format
 - **Load Projects** - Load previously saved sprite projects
 - **JSON-based Format** - Human-readable project files storing frame data and metadata
 
+## ⌨️ Keyboard Shortcuts
+
+### Drawing & Editing
+- `Ctrl+Z` - Undo last action
+- `Ctrl+Shift+Z` - Redo previously undone action
+
+### Frame Management
+- `Ctrl+N` - Add new frame
+- `Del` - Delete current frame
+- `Ctrl+Left Arrow` - Previous frame
+- `Ctrl+Right Arrow` - Next frame
+
+### File Operations
+- `Ctrl+S` - Save project (via menu)
+- `Ctrl+O` - Open project (via menu)
+
 ## 📋 System Requirements
 
-- Qt 5.x or higher (tested with Qt 6.x)
+- Qt 6.9 or higher (tested with Qt 6.9.0)
 - C++17 compatible compiler
-- CMake or qmake build system
+- macOS, Windows, or Linux
+- OpenGL support for rendering
 
 ## 🚀 Installation
 
 ### Prerequisites
 Make sure you have Qt development environment installed:
 - Qt Creator (recommended IDE)
-- Qt libraries and development tools
+- Qt libraries and development tools (Qt 6.9+)
 - C++ compiler (GCC, Clang, or MSVC)
 
 ### Building from Source
@@ -71,63 +111,94 @@ Make sure you have Qt development environment installed:
 ### Getting Started
 
 1. **Launch the Application** - Run the SpriteEditor executable
-2. **Choose Sprite Dimensions** - On startup, select your desired sprite size:
-   - Available sizes: `10x10`, `16x16`, `25x25`, `40x40`, `80x80`, `100x100` pixels
-   - This determines the canvas resolution for your sprite
-
-3. **Select a Drawing Tool** - Choose from the toolbar on the left:
-   - 🖊️ Pen (default) - for precise pixel drawing
-   - 🪣 Paint Bucket - for filling areas
-   - 🧽 Eraser - for removing pixels
-   - 📐 Select Tool - for area selection
+2. **Choose Sprite Dimensions** - Select from the dropdown in the PROJECT panel:
+   - Available sizes: `10x10` to `100x100` pixels
+   - Larger numbers = smaller individual pixels
+3. **Click "New Sprite"** - Confirm to create a canvas with your chosen dimensions
 
 ### 🎨 Drawing Your Sprite
 
 1. **Choose Colors** - Click the 🎨 color palette icon to open the color picker
-2. **Draw on Canvas** - Click and drag on the main drawing area
-3. **Use Tools**:
-   - **🖊️ Pen**: Click/drag to draw individual pixels
-   - **🪣 Paint Bucket**: Click on an area to flood fill with current color
-   - **🧽 Eraser**: Click/drag to erase pixels (makes them white)
-   - **📐 Select**: Click to select contiguous areas of the same color
+   - Full RGBA support with alpha channel
+   - Color preview updates in real-time
+2. **Select a Tool** - Choose from the left toolbar:
+   - 🖊️ **Pen** (default) - Click/drag to draw pixels
+   - 🪣 **Paint Bucket** - Click to fill contiguous areas
+   - 🧽 **Eraser** - Click/drag to erase pixels
+3. **Draw on Canvas** - Click and drag on the main drawing area (center)
+4. **Undo Mistakes** - Use `Ctrl+Z` to undo, `Ctrl+Shift+Z` to redo
 
 ### 🎬 Working with Frames
 
-1. **Add New Frame** - Click the "➕ Add Frame" button in the frame toolbar
-   - Choose to copy the current frame or start with a blank frame
-2. **Navigate Frames** - Click on frame tabs at the bottom to switch between frames
-3. **Delete Frame** - Select a frame and click "❌ Delete Frame" (confirmation required)
+#### Adding Frames
+1. Click the **"+ Add"** button (green) below the frame tabs
+2. Choose to copy the current frame or start blank
+3. New frame is automatically selected
+
+#### Navigating Frames
+- **Click frame tabs** at the bottom to switch between frames
+- Use **Ctrl+Left/Right** arrow keys for quick navigation
+- **Frame counter** shows your position (e.g., "2 / 5")
+
+#### Deleting Frames
+1. Select the frame you want to delete
+2. Click the **"Delete"** button (red)
+3. Confirm deletion (cannot delete the last frame)
+
+### ↩️ Using Undo/Redo
+
+**Each frame has its own undo/redo history:**
+- Make changes on Frame 1 → Undo available
+- Switch to Frame 2 → No undo (new frame)
+- Make changes on Frame 2 → Undo available
+- Switch back to Frame 1 → Original undo history still there!
+
+**Ways to Undo/Redo:**
+- **Buttons** - Blue "Undo" and "Redo" buttons in EDIT panel (left side)
+- **Menu** - Edit → Undo / Redo
+- **Keyboard** - `Ctrl+Z` / `Ctrl+Shift+Z`
+- **Auto-disable** - Buttons gray out when no actions to undo/redo
 
 ### 🎭 Animation Preview
 
-1. **Preview Window** - The top-right panel shows a scaled preview of your sprite
-2. **True Size Preview** - Below that shows the sprite at actual pixel dimensions
-3. **Control Animation**:
-   - Click "▶️ play/pause" to start/stop animation preview
-   - Adjust FPS slider (1-60 FPS) to control animation speed
-4. **Frame Navigation** - Use the frame tabs to edit individual frames
+1. **Preview Window** - Top-right panel shows scaled preview of current frame
+2. **FPS Control** - Adjust slider (1-60 FPS) to control animation speed
+3. **Play Animation**:
+   - Click "Play / Pause" button to start/stop
+   - Animation cycles through all frames
+   - Speed controlled by FPS slider
+4. **Real-time Updates** - Preview updates as you draw
 
 ### 🔄 Image Manipulation
 
-- **↔️ Mirror Horizontally** - View menu → Horizontal Mirror
-- **↕️ Mirror Vertically** - View menu → Vertical Mirror
-- These operations affect the currently active frame
+- **Mirror Horizontally** - View menu → Horizontal Mirror... (or use shortcut)
+- **Mirror Vertically** - View menu → Vertical Mirror... (or use shortcut)
+- **Undoable** - All transformations can be undone with `Ctrl+Z`
 
 ### 💾 Saving and Loading
 
 1. **Save Project**:
-   - File menu → Save File
-   - Choose location and filename (automatically adds `.ssp` extension)
-   - Saves all frames and project metadata in JSON format
+   - File menu → Save File...
+   - Choose location and filename
+   - Automatically adds `.ssp` extension
+   - Saves all frames, dimensions, and metadata
 
 2. **Load Project**:
-   - File menu → Load File
-   - Select a `.ssp` file to load
-   - All frames will be loaded and the first frame will be displayed
+   - File menu → Load File...
+   - Select a `.ssp` file
+   - All frames loaded, undo history reset
+   - First frame displayed
+
+### 🖥️ Fullscreen Mode
+
+- Enter fullscreen (OS-specific shortcut)
+- **UI automatically scales** to utilize screen space
+- Canvas, preview, and all controls grow proportionally
+- Exit fullscreen to return to normal size
 
 ## 📄 File Format
 
-Projects are saved in `.ssp` (Sprite Editor Project) format, which is a JSON file containing:
+Projects are saved in `.ssp` (Sprite Editor Project) format - a JSON file containing:
 
 ```json
 {
@@ -139,7 +210,7 @@ Projects are saved in `.ssp` (Sprite Editor Project) format, which is a JSON fil
       "pixels": [
         [
           {"r": 255, "g": 0, "b": 0, "a": 255},
-          ...
+          {"r": 0, "g": 255, "b": 0, "a": 255}
         ]
       ]
     }
@@ -147,45 +218,81 @@ Projects are saved in `.ssp` (Sprite Editor Project) format, which is a JSON fil
 }
 ```
 
-Each pixel stores RGBA color values, making it easy to export or convert to other formats.
+- **height/width**: Canvas dimensions (always 400x400 or 500x500)
+- **frames**: Array of frame objects
+- **pixels**: 2D array of RGBA color values
+- Human-readable and easy to parse
 
 ## ⚙️ Technical Details
 
 ### 🏗️ Architecture
 - **Model-View Architecture**: `DrawingArea` class serves as the model, `MainWindow` as the view/controller
 - **Qt Signals/Slots**: Extensive use of Qt's signal-slot mechanism for component communication
+- **Per-Frame State Management**: Each frame maintains independent undo/redo history using `std::map`
 - **Image Processing**: Uses `QImage` for pixel manipulation and `QPixmap` for display
+- **Responsive Scaling**: Dynamic geometry updates in `resizeEvent` for fullscreen support
 
 ### 📁 Key Classes
-- **`MainWindow`**: Main application window and UI controller
-- **`DrawingArea`**: Core drawing canvas and sprite data model
-- **Custom Tools**: Enum-based tool system with extensible architecture
+- **`MainWindow`**: Main application window, UI controller, and event coordinator
+- **`DrawingArea`**: Core drawing canvas, sprite data model, and undo/redo manager
+- **Tool System**: Enum-based tool selection with extensible architecture
 
 ### 🧮 Algorithms
-- **Flood Fill**: Breadth-First Search (BFS) algorithm for paint bucket and select tools
-- **Pixel Grid**: Automatic pixel sizing based on canvas dimensions
-- **Frame Animation**: Timer-based frame cycling for preview
+- **Flood Fill**: Optimized Breadth-First Search (BFS) for paint bucket tool
+  - Handles color matching correctly
+  - Prevents filling when clicking same color
+  - Scales image for performance during BFS
+- **Undo/Redo**: Map-based per-frame history with 50-state limit
+  - O(1) frame switching without losing history
+  - Automatic cleanup on frame deletion
+  - History preserved across frame navigation
+- **Coordinate Mapping**: Automatic scaling between widget and image coordinates for fullscreen
+- **Frame Animation**: Timer-based frame cycling with adjustable FPS
 
-## 🚧 Future Enhancements
+### 🎨 UI Features
+- **Styled Components**: Custom Qt stylesheets for modern appearance
+- **State-based Buttons**: Visual feedback (enabled/disabled/hover/pressed states)
+- **Auto-connect Slots**: Qt naming convention for automatic signal connections
+- **Dynamic Layouts**: Responsive positioning with scale factors
 
-- [ ] Export to common image formats (PNG, GIF, etc.)
-- [ ] Undo/redo system
-- [ ] More drawing tools (line, rectangle, circle)
-- [ ] Layer support
-- [ ] Onion skinning for animation
-- [ ] Keyboard shortcuts
-- [ ] Customizable grid overlay
+## 🎯 Project Structure
 
----
-
-### 🎯 Project Structure
 ```
 sprite-editor/
 ├── main.cpp              # Application entry point
-├── mainwindow.cpp/.h     # Main window class
-├── drawingarea.cpp/.h    # Core drawing canvas
-├── mainwindow.ui         # UI layout file
-├── resources.qrc         # Resource file for icons
-├── SpriteEditor.pro      # Qt project file
-└── README.md            # This file
+├── mainwindow.cpp/.h     # Main window class (UI controller)
+├── drawingarea.cpp/.h    # Core drawing canvas (model)
+├── mainwindow.ui         # UI layout file (Qt Designer format)
+├── resources.qrc         # Resource file for icons and assets
+├── SpriteEditor.pro      # Qt project configuration file
+└── README.md             # This file
 ```
+
+## 🚀 Recent Updates
+
+### Version 2.0 Features
+- ✅ **Undo/Redo System** - Full per-frame history with 50-state limit
+- ✅ **Improved Frame Management** - Visual controls, frame counter, better navigation
+- ✅ **Keyboard Shortcuts** - Complete shortcut system for all operations
+- ✅ **Fullscreen Scaling** - Responsive UI that adapts to window size
+- ✅ **Modern UI Design** - Color-coded sections, better visual hierarchy
+- ✅ **Fixed Paint Bucket** - Now works correctly on all colors
+- ✅ **Smart Button States** - Auto-enable/disable based on availability
+- ✅ **Removed Select Tool** - Simplified tool set (was redundant)
+
+## 🐛 Known Issues
+
+- macOS: May need to run `fix_agl.sh` after qmake to fix AGL framework deprecation
+- First-time users should start with medium-sized sprites (25x25) for best experience
+
+## 📝 License
+
+[Add your license here]
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
+
+---
+
+**Built with ❤️ using Qt C++**
