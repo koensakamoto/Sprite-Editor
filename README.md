@@ -280,19 +280,3 @@ sprite-editor/
 - ✅ **Smart Button States** - Auto-enable/disable based on availability
 - ✅ **Removed Select Tool** - Simplified tool set (was redundant)
 
-## 🐛 Known Issues
-
-- macOS: May need to run `fix_agl.sh` after qmake to fix AGL framework deprecation
-- First-time users should start with medium-sized sprites (25x25) for best experience
-
-## 📝 License
-
-[Add your license here]
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
-
----
-
-**Built with ❤️ using Qt C++**

@@ -126,3 +126,17 @@ crash_*.txt
 
 # Project save files (optional - uncomment if you don't want to track them)
 # *.ssp
+
+# Large media files
+*.mov
+*.mp4
+*.avi
+
+# Planning and model files
+*.qmodel
+spriteeditorplan.qmodel
+
+# Package managers
+vcpkg/
+vcpkg.json
+vcpkg-configuration.json
