@@ -2,6 +2,13 @@
 
 A modern, feature-rich pixel-perfect sprite editor built with Qt C++ for creating and animating pixel art sprites with multiple frames.
 
+## Demo
+
+
+
+https://github.com/user-attachments/assets/bc94e2b9-d43d-4d04-bc90-d2660801ddd1
+
+
 ## ✨ Features
 
 ### 🖌️ Drawing Tools
